@@ -4,8 +4,7 @@
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:8080",
-    "distDir": "../dist",
-    "withGlobalTauri": true
+    "distDir": "../dist"
   },
   "package": {
     "productName": "tauri-template",
@@ -57,11 +56,12 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
-        "resizable": true,
+        "height": 640,
+        "resizable": false,
         "title": "tauri-template",
         "width": 960,
-        "decorations": false
+        "decorations": false,
+        "center": true
       }
     ]
   }

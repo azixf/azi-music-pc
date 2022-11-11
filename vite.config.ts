@@ -5,6 +5,7 @@ import path from 'path'
 import vueComponents from 'unplugin-vue-components/vite'
 import autoImport from 'unplugin-auto-import/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+import { svgBuilder } from './src/lib/plugins/svgBuilder'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,6 +16,13 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src')
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "@/style/_mixins.scss";`
+      }
     }
   },
   plugins: [
@@ -28,7 +36,8 @@ export default defineConfig({
       dts: './src/typings/auto-import.d.ts',
       imports: ['vue', 'vue-router'],
       resolvers: [NaiveUiResolver()]
-    })
+    }),
+    svgBuilder('./src/assets/svg/')
   ],
   envPrefix: ['VITE_', 'TAURI_'],
   build: {
