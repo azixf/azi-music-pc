@@ -1,5 +1,32 @@
 <template>
-  <header class="layout-header-wrapper">header</header>
+  <header class="layout-header-wrapper flex align-center justify-between">
+    <div class="layout-header-logo flex align-center">
+      <svg-icon name="netease-cloud-music-fill" color="#ffffff" size="32px"></svg-icon>
+      <strong class="logo-text">4U</strong>
+    </div>
+    <div class="layout-header-search">
+      <div class="layout-header-browser-btns flex align-center">
+        <div class="browser-btn back">
+          <svg-icon name="arrow-left" color="var(--color-header-icon)"></svg-icon>
+        </div>
+        <div class="browser-btn forward">
+          <svg-icon name="arrow-right" color="var(--color-header-icon)"></svg-icon>
+        </div>
+      </div>
+      <div class="layout-header-input flex align-center">
+        <svg-icon name="search" color="#fff" size="14px" class="search-icon" />
+        <input type="text" placeholder="请输入"  class="search-input"/>
+      </div>
+    </div>
+    <div class="layout-header-operations">
+      <svg-icon name="skin" size="18px" color="var(--color-header-icon)" title="换肤" />
+      <svg-icon name="settings" color="var(--color-header-icon)" title="设置" />
+      <n-divider vertical/>
+      <svg-icon name="minus" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('minify')"/>
+      <svg-icon name="full_screen" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('toggleMaxize')" />
+      <svg-icon name="close" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('close')" />
+    </div>
+  </header>
 </template>
 
 <script lang='ts'>
@@ -9,12 +36,86 @@
 </script>
 
 <script lang='ts' setup>
+import { appWindow } from '@tauri-apps/api/window'
+type WindowOperitionType = 'minify' | 'toggleMaxize' | 'close'
+const onOperateWindow = (type: WindowOperitionType) => {
+  if (type === 'minify') {
+    appWindow.minimize()
+  } else if (type === 'toggleMaxize') {
+    appWindow.toggleMaximize()
+  } else {
 
+  }
+}
 </script>
 
 <style lang='scss' scoped>
 .layout-header-wrapper {
-  height: 54px;
+  height: 100%;
   background: var(--color-primary);
+  padding: 0 var(--padding-default);
+}
+
+.layout-header-logo {
+  .logo-text {
+    color: #ffffff;
+    margin-left: var(--padding-small);
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.layout-header-search {
+  display: flex;
+  align-items: center;
+  .browser-btn {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    background: var(--color-icon-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    &.back {
+      margin-right: var(--padding-small);
+    }
+  }
+
+  .layout-header-input {
+    margin-left: var(--padding-default);
+    padding: 0 var(--padding-small);
+    width: 200px;
+    height: 32px;
+    border-radius: 32px;
+    background-color: var(--color-icon-bg);
+    position: relative;
+    .search-icon {
+      position: absolute;
+      left: 12px;
+    }
+    .search-input {
+      margin-left: var(--padding-large);
+      outline: none;
+      border: none;
+      background-color: transparent;
+      color: #ffffff;
+      &::placeholder {
+        color: var(--color-header-icon);
+      }
+    }
+  }
+}
+
+.layout-header-operations {
+  display: flex;
+  align-items: center;
+  gap: 0 var(--padding-default);
+  .svg-icon {
+    cursor: pointer;
+    &:hover {
+      color: #ffffff !important;
+    }
+  }
 }
 </style>

@@ -2,7 +2,7 @@
   <svg
     :class="svgClass"
     aria-hidden="true"
-    :style="{ color: props.color, width: props.width, height: props.height }"
+    :style="{ color: props.color, width: props.size, height: props.size }"
     v-on="$attrs"
   >
     <use :xlink:href="iconName" />
@@ -18,8 +18,7 @@ export default {
  * 名称：SvgIcon
  * @param name String required
  * @param color String
- * @param width String
- * @param height String
+ * @param size string
  * 依赖：src/plugins/svgBuilder.js 需要在 vite中配置
  * 使用方式：
  * 在 template 中使用 <svg-icon name="bug"/>
@@ -29,15 +28,13 @@ import { computed } from 'vue'
 interface Props {
   name: string
   color?: string
-  width?: string
-  height?: string
+  size?: string
 }
 
 /* data */
 const props = withDefaults(defineProps<Props>(), {
   color: '#333',
-  width: '24px',
-  height: '24px',
+  size: '24px',
 }) // 获取props defineProps<{ msg: string }>()
 const iconName = computed((): string => `#icon-${props.name}`)
 const svgClass = computed((): string => {
