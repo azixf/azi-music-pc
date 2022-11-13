@@ -39,13 +39,6 @@
 </script>
 
 <script lang='ts' setup>
-import type { DropdownOption } from 'naive-ui'
-const options: DropdownOption[] = [
-  {
-    label: '创建歌单',
-    key: 1
-  }
-]
 </script>
 
 <style lang='scss' scoped>

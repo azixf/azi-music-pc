@@ -1,1 +1,1 @@
-# tauri-template
+# azi-music-pc
