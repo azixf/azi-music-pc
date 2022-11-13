@@ -4,7 +4,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import path from 'path'
 import vueComponents from 'unplugin-vue-components/vite'
 import autoImport from 'unplugin-auto-import/vite'
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { svgBuilder } from './src/lib/plugins/svgBuilder'
 
 // https://vitejs.dev/config/
@@ -15,7 +15,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src')
+      '@': path.resolve(__dirname, 'src'),
+      '~/': path.resolve(__dirname, 'src/')
     }
   },
   css: {
@@ -30,12 +31,12 @@ export default defineConfig({
     vueJsx(),
     vueComponents({
       dts: './src/typings/vue-component.d.ts',
-      resolvers: [NaiveUiResolver()]
+      resolvers: [ElementPlusResolver()]
     }),
     autoImport({
       dts: './src/typings/auto-import.d.ts',
       imports: ['vue', 'vue-router'],
-      resolvers: [NaiveUiResolver()]
+      resolvers: [ElementPlusResolver()]
     }),
     svgBuilder('./src/assets/svg/')
   ],

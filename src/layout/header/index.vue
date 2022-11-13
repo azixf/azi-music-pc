@@ -1,5 +1,5 @@
 <template>
-  <header class="layout-header-wrapper flex align-center justify-between">
+  <header data-tauri-drag-region class="layout-header-wrapper flex align-center justify-between">
     <div class="layout-header-logo flex align-center">
       <svg-icon name="netease-cloud-music-fill" color="#ffffff" size="32px"></svg-icon>
       <strong class="logo-text">4U</strong>
@@ -21,7 +21,7 @@
     <div class="layout-header-operations">
       <svg-icon name="skin" size="18px" color="var(--color-header-icon)" title="换肤" />
       <svg-icon name="settings" color="var(--color-header-icon)" title="设置" />
-      <n-divider vertical/>
+      <el-divider direction="vertical"/>
       <svg-icon name="minus" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('minify')"/>
       <svg-icon name="full_screen" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('toggleMaxize')" />
       <svg-icon name="close" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('close')" />

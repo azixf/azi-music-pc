@@ -7,6 +7,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ElButton: typeof import('element-plus/es')['ElButton']
+    ElDivider: typeof import('element-plus/es')['ElDivider']
     NButton: typeof import('naive-ui')['NButton']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NDivider: typeof import('naive-ui')['NDivider']

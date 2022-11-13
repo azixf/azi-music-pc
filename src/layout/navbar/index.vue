@@ -15,9 +15,7 @@
     <div class="sub-title">
       <span>创建的歌单</span>
       <span>
-        <n-dropdown trigger="hover" :options="options">
-          <svg-icon name="add" size="14px" color="var(--color-subtitle)" />
-        </n-dropdown>
+        <svg-icon name="add" size="14px" color="var(--color-subtitle)" />
       </span>
     </div>
     <div class="nav-item">

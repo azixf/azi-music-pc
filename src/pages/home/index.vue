@@ -1,6 +1,6 @@
 <template>
   <h1>HomePage</h1>
-  <n-button type="primary" @click="handleClick">aaa</n-button>
+  <el-button type="primary" @click="handleClick">aaa</el-button>
 </template>
 
 <script lang='ts'>

@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import SvgIcon from '@/components/common/svgIcon.vue'
+import { invoke } from '@tauri-apps/api'
 
 import 'normalize.css'
 import './style/global.scss'
@@ -11,9 +12,7 @@ app.component('SvgIcon', SvgIcon)
 app.use(router)
 
 router.isReady().then(() => {
-  const loadingPage = document.querySelector('.loading-page')
-  if (loadingPage) {
-    loadingPage?.parentNode?.removeChild(loadingPage)
-  }
-  app.mount('#app')
+  invoke('close_splashscreen').then(() => {
+    app.mount('#app')
+  })
 })
