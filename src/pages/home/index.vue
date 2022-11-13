@@ -33,6 +33,7 @@ const changeTheme = (theme: string) => {
   themeObj.value = (themes as any)[theme]
   setTheme(themeObj)
   localStorage.theme = theme
+  localStorage.primaryColor = themeObj.value['--el-color-primary']
 }
 
 </script>

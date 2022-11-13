@@ -16,7 +16,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #EC4141;
+    /* background-color: #EC4141; */
 }
  
 .loader {
@@ -94,5 +94,9 @@ body {
         <span>N</span>
         <span>G</span>
     </div>
+    <script>
+        const primaryColor = localStorage.primaryColor || '#ec4141'
+        document.documentElement.style.backgroundColor = primaryColor
+    </script>
 </body>
 </html>
