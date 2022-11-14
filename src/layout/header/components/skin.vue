@@ -11,7 +11,7 @@
     </div>
     <div class="theme-title">自定义主题</div>
     <div>
-      <el-color-picker v-model="color" @change="onColorChange" />
+      <el-color-picker v-model="primaryColor" @change="onColorChange" />
     </div>
   </el-drawer>
 </template>
@@ -49,12 +49,10 @@ const changeDrawerVisible = () => {
   drawerVisible.value = !drawerVisible.value
 }
 
-const color = ref(localStorage.primaryColor || '#ec4141')
 const onColorChange = (current: string) => {
-  color.value = current
   theme.value = 'custom'
-  primaryColor.value = color.value
-  setTheme(color.value)
+  primaryColor.value = current
+  setTheme(current)
 }
 </script>
 

@@ -5,9 +5,9 @@ export type CloseMethod = 'close' | 'hide' | 'none'
 export const useSystemStore = defineStore('system', {
   state() {
     return {
-      theme: '',
-      primaryColor: '',
-      closeType: 'node' as CloseMethod
+      theme: 'default',
+      primaryColor: '#ec4141',
+      closeType: 'none' as CloseMethod
     }
   },
   getters: {

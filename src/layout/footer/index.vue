@@ -3,43 +3,42 @@
     <div class="layout-footer-left">
       <div class="play-music-pic">
         <div class="play-music-mask">
-          <svg-icon name="arrow-left" color="#eee" />
+          <svg-icon name="arrow-up" color="#eee" />
         </div>
         <img src="@/assets/vue.svg" alt="" />
       </div>
       <div class="play-name text-ellipsis cursor">晴天</div>
     </div>
     <div class="layout-footer-center">
-      <div class="music-operation-btns">
-        <svg-icon name="random" size="20px" />
-        <svg-icon name="previous" size="20px" />
-        <svg-icon name="play circle" size="20px" />
-        <svg-icon name="next" size="20px" />
-      </div>
-      <div class="music-progress-bar">
-        <span>0:00</span>
-        <div>bar</div>
-        <span>3:45</span>
-      </div>
+      <audio-player />
     </div>
     <div class="layout-footer-right">
-      <svg-icon name="volume"  />
-      <svg-icon name="musiclist"  />
+      <volume-box />
+      <div class="musiclist-box">
+        <svg-icon name="musiclist" />
+      </div>
     </div>
   </footer>
 </template>
 
-<script lang='ts'>
-  export default {
-    name: 'LayoutFooter'
-  }
+<script lang="ts">
+import VolumeBox from "./components/volumeBox.vue";
+import AudioPlayer from './components/audioPlayer.vue';
+export default {
+  name: "LayoutFooter",
+  components: {
+    VolumeBox,
+    AudioPlayer
+  },
+};
 </script>
 
-<script lang='ts' setup>
-
+<script lang="ts" setup>
+const link =
+  "https://m10.music.126.net/20221114201556/137d0c379474b9c1cc19406566cc8cad/yyaac/obj/wonDkMOGw6XDiTHCmMOi/14052042262/e61d/287b/5a26/a3edc1cf276e864f38b71d8b261f4cd3.m4a";
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .layout-footer {
   height: 100%;
   padding: var(--padding-default);
@@ -80,26 +79,6 @@
     }
   }
 
-  &-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    .music-operation-btns {
-      display: flex;
-      gap: 0 var(--padding-default);
-      .svg-icon {
-        cursor: pointer;
-      }
-    }
-    .music-progress-bar {
-      margin-top: var(--padding-small);
-      display: flex;
-      span {
-        font-size: 12px;
-      }
-    }
-  }
-
   &-right {
     display: flex;
     gap: 0 var(--padding-small);
@@ -109,4 +88,3 @@
   }
 }
 </style>
-
