@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export type VolumeState = 'none' | 'low' | 'high'
+export type VolumeState = 'muted' | 'low' | 'high'
 
 export const usePlayerStore = defineStore('player', {
   state() {

@@ -34,8 +34,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-const link =
-  "https://m10.music.126.net/20221114201556/137d0c379474b9c1cc19406566cc8cad/yyaac/obj/wonDkMOGw6XDiTHCmMOi/14052042262/e61d/287b/5a26/a3edc1cf276e864f38b71d8b261f4cd3.m4a";
+
 </script>
 
 <style lang="scss" scoped>
@@ -45,6 +44,7 @@ const link =
   display: flex;
   align-items: center;
   justify-content: space-between;
+  user-select: none;
   &-left {
     display: flex;
     align-items: center;
