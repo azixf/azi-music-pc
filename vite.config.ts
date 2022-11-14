@@ -6,6 +6,9 @@ import vueComponents from 'unplugin-vue-components/vite'
 import autoImport from 'unplugin-auto-import/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { svgBuilder } from './src/lib/plugins/svgBuilder'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import Inspecet from 'vite-plugin-inspect'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -30,14 +33,28 @@ export default defineConfig({
     vueJsx(),
     vueComponents({
       dts: './src/typings/vue-component.d.ts',
-      resolvers: [ElementPlusResolver()]
+      resolvers: [
+        ElementPlusResolver(),
+        IconsResolver({
+          enabledCollections: ['ep']
+        })
+      ]
     }),
     autoImport({
       dts: './src/typings/auto-import.d.ts',
       imports: ['vue', 'vue-router'],
-      resolvers: [ElementPlusResolver()]
+      resolvers: [
+        ElementPlusResolver(),
+        IconsResolver({
+          prefix: 'Icon'
+        })
+      ]
     }),
-    svgBuilder('./src/assets/svg/')
+    svgBuilder('./src/assets/svg/'),
+    Icons({
+      autoInstall: true
+    }),
+    Inspecet()
   ],
   envPrefix: ['VITE_', 'TAURI_'],
   build: {

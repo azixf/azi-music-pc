@@ -19,8 +19,8 @@
       </div>
     </div>
     <div class="layout-header-operations">
-      <svg-icon name="skin" size="18px" color="var(--color-header-icon)" title="换肤" />
-      <svg-icon name="settings" color="var(--color-header-icon)" title="设置" />
+      <skin-comp />
+      <svg-icon name="settings" color="var(--color-header-icon)"/>
       <el-divider direction="vertical"/>
       <svg-icon name="minus" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('minify')"/>
       <svg-icon name="full_screen" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('toggleMaxize')" />
@@ -45,9 +45,13 @@
 </template>
 
 <script lang='ts'>
-  export default {
-    name: 'LayoutHeader'
-  }
+import SkinComp from './components/skin.vue'
+export default {
+  name: 'LayoutHeader',
+  components: {
+      SkinComp
+    }
+}
 </script>
 
 <script lang='ts' setup>

@@ -18,17 +18,19 @@ export const colorMix = (color1: string, color2: string, weight: number) => {
   return "#" + r + g + b;
 }
 
-export const setTheme = (themeObj: Ref<any>) => {
+export const setTheme = (themeColor: string) => {
+  const colorObj: any = {}
   const prefix = '--el-color-primary'
   for (let i = 0; i < 10; i++) {
     if (i === 2) {
-      themeObj.value[`${prefix}-dark-2`] = colorMix('#000000', themeObj.value[prefix], 1)
+      colorObj[`${prefix}-dark-2`] = colorMix('#000000', themeColor, 1)
     } else {
-      themeObj.value[`${prefix}-light-${10-i}`] = colorMix('#ffffff', themeObj.value[prefix], i * 0.1)
+      colorObj[`${prefix}-light-${10-i}`] = colorMix('#ffffff', themeColor, i * 0.1)
     }
   }
-  Object.keys(themeObj.value).map(item => {
-    console.log('item: ', item);
-    document.documentElement.style.setProperty(item, themeObj.value[item])
+  document.documentElement.style.setProperty(prefix, themeColor)
+  Object.keys(colorObj).map(item => {
+    document.documentElement.style.setProperty(item, colorObj[item])
   })
+  localStorage.primaryColor = themeColor
 }

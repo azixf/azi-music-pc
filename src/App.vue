@@ -11,15 +11,12 @@
 
 <script lang="ts" setup>
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
-import { themes } from './lib/utils/theme';
 import { setTheme } from './lib/utils/themeUtil';
 
-const themeObj = ref<any>()
 
 onMounted(() => {
-  const theme = localStorage.theme || 'default'
-  themeObj.value = (themes as any)[theme]
-  setTheme(themeObj)
+  const primaryColor = localStorage.primaryColor || '#ec4141'
+  setTheme(primaryColor)
 })
 </script>
 
