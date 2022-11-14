@@ -25,6 +25,7 @@
 <script lang='ts' setup>
 import { ThemeName, themes } from '@/lib/utils/theme'
 import { setTheme } from '@/lib/utils/themeUtil';
+import { useStore } from '@/store';
 
 const themeColorObj: any = ref<any>({})
 Object.keys(themes).forEach(item => {
@@ -33,11 +34,12 @@ Object.keys(themes).forEach(item => {
   }
 })
 
-const theme = ref(localStorage.theme || 'default')
+const { system } = useStore()
+const { theme, primaryColor } = storeToRefs(system)
 
 const onThemeClick = (current: string) => {
   theme.value = current
-  localStorage.theme = current
+  primaryColor.value = themes[current]
   setTheme(themes[current])
 }
 
@@ -51,7 +53,7 @@ const color = ref(localStorage.primaryColor || '#ec4141')
 const onColorChange = (current: string) => {
   color.value = current
   theme.value = 'custom'
-  localStorage.theme = 'custom'
+  primaryColor.value = color.value
   setTheme(color.value)
 }
 </script>
@@ -61,7 +63,7 @@ const onColorChange = (current: string) => {
   .svg-icon {
     cursor: pointer;
     &:hover {
-      color: #ffffff;
+      color: #ffffff !important;
     }
   }
 }

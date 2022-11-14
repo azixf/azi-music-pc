@@ -42,7 +42,7 @@ export default defineConfig({
     }),
     autoImport({
       dts: './src/typings/auto-import.d.ts',
-      imports: ['vue', 'vue-router'],
+      imports: ['vue', 'vue-router', 'pinia'],
       resolvers: [
         ElementPlusResolver(),
         IconsResolver({

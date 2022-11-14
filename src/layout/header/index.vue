@@ -22,60 +22,25 @@
       <skin-comp />
       <svg-icon name="settings" color="var(--color-header-icon)"/>
       <el-divider direction="vertical"/>
-      <svg-icon name="minus" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('minify')"/>
-      <svg-icon name="full_screen" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('toggleMaxize')" />
-      <svg-icon name="close" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('close')" />
+      <window-operation />
+      
     </div>
   </header>
-  <el-dialog v-model="closeDialogVisible" title="关闭应用" width="45%">
-    <el-form ref="modalForm" :model="form">
-      <p>
-        <el-radio-group v-model="form.closeType">
-          <el-radio label="close">直接关闭应用</el-radio>
-          <el-radio label="hide">最小化到托盘</el-radio>
-        </el-radio-group>
-      </p>
-      <el-checkbox v-model="form.remembered" label="始终如此" border />
-      <div slot="footer">
-        <el-button type="primary">确定</el-button>
-        <el-button>取消</el-button>
-      </div>
-    </el-form>
-  </el-dialog>
 </template>
 
 <script lang='ts'>
 import SkinComp from './components/skin.vue'
+import windowOperation from './components/windowOperation.vue'
 export default {
   name: 'LayoutHeader',
   components: {
-      SkinComp
-    }
+    SkinComp,
+    windowOperation
+  }
 }
 </script>
 
 <script lang='ts' setup>
-import { appWindow } from '@tauri-apps/api/window'
-
-const modalForm = ref()
-const form = reactive({
-  remembered: false,
-  closeType: 'hide'
-})
-const closeDialogVisible = ref(false)
-
-type WindowOperitionType = 'minify' | 'toggleMaxize' | 'close'
-const onOperateWindow = (type: WindowOperitionType) => {
-  if (type === 'minify') {
-    appWindow.minimize()
-  } else if (type === 'toggleMaxize') {
-    appWindow.toggleMaximize()
-  } else {
-    const isDirectlyClose = localStorage.directlyClose || false
-    if (isDirectlyClose) return appWindow.close()
-    closeDialogVisible.value = true
-  }
-}
 </script>
 
 <style lang='scss' scoped>
