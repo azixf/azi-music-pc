@@ -1,11 +1,11 @@
 <template>
   <div class="volume-box">
     <div @click="onVolumeClicked">
-      <svg-icon name="volume_high" v-show="!muted && volumeState === 'high'" />
-      <svg-icon name="volume_low" v-show="!muted && volumeState === 'low'" />
-      <svg-icon name="close_volume" size="24px" v-show="muted" />
+      <svg-icon name="volume-2" color="var(--color-icon)" v-show="!muted && volumeState === 'high'" />
+      <svg-icon name="volume-1" color="var(--color-icon)" v-show="!muted && volumeState === 'low'" />
+      <svg-icon name="volume-x" color="var(--color-icon)" size="24px" v-show="muted" />
     </div>
-    <el-slider class="custom-slider" v-model="volume" vertical height="80px" size="small" @change="onAudioProgressChanged" />
+    <el-slider class="custom-slider" v-model="volume" vertical height="80px" :show-tooltip="false" @change="onAudioProgressChanged" />
   </div>
 </template>
 
@@ -67,5 +67,9 @@ watch(() => volume.value, (current: number) => {
     left: -8px;
     display: none;
   }
+}
+:deep(.el-slider__button) {
+  width: 14px;
+  height: 14px;
 }
 </style>

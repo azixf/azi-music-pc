@@ -2,7 +2,7 @@
   <header data-tauri-drag-region class="layout-header-wrapper flex align-center justify-between">
     <div class="layout-header-logo flex align-center">
       <svg-icon name="netease-cloud-music-fill" color="#ffffff" size="32px"></svg-icon>
-      <strong class="logo-text">4U</strong>
+      <strong class="logo-text">4U Music</strong>
     </div>
     <div class="layout-header-search">
       <div class="layout-header-browser-btns flex align-center">

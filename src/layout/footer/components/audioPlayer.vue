@@ -37,21 +37,25 @@ export default {
 };
 </script>
 
-<script lang="ts" setup>import { throttle } from '@/lib/utils/common';
-import { useStore } from '@/store';
+<script lang="ts" setup>
+import { throttle } from "@/lib/utils/common";
+import { useStore } from "@/store";
 
 const link =
   "http://cdn.xieblog.ltd/music/%E6%90%81%E6%B5%85-%E5%91%A8%E6%9D%B0%E4%BC%A6.mp3";
 
 const audioRef = ref();
 
-const { player } = useStore()
-const { volume } = storeToRefs(player)
+const { player } = useStore();
+const { volume } = storeToRefs(player);
 
-watch(() => volume.value, (current) => {
-  console.log(current);
-  audioRef.value.volume = current / 100
-})
+watch(
+  () => volume.value,
+  current => {
+    console.log(current);
+    audioRef.value.volume = current / 100;
+  }
+);
 
 onMounted(() => {
   audioRef.value.addEventListener("canplay", canplayHandler);
@@ -60,22 +64,22 @@ onMounted(() => {
 });
 
 const canplayHandler = (e: any) => {
-    duration.value = e.target.duration;
-    setStartAndEndTime(e.target.duration);
-}
+  duration.value = e.target.duration;
+  setStartAndEndTime(e.target.duration);
+};
 
 const endedHandler = (e: any) => {
-  console.log('end');
-  play_state.value = PlayState[1]
-}
+  console.log("end");
+  play_state.value = PlayState[1];
+};
 
 const timeupdateHandler = throttle((e: any) => {
-  const current = e.target.currentTime
-  progress.value = Math.ceil((current / duration.value) * 100)
+  const current = e.target.currentTime;
+  progress.value = Math.ceil((current / duration.value) * 100);
   console.log(duration.value, progress.value);
-  currentTime.value = current
-  currentTimeFlag.value = formatTime(currentTime.value)
-}, 800)
+  currentTime.value = current;
+  currentTimeFlag.value = formatTime(currentTime.value);
+}, 800);
 
 enum PlayState {
   "play",
@@ -103,9 +107,9 @@ const duration = ref(0); // 音频的长度 ms
 // 拖动播放进度条
 const onAudioProgressChanged = (current: number) => {
   progress.value = current;
-  currentTime.value = (current / 100) * duration.value
-  audioRef.value.currentTime = currentTime.value
-  currentTimeFlag.value = formatTime(currentTime.value)
+  currentTime.value = (current / 100) * duration.value;
+  audioRef.value.currentTime = currentTime.value;
+  currentTimeFlag.value = formatTime(currentTime.value);
 };
 
 // 获取音频时间长度
@@ -144,6 +148,10 @@ const formatTime = (duration: number): string => {
     }
     span {
       font-size: 12px;
+    }
+    :deep(.el-slider__button) {
+      width: 14px;
+      height: 14px;
     }
   }
 }
