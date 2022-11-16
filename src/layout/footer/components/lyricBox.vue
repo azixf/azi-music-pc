@@ -12,7 +12,6 @@ export default {
 
 <script lang="ts" setup>
 import { useStore } from '@/store';
-
 const { player } = useStore()
 const { lyric } = storeToRefs(player)
 
