@@ -23,7 +23,7 @@
 </script>
 
 <script lang='ts' setup>
-import { ThemeName, themes } from '@/lib/utils/theme'
+import { ThemeName, themes } from '@/theme/theme';
 import { setTheme } from '@/lib/utils/themeUtil';
 import { useStore } from '@/store';
 

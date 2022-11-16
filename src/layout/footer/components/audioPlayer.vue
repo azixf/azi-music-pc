@@ -14,7 +14,7 @@
         <svg-icon name="pause" size="20px" v-show="play_state === 'play'" />
       </div>
       <svg-icon name="skip-next" size="20px" />
-      <svg-icon name="add_to_list" size="20px" />
+      <lyric-box />
     </div>
     <div class="music-progress-bar">
       <span>{{ currentTimeFlag }}</span>
@@ -32,8 +32,12 @@
 </template>
 
 <script lang="ts">
+import LyricBox from './lyricBox.vue';
 export default {
   name: "AudioPlayer",
+  components: {
+    LyricBox
+  }
 };
 </script>
 
