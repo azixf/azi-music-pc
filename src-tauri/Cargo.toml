@@ -1,8 +1,8 @@
 [package]
 name = "app"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "A music desktop App"
+authors = ["azixf"]
 license = ""
 repository = ""
 default-run = "app"
@@ -10,6 +10,10 @@ edition = "2021"
 rust-version = "1.57"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies.tauri-plugin-store]
+git = "https://github.com/tauri-apps/tauri-plugin-store"
+branch="renovate/rollup-plugin-node-resolve-15.x"
 
 [build-dependencies]
 tauri-build = { version = "1.1.1", features = [] }

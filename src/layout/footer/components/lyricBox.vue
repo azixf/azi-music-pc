@@ -11,7 +11,11 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { ElMessage } from 'element-plus';
+import { useStore } from '@/store';
+
+const { player } = useStore()
+const { lyric } = storeToRefs(player)
+
 const content = computed(() => {
   let msg = ''
   if (lyric.value) {
@@ -21,7 +25,6 @@ const content = computed(() => {
   }
   return msg;
 })
-const lyric = ref(false)
 
 const onLyricStateChange = (current: boolean) => {
   lyric.value = !current;

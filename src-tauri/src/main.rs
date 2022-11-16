@@ -3,13 +3,20 @@
     windows_subsystem = "windows"
 )]
 
+use tauri_plugin_store::{PluginBuilder, StoreBuilder};
+
 use tauri::{
-    AppHandle, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu,
-    SystemTrayMenuItem, generate_handler
+    generate_handler, AppHandle, CustomMenuItem, Manager, SystemTray, SystemTrayEvent,
+    SystemTrayMenu, SystemTrayMenuItem,
 };
 
 fn main() {
+    let settings = StoreBuilder::new(".settings".parse().unwrap())
+        .default("foryou".to_string(), "app".into())
+        .build();
+
     tauri::Builder::default()
+        .plugin(PluginBuilder::default().stores([settings]).freeze().build())
         .system_tray(create_system_tray())
         .on_system_tray_event(tray_event)
         .invoke_handler(generate_handler![close_splashscreen])
@@ -48,10 +55,10 @@ fn tray_event(app: &AppHandle, event: SystemTrayEvent) {
             _ => {}
         },
         SystemTrayEvent::LeftClick { .. } => {
-          let window = app.get_window("main").unwrap();
-          window.show().unwrap();
-          window.unminimize().unwrap();
-          window.set_focus().unwrap();
+            let window = app.get_window("main").unwrap();
+            window.show().unwrap();
+            window.unminimize().unwrap();
+            window.set_focus().unwrap();
         }
         SystemTrayEvent::RightClick { .. } => {}
         SystemTrayEvent::DoubleClick { .. } => {}

@@ -11,6 +11,7 @@
   "dependencies": {
     "pinia": "^2.0.23",
     "pinia-plugin-persistedstate": "^2.4.0",
+    "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#dev",
     "vue": "^3.2.41",
     "vue-router": "^4.1.6"
   },

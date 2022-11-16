@@ -8,7 +8,6 @@ import { vPreventRepeatClick } from '@/lib/directives'
 
 import 'normalize.css'
 import './style/global.scss'
-import 'element-plus/theme-chalk/el-message.css'
 
 const app = createApp(App)
 app.component('SvgIcon', SvgIcon)
