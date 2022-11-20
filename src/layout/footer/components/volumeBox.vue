@@ -42,7 +42,6 @@ const onAudioProgressChanged = (value: number) => {
 }
 
 watch(() => volume.value, (current: number) => {
-  console.log(current);
   if (current === 0) {
     volumeState.value = 'muted'
     muted.value = true

@@ -27,7 +27,7 @@
       </div>
       <span>{{ endTime }}</span>
     </div>
-    <audio ref="audioRef" :src="link"></audio>
+    <audio ref="audioRef" src="/download/搁浅-周杰伦.mp3"></audio>
   </div>
 </template>
 
@@ -45,9 +45,6 @@ export default {
 import { throttle } from "@/lib/utils/common";
 import { useStore } from "@/store";
 
-const link =
-  "http://cdn.xieblog.ltd/music/%E6%90%81%E6%B5%85-%E5%91%A8%E6%9D%B0%E4%BC%A6.mp3";
-
 const audioRef = ref();
 
 const { player } = useStore();
@@ -56,7 +53,6 @@ const { volume } = storeToRefs(player);
 watch(
   () => volume.value,
   current => {
-    console.log(current);
     audioRef.value.volume = current / 100;
   }
 );
@@ -73,14 +69,12 @@ const canplayHandler = (e: any) => {
 };
 
 const endedHandler = (e: any) => {
-  console.log("end");
   play_state.value = PlayState[1];
 };
 
 const timeupdateHandler = throttle((e: any) => {
   const current = e.target.currentTime;
   progress.value = Math.ceil((current / duration.value) * 100);
-  console.log(duration.value, progress.value);
   currentTime.value = current;
   currentTimeFlag.value = formatTime(currentTime.value);
 }, 800);

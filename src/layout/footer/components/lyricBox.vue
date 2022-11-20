@@ -32,7 +32,7 @@ const onLyricStateChange = (current: boolean) => {
 
 <style lang="scss" scoped>
 .music-lyric {
-  border: 2px solid var(--color-primary);
+  
   cursor: pointer;
   font-size: var(--font-small);
   padding: var(--padding-mini);
