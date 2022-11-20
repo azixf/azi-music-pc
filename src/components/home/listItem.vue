@@ -2,10 +2,10 @@
   <div class="list-item-wrapper">
     <div class="list-item-bg">
       <img :src="src" alt="" />
-      <div class="icon-wrapper">
+      <div class="icon-wrapper" v-if="showIcon">
         <svg-icon name="play_fill" size="18px" color="red" />
       </div>
-      <div class="mask" v-if="showMask">
+      <div class="mask text-2-ellipsis" v-if="showMask">
         {{ maskText }}
       </div>
     </div>
@@ -29,6 +29,7 @@ interface ListItemProps {
   maskText?: string,
   center?: boolean,
   detail?: string,
+  showIcon?: boolean,
   src: string
 }
 
@@ -38,7 +39,8 @@ withDefaults(defineProps<ListItemProps>(), {
   showMask: false,
   maskText: '',
   center: false,
-  detail: ''
+  detail: '',
+  showIcon: true
 })
 
 
@@ -83,10 +85,8 @@ withDefaults(defineProps<ListItemProps>(), {
       left: 0;
       width: 100%;
       height: 40px;
+      padding: var(--padding-mini) var(--padding-small);
       background-color: rgba(0,0,0,.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       color: var(--color-bg);
       font-size: var(--font-small);
       transition: top .3s;
@@ -94,6 +94,7 @@ withDefaults(defineProps<ListItemProps>(), {
     }
   }
   .list-item-detail {
+    padding-top: var(--padding-small);
     width: v-bind(width);
     word-break: break-all;
     color: var(--color-text);

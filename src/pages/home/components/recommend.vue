@@ -6,7 +6,7 @@
   </el-carousel>
   <item-title title="推荐歌单" />
   <div class="recommended-list">
-    <list-item v-for="item in 6" />
+    <list-item v-for="item in recommendedList" :src="item.img" :detail="item.info" show-mask :mask-text="item.name" />
   </div>
   <item-title title="最新音乐" />
   <item-title title="推荐MV" />
@@ -19,12 +19,37 @@
 </script>
 
 <script lang='ts' setup>
+import { getRecommendedList } from '@/api';
+import { vLazyLoad } from '@/lib/directives';
 const imgs = [
   'https://w.wallhaven.cc/full/0w/wallhaven-0wq1q7.jpg',
   'https://w.wallhaven.cc/full/8x/wallhaven-8x27zo.png',
   'https://w.wallhaven.cc/full/0w/wallhaven-0wq1q7.jpg',
   'https://w.wallhaven.cc/full/8x/wallhaven-8x27zo.png'
 ]
+
+interface recommendedListItem {
+  img: string,
+  uname: string,
+  img700: string,
+  img300: string,
+  userName: string,
+  img500: string,
+  total: number,
+  name: string,
+  listencnt: number,
+  id: number,
+  musicList: string,
+  desc: string,
+  info: string
+}
+const recommendedList = ref<recommendedListItem[]>([])
+
+onBeforeMount(() => {
+  getRecommendedList().then((res: any) => {
+    recommendedList.value = res.data.list.slice(0, 8);
+  })
+})
 </script>
 
 <style lang='scss' scoped>
