@@ -1,13 +1,14 @@
 <template>
-  <el-carousel :interval="4000" type="card" height="200px">
-    <el-carousel-item  v-for="item, index in 4">
-      <img :src="imgs[index]" alt="" class="carousel-img" />
+  <el-carousel :interval="4000" type="card" height="180px">
+    <el-carousel-item  v-for="img in images">
+      <img :src="img?.pic_info?.url" alt="" class="carousel-img" />
     </el-carousel-item>
   </el-carousel>
-  <item-title title="推荐歌单" />
+  <item-title title="库硪推荐歌单" />
   <div class="recommended-list">
     <list-item v-for="item in recommendedList" :src="item.img" :detail="item.info" show-mask :mask-text="item.name" />
   </div>
+  <item-title title="Q鹅推荐歌单"></item-title>
   <item-title title="最新音乐" />
   <item-title title="推荐MV" />
 </template>
@@ -19,14 +20,9 @@
 </script>
 
 <script lang='ts' setup>
-import { getRecommendedList } from '@/api';
-import { vLazyLoad } from '@/lib/directives';
-const imgs = [
-  'https://w.wallhaven.cc/full/0w/wallhaven-0wq1q7.jpg',
-  'https://w.wallhaven.cc/full/8x/wallhaven-8x27zo.png',
-  'https://w.wallhaven.cc/full/0w/wallhaven-0wq1q7.jpg',
-  'https://w.wallhaven.cc/full/8x/wallhaven-8x27zo.png'
-]
+import { getFocusImages, getRecommendedList } from '@/api';
+
+const images = ref<any>([])
 
 interface recommendedListItem {
   img: string,
@@ -46,6 +42,9 @@ interface recommendedListItem {
 const recommendedList = ref<recommendedListItem[]>([])
 
 onBeforeMount(() => {
+  getFocusImages().then((res: any) => {
+    images.value = res.focus.data.content;
+  })
   getRecommendedList().then((res: any) => {
     recommendedList.value = res.data.list.slice(0, 8);
   })
@@ -54,8 +53,7 @@ onBeforeMount(() => {
 
 <style lang='scss' scoped>
 .carousel-img {
-  height: 200px;
-  width: 350px;
+  height: 180px;
 }
 
 .recommended-list {
