@@ -2,7 +2,7 @@
   <div class="list-item-wrapper">
     <div class="list-item-bg">
       <img :src="src" alt="" />
-      <div class="icon-wrapper" v-if="showIcon">
+      <div :class="[ center ? 'center' : 'icon-wrapper']" v-if="showIcon">
         <svg-icon name="play_fill" size="18px" color="red" />
       </div>
       <div class="mask text-2-ellipsis" v-if="showMask">
@@ -49,6 +49,7 @@ withDefaults(defineProps<ListItemProps>(), {
 <style lang='scss' scoped>
 .list-item-wrapper {
   cursor: pointer;
+  width: v-bind(width);
   .list-item-bg {
     position: relative;
     border-radius: var(--radius-default);
@@ -65,14 +66,19 @@ withDefaults(defineProps<ListItemProps>(), {
       right: var(--padding-small);
       bottom: var(--padding-small);
       display: none;
-      &.center {
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-50%) translateZ(0);
-      }
+    }
+    .center {
+      position: absolute;
+      padding: var(--padding-small);
+      border-radius: 50%;
+      background-color: #ffffff;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%) translateZ(0); 
+      display: none;
     }
     &:hover {
-      .icon-wrapper {
+      .icon-wrapper, .center {
       display: block;
       }
       .mask {

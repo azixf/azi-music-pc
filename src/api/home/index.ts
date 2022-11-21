@@ -13,3 +13,8 @@ export const getRecommendedList = () => {
     size: 10
   })
 }
+
+// 获取Q鹅推荐歌单
+export const getQRecommendedList = () => {
+  return get('/qq/getMultiple/recomPlaylist') 
+}
