@@ -17,10 +17,23 @@ const routes: Array<RouteRecordRaw> = [
         path: 'playlist',
         component: () => import('@/pages/playlist/index.vue'),
         meta: {
-          title: '播放列表',
-          keepAlive: true
+          title: '播放列表'
         }
-      }
+      },
+      {
+        path: 'download',
+        component: () => import('@/pages/download/index.vue'),
+        meta: {
+          title: '本地与下载'
+        }
+      },
+      {
+        path: 'recent',
+        component: () => import('@/pages/recent/index.vue'),
+        meta: {
+          title: '最近播放'
+        }
+      },
     ]
   }
 ]

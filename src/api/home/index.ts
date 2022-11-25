@@ -1,13 +1,13 @@
-import { get, post } from '@/lib/request/request';
+import { http } from '@/lib/request/request';
 
 // 获取焦点图
 export const getFocusImages = () => {
-  return get('/qq/getMultiple/focus')
+  return http.get('/qq/getMultiple/focus')
 }
 
 // 获取库硪推荐歌单
 export const getRecommendedList = () => {
-  return post('/kuwo/getRecommendSongList', {
+  return http.post('/kuwo/getRecommendSongList', {
     id: 'rcm',
     page: 0,
     size: 10
@@ -16,5 +16,5 @@ export const getRecommendedList = () => {
 
 // 获取Q鹅推荐歌单
 export const getQRecommendedList = () => {
-  return get('/qq/getMultiple/recomPlaylist') 
+  return http.get('/qq/getMultiple/recomPlaylist') 
 }
