@@ -12,6 +12,14 @@ const routes: Array<RouteRecordRaw> = [
           title: '首页',
           keepAlive: true
         }
+      },
+      {
+        path: 'playlist',
+        component: () => import('@/pages/playlist/index.vue'),
+        meta: {
+          title: '播放列表',
+          keepAlive: true
+        }
       }
     ]
   }

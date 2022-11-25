@@ -31,6 +31,11 @@ const props = withDefaults(defineProps<NavItemProps>(), {
   active: false,
   type: 'main'
 })
+
+onMounted(() => {
+  const slots = useSlots();
+  console.log(slots);
+})
 </script>
 
 <style lang='scss' scoped>
@@ -66,7 +71,7 @@ const props = withDefaults(defineProps<NavItemProps>(), {
       span {
         font-size: var(--font-small);
       }
-      .svg-icon {
+      :deep(.svg-icon) {
         cursor: pointer;
       }
     }

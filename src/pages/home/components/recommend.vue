@@ -67,15 +67,15 @@ interface QRecommendedListItem {
 const qRecommendedList = ref<QRecommendedListItem[]>([])
 
 onBeforeMount(() => {
-  getFocusImages().then((res: any) => {
-    images.value = res.focus.data.content;
-  })
-  getRecommendedList().then((res: any) => {
-    recommendedList.value = res.data.list.slice(0, 8);
-  })
-  getQRecommendedList().then((res: any) => {
-    qRecommendedList.value = res.recomPlaylist.data.v_hot.slice(0, 8)
-  } )
+  // getFocusImages().then((res: any) => {
+  //   images.value = res.focus.data.content;
+  // })
+  // getRecommendedList().then((res: any) => {
+  //   recommendedList.value = res.data.list.slice(0, 8);
+  // })
+  // getQRecommendedList().then((res: any) => {
+  //   qRecommendedList.value = res.recomPlaylist.data.v_hot.slice(0, 8)
+  // } )
 })
 </script>
 

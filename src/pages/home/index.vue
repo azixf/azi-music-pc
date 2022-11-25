@@ -1,7 +1,10 @@
 <template>
   <div class="home-page">
     <el-tabs v-model="actab" @tab-click="onTabClick">
-      <el-tab-pane v-for="tab in tabList" :label="tab.label" :name="tab.name">
+      <el-tab-pane v-for="tab in tabList" :name="tab.name">
+        <template #label>
+          <div :class="['custom-label', { active: actab === tab.name }]">{{ tab.label }}</div>
+        </template>
         <component :is="tab.component"></component>
       </el-tab-pane>
     </el-tabs>
@@ -52,4 +55,8 @@ const onTabClick = (tab: TabsPaneContext, event: Event) => {
 </script>
 
 <style lang='scss' scoped>
+.custom-label.active {
+  font-size: var(--font-large);
+  font-weight: var(--font-weight-600);
+}
 </style>
