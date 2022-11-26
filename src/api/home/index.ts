@@ -18,3 +18,12 @@ export const getRecommendedList = () => {
 export const getQRecommendedList = () => {
   return http.get('/qq/getMultiple/recomPlaylist') 
 }
+
+// 获取库苟最新音乐
+export const getKGNewSongs = () => {
+  return http.post('/kugou/getNewSongs', {
+    type: 1,
+    page: 0,
+    size: 20
+  })
+}

@@ -1,28 +1,5 @@
 <template>
   <nav class="layout-nav">
-    <!-- <nav-item label="发现音乐" active></nav-item>
-    <nav-item label="私人FM"></nav-item>
-    <nav-item label="我的音乐" type="second"></nav-item>
-    <nav-item label="我喜欢的音乐">
-      <template #prefix>
-        <svg-icon name="heart" size="18px" />
-      </template>
-    </nav-item>
-    <nav-item label="本地与下载">
-      <template #prefix>
-        <svg-icon name="download" size="18px" />
-      </template>
-    </nav-item>
-    <nav-item label="最近播放">
-      <template #prefix>
-        <svg-icon name="recent" size="18px" style="transform: scale(1.6);" />
-      </template>
-    </nav-item>
-    <nav-item label="创建歌单" type="second">
-      <template #suffix>
-        <svg-icon name="add" size="14px" color="var(--color-subtitle)" />
-      </template>
-    </nav-item> -->
     <nav-item
       v-for="(nav, index) in navItemList"
       :label="nav.label"

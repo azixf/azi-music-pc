@@ -1,7 +1,7 @@
 <template>
   <div class="list-item-wrapper">
     <div class="list-item-bg">
-      <img :src="src" alt="" />
+      <img :src="src" alt="" :style="{ width, height: width}" />
       <div :class="[ center ? 'center' : 'icon-wrapper']" v-if="showIcon">
         <svg-icon name="play_fill" size="18px" color="red" />
       </div>
@@ -23,8 +23,7 @@
 
 <script lang='ts' setup>
 interface ListItemProps {
-  width?: string,
-  height?: string,
+  width?: string
   showMask?: boolean,
   maskText?: string,
   center?: boolean,
@@ -34,8 +33,6 @@ interface ListItemProps {
 }
 
 withDefaults(defineProps<ListItemProps>(), {
-  width: '160px',
-  height: '160px',
   showMask: false,
   maskText: '',
   center: false,
@@ -49,14 +46,13 @@ withDefaults(defineProps<ListItemProps>(), {
 <style lang='scss' scoped>
 .list-item-wrapper {
   cursor: pointer;
-  width: v-bind(width);
   .list-item-bg {
     position: relative;
     border-radius: var(--radius-default);
     overflow: hidden;
     > img {
-      width: v-bind(width);
-      height: v-bind(height);
+      width: 100%;
+      height: 100%;
     }
     .icon-wrapper {
       position: absolute;
@@ -101,7 +97,7 @@ withDefaults(defineProps<ListItemProps>(), {
   }
   .list-item-detail {
     padding-top: var(--padding-small);
-    width: v-bind(width);
+    width: 100%;
     word-break: break-all;
     color: var(--color-text);
     font-size: var(--font-small);

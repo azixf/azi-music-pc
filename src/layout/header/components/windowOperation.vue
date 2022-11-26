@@ -1,7 +1,7 @@
 <template>
   <div class="window-operation">
     <svg-icon name="minus" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('minify')"/>
-      <!-- <svg-icon name="full_screen" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('toggleMaxize')" /> -->
+      <svg-icon name="full_screen" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('toggleMaxize')" />
       <svg-icon name="close" size="18px" color="var(--color-header-icon)" @click="onOperateWindow('close')" />
   </div>
   <el-dialog v-model="closeDialogVisible" title="关闭应用" width="45%" @closed="onModalClosed">

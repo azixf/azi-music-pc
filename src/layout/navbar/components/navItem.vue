@@ -31,11 +31,6 @@ const props = withDefaults(defineProps<NavItemProps>(), {
   active: false,
   type: 'main'
 })
-
-onMounted(() => {
-  const slots = useSlots();
-  console.log(slots);
-})
 </script>
 
 <style lang='scss' scoped>

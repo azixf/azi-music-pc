@@ -64,9 +64,10 @@
       {
         "fullscreen": false,
         "height": 640,
-        "resizable": false,
         "title": "4U",
         "width": 960,
+        "minHeight": 640,
+        "minWidth": 960,
         "decorations": false,
         "center": true,
         "visible": false,
@@ -78,7 +79,8 @@
         "center": true,
         "visible": true,
         "height": 200,
-        "width": 800,
+        "width": 640,
+        "resizable": false,
         "label": "splashscreen",
         "url": "splash.html"
       }
