@@ -27,3 +27,8 @@ export const getKGNewSongs = () => {
     size: 20
   })
 }
+
+// 获取推荐MV
+export const getKGMvList = () => {
+  return http.get('/kugou/getMVList')
+}

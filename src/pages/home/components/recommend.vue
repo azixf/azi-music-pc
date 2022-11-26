@@ -11,8 +11,9 @@
     <el-row :gutter="16">
       <el-col
         class="m-b-16"
-        :sm="6"
-        :md="6"
+        :sm="8"
+        :md="8"
+        :xl="6"
         :lg="4"
         v-for="item in recommendedList"
       >
@@ -30,8 +31,9 @@
     <el-row :gutter="16">
       <el-col
         class="m-b-16"
-        :sm="6"
-        :md="6"
+        :sm="8"
+        :md="8"
+        :xl="6"
         :lg="4"
         v-for="item in qRecommendedList"
       >
@@ -41,20 +43,40 @@
   </section>
   <section>
     <item-title title="最新音乐" />
-    <!-- <div class="new-music-list">
-      <new-item v-for="item in 12" />
-    </div> -->
     <el-row :gutter="16">
-      <el-col
-        class="m-b-16"
-        :span="6"
-        v-for="item in newSongsList"
-      >
-        <new-item :src="item.album_cover.replace('{size}', 480)" width="8vw" center :music="item.songname" :singer="item.authors[0].author_name" :mv="item.mvhash" />
+      <el-col class="m-b-16" :span="6" v-for="item in newSongsList">
+        <new-item
+          :src="item.album_cover.replace('{size}', '480')"
+          width="8vw"
+          center
+          :music="item.songname"
+          :singer="item.authors[0].author_name"
+          :mv="!!item.mvhash"
+        />
       </el-col>
     </el-row>
   </section>
-  <item-title title="推荐MV" />
+  <section>
+    <item-title title="推荐MV" />
+    <el-row :gutter="16">
+      <el-col
+        class="m-b-16"
+        :sm="8"
+        :md="8"
+        :xl="6"
+        :lg="4"
+        v-for="item in mvList"
+      >
+        <mv-item
+          :cover="item.album_cover.replace('{size}', '480')"
+          :name="item.videoname"
+          :author="item.singername"
+          :info="item.description"
+          :playcount="item.playcount"
+        />
+      </el-col>
+    </el-row>
+  </section>
 </template>
 
 <script lang="ts">
@@ -69,6 +91,7 @@ import {
   getRecommendedList,
   getQRecommendedList,
   getKGNewSongs,
+  getKGMvList,
 } from "@/api";
 
 const images = ref<any>([]);
@@ -101,7 +124,57 @@ interface QRecommendedListItem {
 
 const qRecommendedList = ref<QRecommendedListItem[]>([]);
 
-const newSongsList = ref<any>([])
+type AuthorArray = Array<{
+  author_id: string;
+  author_name: string;
+  sizable_cover: string;
+}>;
+
+interface NewSongsItem {
+  album_cover: string;
+  "320hash"?: string;
+  alnum_id: string;
+  authors: AuthorArray;
+  cover: string;
+  duration: number;
+  filename: string;
+  hash: string;
+  hash_high: string;
+  mvhash: string;
+  remark: string;
+  songname: string;
+  sort: number;
+}
+
+const newSongsList = ref<NewSongsItem[]>([]);
+
+interface MVListItem {
+  album_audio_id: string;
+  album_cover: string;
+  authors: AuthorArray;
+  description: string;
+  duration: number;
+  fhd_filesize: number;
+  fhd_hash: string;
+  hd_hash: string;
+  img: string;
+  ld_filesize: string;
+  ld_hash: string;
+  mvhash: string;
+  playcount: number;
+  publish: string;
+  qhd_filesize: string;
+  qhd_hash: string;
+  remark: string;
+  sd_filesize: string;
+  sd_hash: string;
+  singername: string;
+  title: string;
+  videoid: number;
+  videoname: string;
+}
+
+const mvList = ref<MVListItem[]>([]);
 
 onBeforeMount(() => {
   getFocusImages().then((res: any) => {
@@ -114,8 +187,10 @@ onBeforeMount(() => {
     qRecommendedList.value = res.recomPlaylist.data.v_hot;
   });
   getKGNewSongs().then((res: any) => {
-    console.log(res);
     newSongsList.value = res.data.info.slice(0, 12);
+  });
+  getKGMvList().then((res: any) => {
+    mvList.value = res.data.info.slice(0, 12);
   });
 });
 </script>

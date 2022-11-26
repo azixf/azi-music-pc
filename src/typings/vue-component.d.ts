@@ -28,6 +28,7 @@ declare module '@vue/runtime-core' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ItemTitle: typeof import('./../components/home/itemTitle.vue')['default']
     ListItem: typeof import('./../components/home/listItem.vue')['default']
+    MvItem: typeof import('./../components/home/mvItem.vue')['default']
     NewItem: typeof import('./../components/home/newItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

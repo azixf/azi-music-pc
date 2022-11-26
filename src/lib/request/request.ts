@@ -27,8 +27,8 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (res: AxiosResponse) => {
-    const { code, data } = res.data;
-    if (code != 200 && code != 0) {
+    const { code, status } = res.data;
+    if (code != 200 && code != 0 && status != 1) {
       const { status, msg } = errHandler(res);
       ElNotification({
         title: `请求错误码：${status}`,
