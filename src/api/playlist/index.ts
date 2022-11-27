@@ -1,6 +1,5 @@
 import { http } from "@/lib/request/request"
 
-
 interface KWPlaylistInfoRequest {
   pid: string | number,
   page: number,
@@ -15,4 +14,9 @@ export const apiGetKWPlaylistInfo = (
     page: data.page,
     size: data.size
   })
+}
+
+// 获取q鹅歌单详情
+export const apiGetQEPlaylistInfo = (id: string) => {
+  return http.get(`/qq/getPlaylistIngo/${id}`)
 }

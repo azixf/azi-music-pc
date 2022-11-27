@@ -5,20 +5,19 @@
         <el-col :span="6">
           <img
             class="playlist-cover"
-            :src="playlistInfo?.img700"
+            :src="state.cover"
             alt="playlist-cover"
           />
         </el-col>
         <el-col :span="18">
           <div class="playlist-header">
             <div class="playlist-header__tag">歌单</div>
-            <div class="playlist-header__name">{{ playlistInfo?.name }}</div>
+            <div class="playlist-header__name">{{ state.playlistName }}</div>
           </div>
           <div class="playlist-info">
-            <span v-if="playlistInfo?.uname"
-              >{{ playlistInfo?.uname }}创建</span
+            <span v-if="state.playlistCreator"
+              >{{ state.playlistCreator }}创建</span
             >
-            <!-- <span class="m-l-16"> </span> -->
           </div>
           <div class="playlist-content">
             <div class="playlist-content__playall">
@@ -37,15 +36,15 @@
             </div>
           </div>
           <div class="playlist-data">
-            <span v-if="playlistInfo?.total"
-              >歌曲：{{ playlistInfo?.total }}</span
+            <span v-if="state.total"
+              >歌曲：{{ state.total }}</span
             >
-            <span class="m-l-24" v-if="playlistInfo?.listencnt"
-              >收听：{{ playlistInfo?.listencnt }}</span
+            <span class="m-l-24" v-if="state.listencnt > 0"
+              >收听：{{ state.listencnt }}</span
             >
           </div>
-          <div class="playlist-tag m-t-16" v-if="tags.length > 0">
-            <el-tag v-for="tag in tags">{{ tag }}</el-tag>
+          <div class="playlist-tag m-t-16" v-if="state.tags.length > 0">
+            <el-tag v-for="tag in state.tags">{{ tag }}</el-tag>
           </div>
         </el-col>
       </el-row>
@@ -61,7 +60,7 @@
       </el-row>
     </section>
     <section class="playlist-table">
-      <el-table :data="playlistInfo?.musicList" stripe>
+      <el-table :data="state.songsList" stripe>
         <el-table-column type="index" :index="setIndex" width="64" />
         <el-table-column prop="operation" label="操作">
           <div class="playlist-table__operation">
@@ -76,18 +75,34 @@
         <el-table-column prop="title" label="标题">
           <template #default="{ row }">
             <div class="playlist-table__title">
-              <span>{{ row.name }}</span>
+              <span>{{ type === 'kuwo' ? row.name : row.songname }}</span>
               <span class="flag" v-if="row.hasmv">MV</span>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="artist" label="歌手" />
-        <el-table-column prop="album" label="专辑" />
-        <el-table-column prop="releaseDate" label="发行日期" />
-        <el-table-column prop="songTimeMinutes" label="时间" />
+        <el-table-column prop="artist" label="歌手">
+          <template #default="{ row }" v-if="type !== 'kuwo'">
+            <span>{{ row.singer?.[0]?.name || '-' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="album" label="专辑">
+          <template #default="{ row }">
+            <span>{{ row.albumname }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="releaseDate" label="发行日期">
+          <template #default v-if="type !== 'kuwo'">
+            <span>-</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="songTimeMinutes" label="时间">
+          <template #default="{ row }" v-if="type !== 'kuwo'">
+            <span> {{ duration(row.interval) }}</span>
+          </template>
+        </el-table-column>
       </el-table>
     </section>
-    <section class="playlist-pagination">
+    <section class="playlist-pagination" v-if="type === 'kuwo'">
       <el-pagination
         background 
         v-model:current-page="pagination.page"
@@ -107,7 +122,17 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { apiGetKWPlaylistInfo } from "@/api";
+import { apiGetKWPlaylistInfo, apiGetQEPlaylistInfo } from "@/api";
+
+const state = reactive({
+  cover: '',
+  playlistName: '',
+  playlistCreator: '',
+  total: 0,
+  listencnt: 0,
+  tags: [] as string[],
+  songsList: [] as any
+})
 
 const pagination = reactive({
   page: 1,
@@ -115,6 +140,7 @@ const pagination = reactive({
   total: 100,
 });
 
+// 库硪
 interface MusicListItem {
   album: string;
   albumid: number;
@@ -156,24 +182,84 @@ const tags = computed(() => {
 });
 
 const route = useRoute();
+const type = ref('');
 onBeforeMount(() => {
+  type.value = route.query.type as string;
   getPlayListInfo();
 });
+
+// qq
+interface QQSongList  {
+  albumdesc: string,
+  albumid: number,
+  albummid: string,
+  albumname: string,
+  singer: Array<{ id: number, mid: string, name: string }>,
+  interval: number,
+  songid: number,
+  songmid: string,
+  songname: string,
+  strMediaMid: string
+}
+
+interface QQPlaylistInfoData {
+  album_pic_mid: string,
+  coveradurl: string,
+  cur_song_num: number,
+  desc: string,
+  dissid: number,
+  dissname: string,
+  headurl: string,
+  ifpicurl: string,
+  logo: string,
+  nick: string,
+  nickname: string,
+  pic_dpi: string,
+  singerid: number,
+  songlist: Array<QQSongList>,
+  songnum: number,
+  total_song_num: number,
+  tags: Array<{id: number, name: string, pid: number}>,
+  visitnum: number
+}
+
+const qqPlaylist = ref<QQPlaylistInfoData>()
 
 const getPlayListInfo = () => {
   const { query } = route;
   if (query.type === "kuwo") {
-    if (playlistInfo.value?.musicList) {
-        playlistInfo.value.musicList = []
+    if (state.songsList?.length) {
+        state.songsList = []
       }
     apiGetKWPlaylistInfo({
       pid: query.pid as string,
       page: pagination.page - 1,
       size: pagination.size,
     }).then((res: any) => {
-      playlistInfo.value = res.data;
+      // playlistInfo.value = res.data;
       pagination.total = res.data.total;
+      const data = res.data as PlaylistInfoData;
+      state.cover = data?.img700 || data?.img500 || data?.img300 || data?.img;
+      state.listencnt = data.listencnt;
+      state.playlistCreator = data.uname;
+      state.songsList = data.musicList;
+      state.total = data.total;
+      state.tags = data.tag?.split(',') || [];
     });
+  } else if (query.type === 'qq') {
+    apiGetQEPlaylistInfo(query.pid as string).then((res: any) => {
+      console.log(res);
+      const data = res.cdlist?.[0] as QQPlaylistInfoData;
+      if (data) {
+        state.cover = data.logo;
+        state.listencnt = data.visitnum;
+        state.playlistCreator = data.nickname;
+        state.playlistName = data.dissname;
+        state.tags = data.tags?.map(item => item.name);
+        state.songsList = data.songlist;
+        state.total = data.total_song_num;
+      }
+    })
   }
 }
 
@@ -182,8 +268,16 @@ const onPaginationChange = () => {
 }
 
 const setIndex = (idx: number) => {
-  return (pagination.page - 1) * pagination.size + idx + 1
+  return route.query.type === 'kuwo' ? (pagination.page - 1) * pagination.size + idx + 1 : idx + 1;
 }
+
+const duration = computed(() => {
+  return function (interval: number) {
+    const minutes = Math.floor(interval / 60) + '';
+    const seconds = (interval % 60 + '').padStart(2, '0');
+    return `${minutes}:${seconds}`
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -191,6 +285,8 @@ const setIndex = (idx: number) => {
   &-cover {
     width: 100%;
     height: 100%;
+    max-width: 240px;
+    max-height: 240px;
     border-radius: var(--radius-default);
   }
 

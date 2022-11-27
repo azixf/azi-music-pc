@@ -38,7 +38,7 @@
         :lg="4"
         v-for="item in qRecommendedList"
       >
-        <list-item :src="item.cover" :detail="item.title" center />
+        <list-item :src="item.cover" :detail="item.title" center @click="onQEPlaylistClick(item)"/>
       </el-col>
     </el-row>
   </section>
@@ -202,6 +202,17 @@ const onKWPlaylistClick = (item: recommendedListItem) => {
     query: {
       type: 'kuwo',
       pid: item.id
+    }
+  })
+}
+
+const onQEPlaylistClick = (item: QRecommendedListItem) => {
+  console.log(item);
+  router.push({
+    path: '/playlist',
+    query: {
+      type: 'qq',
+      pid: item.content_id
     }
   })
 }
