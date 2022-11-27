@@ -118,8 +118,7 @@ watch(() => route, (value) => {
   })
   const path = params ? route.path + '?' + params : route.path
   const matchedPath = navItemList.value.find(item => item.route === path)
-  console.log(path);
-  activeIndex.value = matchedPath!.id
+  activeIndex.value = matchedPath?.id || -1
 }, {
   immediate: true,
   deep: true

@@ -44,7 +44,6 @@ export class CustomRouter {
       this.previous.canPush = false
       const { _router } = useStore()
       this.next.push(_router.current)
-      console.log('previous: ', item);
       router.push({
         path: item.path,
         query: item.query
@@ -54,10 +53,7 @@ export class CustomRouter {
 
   public goToNext() {
     if (this.next.size > 0) {
-      console.log('next lsit: ', this.next);
       const item = this.next.pop()!
-      // this.previous.push(item)
-      console.log('next: ', item);
       router.push({
         path: item.path,
         query: item.query

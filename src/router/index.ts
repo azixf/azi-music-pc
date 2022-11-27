@@ -51,7 +51,6 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     _router.router.previous.push(from)
-    console.log('router: ', _router.router.previous);
     next()
   }
 })
