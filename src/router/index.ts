@@ -45,6 +45,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  console.log('route: ', to);
   const { _router } = useStore()
   _router.current = to
   if (to.fullPath === from.fullPath && from.fullPath === '/') {

@@ -1,0 +1,18 @@
+import { http } from "@/lib/request/request"
+
+
+interface KWPlaylistInfoRequest {
+  pid: string | number,
+  page: number,
+  size: number
+}
+// 获取库硪歌单详情
+export const apiGetKWPlaylistInfo = (
+  data: KWPlaylistInfoRequest
+) => {
+  return http.post('/kuwo/palyListInfo', {
+    pid: data.pid,
+    page: data.page,
+    size: data.size
+  })
+}

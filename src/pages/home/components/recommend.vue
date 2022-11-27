@@ -22,6 +22,7 @@
           :detail="item.info"
           show-mask
           :mask-text="item.name"
+          @click="onKWPlaylistClick(item)"
         ></list-item>
       </el-col>
     </el-row>
@@ -193,6 +194,17 @@ onBeforeMount(() => {
     mvList.value = res.data.info.slice(0, 12);
   });
 });
+
+const router = useRouter()
+const onKWPlaylistClick = (item: recommendedListItem) => {
+  router.push({
+    path: '/playlist',
+    query: {
+      type: 'kuwo',
+      pid: item.id
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>

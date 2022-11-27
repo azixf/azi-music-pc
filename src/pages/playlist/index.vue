@@ -2,21 +2,23 @@
   <div class="playlist-wrapper">
     <section class="playlist-top">
       <el-row :gutter="16">
-        <el-col :span="4">
+        <el-col :span="6">
           <img
             class="playlist-cover"
-            src="@/assets/vue.svg"
+            :src="playlistInfo?.img700"
             alt="playlist-cover"
           />
         </el-col>
-        <el-col :span="20">
+        <el-col :span="18">
           <div class="playlist-header">
             <div class="playlist-header__tag">歌单</div>
-            <div class="playlist-header__name">我喜欢的音乐</div>
+            <div class="playlist-header__name">{{ playlistInfo?.name }}</div>
           </div>
           <div class="playlist-info">
-            <span>谁</span>
-            <span class="m-l-16"> 2022-12-15创建 </span>
+            <span v-if="playlistInfo?.uname"
+              >{{ playlistInfo?.uname }}创建</span
+            >
+            <!-- <span class="m-l-16"> </span> -->
           </div>
           <div class="playlist-content">
             <div class="playlist-content__playall">
@@ -35,14 +37,15 @@
             </div>
           </div>
           <div class="playlist-data">
-            <span>歌曲：155</span>
-            <span class="m-l-24">收听：1555555</span>
+            <span v-if="playlistInfo?.total"
+              >歌曲：{{ playlistInfo?.total }}</span
+            >
+            <span class="m-l-24" v-if="playlistInfo?.listencnt"
+              >收听：{{ playlistInfo?.listencnt }}</span
+            >
           </div>
-          <div class="playlist-tag m-t-16">
-            <el-tag>怀旧</el-tag>
-            <el-tag>伤感</el-tag>
-            <el-tag>忧伤</el-tag>
-            <el-tag>情歌</el-tag>
+          <div class="playlist-tag m-t-16" v-if="tags.length > 0">
+            <el-tag v-for="tag in tags">{{ tag }}</el-tag>
           </div>
         </el-col>
       </el-row>
@@ -58,8 +61,8 @@
       </el-row>
     </section>
     <section class="playlist-table">
-      <el-table :data="data" stripe>
-        <el-table-column type="index" />
+      <el-table :data="playlistInfo?.musicList" stripe>
+        <el-table-column type="index" :index="setIndex" width="64" />
         <el-table-column prop="operation" label="操作">
           <div class="playlist-table__operation">
             <svg-icon
@@ -73,15 +76,26 @@
         <el-table-column prop="title" label="标题">
           <template #default="{ row }">
             <div class="playlist-table__title">
-              <span>{{ row.title }}</span>
-              <span class="flag">MV</span>
+              <span>{{ row.name }}</span>
+              <span class="flag" v-if="row.hasmv">MV</span>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="singer" label="歌手" />
+        <el-table-column prop="artist" label="歌手" />
         <el-table-column prop="album" label="专辑" />
-        <el-table-column prop="duration" label="时间" />
+        <el-table-column prop="releaseDate" label="发行日期" />
+        <el-table-column prop="songTimeMinutes" label="时间" />
       </el-table>
+    </section>
+    <section class="playlist-pagination">
+      <el-pagination
+        background 
+        v-model:current-page="pagination.page"
+        :page-size="pagination.size"
+        layout="prev, pager, next"
+        :page-count="pagination.total"
+        @current-change="onPaginationChange"
+      />
     </section>
   </div>
 </template>
@@ -93,35 +107,90 @@ export default {
 </script>
 
 <script lang="ts" setup>
-const data = ref([
-  {
-    title: "title1",
-    singer: "singer1",
-    album: "album1",
-    duration: 3000,
-  },
-  {
-    title: "title2",
-    singer: "singer2",
-    album: "album2",
-    duration: 2000,
-  },
-  ...Array.from(new Array(60), () => {
-    return {
-      title: "title2",
-      singer: "singer2",
-      album: "album2",
-      duration: 2000,
-    };
-  }),
-]);
+import { apiGetKWPlaylistInfo } from "@/api";
+
+const pagination = reactive({
+  page: 1,
+  size: 100,
+  total: 100,
+});
+
+interface MusicListItem {
+  album: string;
+  albumid: number;
+  albumpic: string;
+  artist: string;
+  artistid: number;
+  duration: number;
+  hasmv: number;
+  name: string;
+  pic: string;
+  pic120: string;
+  songTimeMinutes: string;
+  releaseDate: string;
+}
+
+interface PlaylistInfoData {
+  desc: string;
+  id: number;
+  img: string;
+  img300: string;
+  img500: string;
+  img700: string;
+  info: string;
+  isOfficial: number;
+  listencnt: number;
+  musicList: Array<MusicListItem>;
+  name: string;
+  tag: string;
+  total: number;
+  uPic: string;
+  uname: string;
+  userName: string;
+}
+
+const playlistInfo = ref<PlaylistInfoData>();
+
+const tags = computed(() => {
+  return playlistInfo.value?.tag?.split(",") || [];
+});
+
+const route = useRoute();
+onBeforeMount(() => {
+  getPlayListInfo();
+});
+
+const getPlayListInfo = () => {
+  const { query } = route;
+  if (query.type === "kuwo") {
+    if (playlistInfo.value?.musicList) {
+        playlistInfo.value.musicList = []
+      }
+    apiGetKWPlaylistInfo({
+      pid: query.pid as string,
+      page: pagination.page - 1,
+      size: pagination.size,
+    }).then((res: any) => {
+      playlistInfo.value = res.data;
+      pagination.total = res.data.total;
+    });
+  }
+}
+
+const onPaginationChange = () => {
+  getPlayListInfo()
+}
+
+const setIndex = (idx: number) => {
+  return (pagination.page - 1) * pagination.size + idx + 1
+}
 </script>
 
 <style lang="scss" scoped>
 .playlist {
   &-cover {
-    width: 80%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
     border-radius: var(--radius-default);
   }
 
@@ -215,6 +284,12 @@ const data = ref([
         color: var(--color-primary);
       }
     }
+  }
+
+  &-pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--padding-default);
   }
 }
 </style>
