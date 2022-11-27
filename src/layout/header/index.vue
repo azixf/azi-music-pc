@@ -1,49 +1,72 @@
 <template>
-  <header data-tauri-drag-region class="layout-header-wrapper flex align-center justify-between">
+  <header
+    data-tauri-drag-region
+    class="layout-header-wrapper flex align-center justify-between"
+  >
     <div class="layout-header-logo flex align-center">
-      <svg-icon name="netease-cloud-music-fill" color="#ffffff" size="32px"></svg-icon>
+      <svg-icon
+        name="netease-cloud-music-fill"
+        color="#ffffff"
+        size="32px"
+      ></svg-icon>
       <strong class="logo-text">4U Music</strong>
     </div>
     <div class="layout-header-search">
       <div class="layout-header-browser-btns flex align-center">
-        <div class="browser-btn back">
-          <svg-icon name="arrow-left" color="var(--color-header-icon)"></svg-icon>
+        <div
+          :class="[
+            'browser-btn',
+            'back',
+            {
+              active: _router.router.previous.size > 0,
+            },
+          ]"
+          @click="_router.router.goToPrevious"
+        >
+          <svg-icon
+            name="arrow-left"
+            color="var(--color-header-icon)"
+          ></svg-icon>
         </div>
-        <div class="browser-btn forward">
-          <svg-icon name="arrow-right" color="var(--color-header-icon)"></svg-icon>
+        <div :class="['browser-btn', { active: _router.router.next.size > 0 }]" @click="_router.router.goToNext">
+          <svg-icon
+            name="arrow-right"
+            color="var(--color-header-icon)"
+          ></svg-icon>
         </div>
       </div>
       <div class="layout-header-input flex align-center">
         <svg-icon name="search" color="#fff" size="14px" class="search-icon" />
-        <input type="text" placeholder="请输入"  class="search-input"/>
+        <input type="text" placeholder="请输入" class="search-input" />
       </div>
     </div>
     <div class="layout-header-operations">
       <skin-comp />
-      <svg-icon name="settings" color="var(--color-header-icon)"/>
-      <el-divider direction="vertical"/>
+      <svg-icon name="settings" color="var(--color-header-icon)" />
+      <el-divider direction="vertical" />
       <window-operation />
-      
     </div>
   </header>
 </template>
 
-<script lang='ts'>
-import SkinComp from './components/skin.vue'
-import windowOperation from './components/windowOperation.vue'
+<script lang="ts">
+import { useStore } from "@/store";
+import SkinComp from "./components/skin.vue";
+import windowOperation from "./components/windowOperation.vue";
 export default {
-  name: 'LayoutHeader',
+  name: "LayoutHeader",
   components: {
     SkinComp,
-    windowOperation
-  }
-}
+    windowOperation,
+  },
+};
 </script>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
+const { _router } = useStore();
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .layout-header-wrapper {
   height: 100%;
   background: var(--color-primary);
@@ -70,9 +93,18 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+    cursor: not-allowed;
     &.back {
       margin-right: var(--padding-small);
+    }
+    &.active {
+      cursor: pointer;
+      &:active {
+        opacity: 0.67;
+      }
+      :deep(.svg-icon) {
+        color: #ffffff !important;
+      }
     }
   }
 

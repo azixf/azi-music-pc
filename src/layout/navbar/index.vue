@@ -1,17 +1,17 @@
 <template>
   <nav class="layout-nav">
     <nav-item
-      v-for="(nav, index) in navItemList"
-      :label="nav.label"
+      v-for="(item, index) in navItemList"
+      :label="item.label"
       :active="activeIndex === index"
-      :type="nav.type"
-      @click="onNavItemClick(nav, index)"
+      :type="item.type"
+      @click="onNavItemClick(item)"
     >
-      <template #prefix v-if="nav.prefix">
-        <component :is="nav.prefix"></component>
+      <template #prefix v-if="item.prefix">
+        <component :is="item.prefix"></component>
       </template>
-      <template #suffix v-if="nav.suffix">
-        <component :is="nav.suffix"></component>
+      <template #suffix v-if="item.suffix">
+        <component :is="item.suffix"></component>
       </template>
     </nav-item>
   </nav>
@@ -103,12 +103,27 @@ const navItemList = ref<NavItemType[]>([
 ]);
 
 const router = useRouter();
-const onNavItemClick = (item: NavItemType, index: number) => {
-  if (item.type === "main" && item.route) {
-    activeIndex.value = index;
-    router.push(item.route);
+const onNavItemClick = (item: NavItemType) => {
+  if (item.type === "main" && !!item.route) {
+    router.replace(item.route!);
   }
 };
+
+const route = useRoute()
+watch(() => route, (value) => {
+  const query = route.query
+  let params = ''
+  Object.keys(query).map((item, index) => {
+    params += `${index === 0 ? '' : '&'}${item}=${query[item]}`
+  })
+  const path = params ? route.path + '?' + params : route.path
+  const matchedPath = navItemList.value.find(item => item.route === path)
+  console.log(path);
+  activeIndex.value = matchedPath!.id
+}, {
+  immediate: true,
+  deep: true
+})
 </script>
 
 <style lang="scss" scoped>

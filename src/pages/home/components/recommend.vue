@@ -1,6 +1,6 @@
 <template>
   <section>
-    <el-carousel :interval="4000" type="card" height="20vw">
+    <el-carousel trigger="click" :interval="4000" type="card" height="20vw">
       <el-carousel-item v-for="img in images">
         <img :src="img?.pic_info?.url" alt="" class="carousel-img" />
       </el-carousel-item>

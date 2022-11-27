@@ -1,11 +1,12 @@
 <template>
   <el-config-provider :locale="zhCn">
-    <router-view v-slot="{ Component }">
+    <!-- <router-view v-slot="{ Component }">
       <keep-alive v-if="$route.meta.keepAlive">
         <component :is="Component"></component>
       </keep-alive>
       <component :is="Component" v-if="!$route.meta.keepAlive"></component>
-    </router-view>
+    </router-view> -->
+    <router-view />
   </el-config-provider>
 </template>
 

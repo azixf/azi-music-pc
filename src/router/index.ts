@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { useStore } from '@/store'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -10,7 +11,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/home/index.vue'),
         meta: {
           title: '首页',
-          keepAlive: true
+          cache: true
         }
       },
       {
@@ -41,6 +42,18 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   routes,
   history: createWebHistory()
+})
+
+router.beforeEach((to, from, next) => {
+  const { _router } = useStore()
+  _router.current = to
+  if (to.fullPath === from.fullPath && from.fullPath === '/') {
+    next()
+  } else {
+    _router.router.previous.push(from)
+    console.log('router: ', _router.router.previous);
+    next()
+  }
 })
 
 export default router

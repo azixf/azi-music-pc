@@ -8,7 +8,13 @@
         <LayoutNav />
       </div>
       <div class="layout-page-content">
-        <router-view></router-view>
+        <!-- <router-view></router-view> -->
+        <router-view v-slot="{ Component }">
+          <keep-alive v-if="$route.meta.cache">
+            <component :is="Component"></component>
+          </keep-alive>
+          <component :is="Component" v-if="!$route.meta.cache"></component>
+        </router-view>
       </div>
     </div>
     <div class="layout-page-footer">

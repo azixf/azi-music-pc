@@ -1,5 +1,5 @@
 <template>
-  <div :class="['nav-item', { active: props.active, 'sub-title': props.type === 'second' }]">
+  <div :class="['nav-item', { active, 'sub-title': type === 'second' }]">
       <span class="flex align-center">
         <span :class="{ 'm-r-8': $slots.prefix }">
           <slot name="prefix"></slot>
@@ -27,7 +27,7 @@ interface NavItemProps {
   type?: 'main' | 'second'
 }
 
-const props = withDefaults(defineProps<NavItemProps>(), {
+withDefaults(defineProps<NavItemProps>(), {
   active: false,
   type: 'main'
 })
