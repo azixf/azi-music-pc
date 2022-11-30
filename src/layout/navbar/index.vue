@@ -105,20 +105,22 @@ const navItemList = ref<NavItemType[]>([
 const router = useRouter();
 const onNavItemClick = (item: NavItemType) => {
   if (item.type === "main" && !!item.route) {
-    router.replace(item.route!);
+    router.push(item.route!);
   }
 };
 
 const route = useRoute()
-watch(() => route, (value) => {
+watch(() => route, () => {
   const query = route.query
   let params = ''
   Object.keys(query).map((item, index) => {
     params += `${index === 0 ? '' : '&'}${item}=${query[item]}`
   })
   const path = params ? route.path + '?' + params : route.path
+  console.log('path: ', path);
   const matchedPath = navItemList.value.find(item => item.route === path)
-  activeIndex.value = matchedPath?.id || -1
+  console.log(matchedPath);
+  activeIndex.value = matchedPath?.id ?? -1
 }, {
   immediate: true,
   deep: true

@@ -8,6 +8,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '',
+        name: 'index',
         component: () => import('@/pages/home/index.vue'),
         meta: {
           title: '首页',
@@ -16,6 +17,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'playlist',
+        name: 'playlist',
         component: () => import('@/pages/playlist/index.vue'),
         meta: {
           title: '播放列表'
@@ -23,6 +25,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'download',
+        name: 'download',
         component: () => import('@/pages/download/index.vue'),
         meta: {
           title: '本地与下载'
@@ -30,6 +33,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'recent',
+        name: 'recent',
         component: () => import('@/pages/recent/index.vue'),
         meta: {
           title: '最近播放'

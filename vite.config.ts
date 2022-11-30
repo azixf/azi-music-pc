@@ -14,7 +14,8 @@ import Inspecet from 'vite-plugin-inspect'
 export default defineConfig({
   clearScreen: false,
   server: {
-    strictPort: true
+    strictPort: true,
+    port: 5237
   },
   resolve: {
     alias: {

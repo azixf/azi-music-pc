@@ -3,7 +3,7 @@
   "build": {
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
-    "devPath": "http://localhost:8080",
+    "devPath": "http://localhost:5237",
     "distDir": "../dist"
   },
   "package": {
@@ -79,7 +79,7 @@
         "center": true,
         "visible": true,
         "height": 200,
-        "width": 640,
+        "width": 540,
         "resizable": false,
         "label": "splashscreen",
         "url": "splash.html"

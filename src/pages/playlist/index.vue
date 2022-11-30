@@ -12,7 +12,7 @@
         <el-col :span="18">
           <div class="playlist-header">
             <div class="playlist-header__tag">歌单</div>
-            <div class="playlist-header__name">{{ state.playlistName }}</div>
+            <div class="playlist-header__name" v-html="state.playlistName"></div>
           </div>
           <div class="playlist-info">
             <span v-if="state.playlistCreator"
@@ -108,7 +108,7 @@
         v-model:current-page="pagination.page"
         :page-size="pagination.size"
         layout="prev, pager, next"
-        :page-count="pagination.total"
+        :total="pagination.total"
         @current-change="onPaginationChange"
       />
     </section>
@@ -175,12 +175,6 @@ interface PlaylistInfoData {
   userName: string;
 }
 
-const playlistInfo = ref<PlaylistInfoData>();
-
-const tags = computed(() => {
-  return playlistInfo.value?.tag?.split(",") || [];
-});
-
 const route = useRoute();
 const type = ref('');
 onBeforeMount(() => {
@@ -223,7 +217,6 @@ interface QQPlaylistInfoData {
   visitnum: number
 }
 
-const qqPlaylist = ref<QQPlaylistInfoData>()
 
 const getPlayListInfo = () => {
   const { query } = route;
@@ -236,7 +229,6 @@ const getPlayListInfo = () => {
       page: pagination.page - 1,
       size: pagination.size,
     }).then((res: any) => {
-      // playlistInfo.value = res.data;
       pagination.total = res.data.total;
       const data = res.data as PlaylistInfoData;
       state.cover = data?.img700 || data?.img500 || data?.img300 || data?.img;
@@ -248,7 +240,6 @@ const getPlayListInfo = () => {
     });
   } else if (query.type === 'qq') {
     apiGetQEPlaylistInfo(query.pid as string).then((res: any) => {
-      console.log(res);
       const data = res.cdlist?.[0] as QQPlaylistInfoData;
       if (data) {
         state.cover = data.logo;

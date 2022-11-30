@@ -8,13 +8,13 @@
         <LayoutNav />
       </div>
       <div class="layout-page-content">
-        <!-- <router-view></router-view> -->
+        <!-- <router-view /> -->
         <router-view v-slot="{ Component }">
-          <keep-alive v-if="$route.meta.cache">
-            <component :is="Component"></component>
-          </keep-alive>
-          <component :is="Component" v-if="!$route.meta.cache"></component>
-        </router-view>
+      <keep-alive>
+        <component :is="Component" v-if="$route.meta.cache" :key="key"></component>
+      </keep-alive>
+      <component :is="Component" v-if="!$route.meta.cache" :key="key"></component>
+    </router-view>
       </div>
     </div>
     <div class="layout-page-footer">
@@ -38,7 +38,16 @@ export default {
 </script>
 
 <script lang='ts' setup>
-
+const route = useRoute()
+const key = computed(() => {
+  const path = route.path
+  const query = route.query
+  let params = ''
+  Object.keys(query).forEach((item) => {
+    params +=  `${item}=${query[item]}&`
+  })
+  return params ? path + '?' + params.slice(0, params.length) : path;
+})
 </script>
 
 <style lang='scss' scoped>
