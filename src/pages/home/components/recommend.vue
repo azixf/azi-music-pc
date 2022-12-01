@@ -19,9 +19,9 @@
       >
         <list-item
           :src="item.img"
-          :detail="item.info"
+          :detail="item.name"
           show-mask
-          :mask-text="item.name"
+          :mask-text="item.info"
           @click="onKWPlaylistClick(item)"
         ></list-item>
       </el-col>
@@ -98,19 +98,11 @@ import {
 const images = ref<any>([]);
 
 interface recommendedListItem {
-  img: string;
-  uname: string;
-  img700: string;
-  img300: string;
-  userName: string;
-  img500: string;
-  total: number;
-  name: string;
-  listencnt: number;
-  id: number;
-  musicList: string;
-  desc: string;
-  info: string;
+  id: string,
+  img: string,
+  name: string,
+  uid: string,
+  info: string
 }
 
 const recommendedList = ref<recommendedListItem[]>([]);
@@ -182,7 +174,8 @@ onBeforeMount(() => {
     images.value = res.focus.data.content;
   });
   getRecommendedList().then((res: any) => {
-    recommendedList.value = res.data.list;
+    console.log(res);
+    recommendedList.value = res.data.data.slice(0, 12);
   });
   getQRecommendedList().then((res: any) => {
     qRecommendedList.value = res.recomPlaylist.data.v_hot;

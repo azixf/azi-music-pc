@@ -7,10 +7,10 @@ export const getFocusImages = () => {
 
 // 获取库硪推荐歌单
 export const getRecommendedList = () => {
-  return http.post('/kuwo/getRecommendSongList', {
-    id: 'rcm',
+  return http.post('/kuwo/rcmPlayList', {
+    order: 'new',
     page: 0,
-    size: 10
+    size: 20
   })
 }
 
