@@ -5,11 +5,13 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
 } from "axios";
+import axiosTauriAdapter from 'axios-tauri-adapter'
 
 const service: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL,
   timeout: 10 * 1000,
   timeoutErrorMessage: "请求超时，请稍后重试",
+  adapter: axiosTauriAdapter
 });
 
 service.interceptors.request.use(

@@ -4,11 +4,12 @@
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:5237",
-    "distDir": "../dist"
+    "distDir": "../dist",
+    "withGlobalTauri": true
   },
   "package": {
     "productName": "4U Music",
-    "version": "0.1.0"
+    "version": "1.0.0"
   },
   "tauri": {
     "systemTray": {
@@ -32,7 +33,30 @@
         "removeDir": true,
         "removeFile": true,
         "renameFile": true,
-        "scope": ["*"],
+        "scope": [
+          "$APPCONFIG/*",
+          "$APPDATA/*",
+          "$APPLOCALDATA/*",
+          "$APPCACHE/*",
+          "$APPLOG/*",
+          "$AUDIO/*",
+          "$CACHE/*",
+          "$CONFIG/*",
+          "$DATA/*",
+          "$LOCALDATA/*",
+          "$DESKTOP/*",
+          "$DOCUMENT/*",
+          "$DOWNLOAD/*",
+          "$HOME/*",
+          "$PICTURE/*",
+          "$PUBLIC/*",
+          "$TEMPLATE/*",
+          "$VIDEO/*",
+          "$RESOURCE/*",
+          "$APP/*",
+          "$LOG/*",
+          "$TEMP/*"
+        ],
         "writeFile": true
       }
     },

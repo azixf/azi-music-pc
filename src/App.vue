@@ -9,10 +9,12 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
 import { setTheme } from './lib/utils/themeUtil';
 import { invoke } from '@tauri-apps/api'
 
-onMounted(async () => {
+onMounted(() => {
   const primaryColor = localStorage.primaryColor || '#ec4141'
   setTheme(primaryColor)
-  await invoke('close_splashscreen')
+  setTimeout(async () => {
+    await invoke('close_splashscreen')
+  }, 2000)
 })
 </script>
 
