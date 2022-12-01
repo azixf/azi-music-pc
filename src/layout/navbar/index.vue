@@ -19,13 +19,11 @@
 
 <script lang="ts">
 import { VNode } from "vue";
-import NavItem from "./components/navItem.vue";
-import SvgIcon from "@/components/common/svgIcon.vue";
+import SvgIcon from '@/components/common/svgIcon.vue';
 export default {
   name: "LayoutNav",
   components: {
-    NavItem,
-    SvgIcon
+    NavItem: defineAsyncComponent(() => import('./components/navItem.vue'))
   },
 };
 </script>

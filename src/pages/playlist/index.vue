@@ -1,5 +1,5 @@
 <template>
-  <div class="playlist-wrapper">
+  <div class="playlist-wrapper" v-loading="loading">
     <section class="playlist-top">
       <el-row :gutter="16">
         <el-col :span="6">
@@ -134,6 +134,8 @@ const state = reactive({
   songsList: [] as any
 })
 
+const loading = ref(false)
+
 const pagination = reactive({
   page: 1,
   size: 100,
@@ -220,6 +222,7 @@ interface QQPlaylistInfoData {
 
 const getPlayListInfo = () => {
   const { query } = route;
+  loading.value = true;
   if (query.type === "kuwo") {
     if (state.songsList?.length) {
         state.songsList = []
@@ -237,6 +240,8 @@ const getPlayListInfo = () => {
       state.songsList = data.musicList;
       state.total = data.total;
       state.tags = data.tag?.split(',') || [];
+    }).finally(() => {
+      loading.value = false;
     });
   } else if (query.type === 'qq') {
     apiGetQEPlaylistInfo(query.pid as string).then((res: any) => {
@@ -250,7 +255,9 @@ const getPlayListInfo = () => {
         state.songsList = data.songlist;
         state.total = data.total_song_num;
       }
-    })
+    }).finally(() => {
+      loading.value = false;
+    });
   }
 }
 

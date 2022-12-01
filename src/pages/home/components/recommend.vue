@@ -175,7 +175,7 @@ onBeforeMount(() => {
   });
   getRecommendedList().then((res: any) => {
     console.log(res);
-    recommendedList.value = res.data.data.slice(0, 12);
+    recommendedList.value = res.data?.data?.slice(0, 12);
   });
   getQRecommendedList().then((res: any) => {
     qRecommendedList.value = res.recomPlaylist.data.v_hot;

@@ -14,17 +14,13 @@
 </template>
 
 <script lang="ts">
-import VolumeBox from "./components/volumeBox.vue";
-import AudioPlayer from './components/audioPlayer.vue';
-import MusicCover from './components/musicCover.vue';
-import PlayingList from './components/playingList.vue';
 export default {
   name: "LayoutFooter",
   components: {
-    VolumeBox,
-    AudioPlayer,
-    MusicCover,
-    PlayingList
+    VolumeBox: defineAsyncComponent(() => import('./components/volumeBox.vue')),
+    AudioPlayer: defineAsyncComponent(() => import('./components/audioPlayer.vue')),
+    MusicCover: defineAsyncComponent(() => import('./components/musicCover.vue')),
+    PlayingList: defineAsyncComponent(() => import('./components/playingList.vue'))
   },
 };
 </script>

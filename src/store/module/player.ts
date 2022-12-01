@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 
 export type VolumeState = 'muted' | 'low' | 'high'
+export type MusicOriginType = 'qq' | 'kuwo' | 'kugou' | 'netease'
+export type MusicPlayState = 'loading' | 'pause' | 'playing'
 
 export const usePlayerStore = defineStore('player', {
   state() {
@@ -12,6 +14,8 @@ export const usePlayerStore = defineStore('player', {
       recentList: [], // 最近播放
       favoriteList: [], // 我的收藏
       songsList: [], // 歌单列表
+      type: 'kuwo' as MusicOriginType, // 歌曲来源
+      playState: 'pause' as MusicPlayState // 歌曲比方状态
     }
   },
   persist: true

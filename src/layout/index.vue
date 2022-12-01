@@ -9,11 +9,23 @@
       </div>
       <div class="layout-page-content">
         <router-view v-slot="{ Component }">
-      <keep-alive>
-        <component :is="Component" v-if="$route.meta.cache" :key="key"></component>
-      </keep-alive>
-      <component :is="Component" v-if="!$route.meta.cache" :key="key"></component>
-    </router-view>
+          <keep-alive>
+            <transition name="fade">
+              <component
+                :is="Component"
+                v-if="$route.meta.cache"
+                :key="key"
+              ></component>
+            </transition>
+          </keep-alive>
+          <transition name="fade">
+            <component
+              :is="Component"
+              v-if="!$route.meta.cache"
+              :key="key"
+            ></component>
+          </transition>
+        </router-view>
       </div>
     </div>
     <div class="layout-page-footer">
@@ -22,34 +34,31 @@
   </div>
 </template>
 
-<script lang='ts'>
-import LayoutHeader from './header/index.vue';
-import LayoutFooter from './footer/index.vue';
-import LayoutNav from './navbar/index.vue';
+<script lang="ts">
 export default {
-  name: 'LayoutPage',
+  name: "LayoutPage",
   components: {
-    LayoutHeader,
-    LayoutFooter,
-    LayoutNav
-  }
-}
+    LayoutHeader: defineAsyncComponent(() => import('./header/index.vue')),
+    LayoutFooter: defineAsyncComponent(() => import('./footer/index.vue')),
+    LayoutNav: defineAsyncComponent(() => import('./navbar/index.vue'))
+  },
+};
 </script>
 
-<script lang='ts' setup>
-const route = useRoute()
+<script lang="ts" setup>
+const route = useRoute();
 const key = computed(() => {
-  const path = route.path
-  const query = route.query
-  let params = ''
-  Object.keys(query).forEach((item) => {
-    params +=  `${item}=${query[item]}&`
-  })
-  return params ? path + '?' + params.slice(0, params.length) : path;
-})
+  const path = route.path;
+  const query = route.query;
+  let params = "";
+  Object.keys(query).forEach(item => {
+    params += `${item}=${query[item]}&`;
+  });
+  return params ? path + "?" + params.slice(0, params.length) : path;
+});
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .layout-page {
   width: 100vw;
   height: 100vh;
@@ -76,5 +85,12 @@ const key = computed(() => {
     height: 64px;
     border-top: 1px solid var(--color-border);
   }
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

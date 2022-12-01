@@ -20,7 +20,8 @@ const routes: Array<RouteRecordRaw> = [
         name: 'playlist',
         component: () => import('@/pages/playlist/index.vue'),
         meta: {
-          title: '播放列表'
+          title: '播放列表',
+          cache: true
         }
       },
       {

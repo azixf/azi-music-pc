@@ -22,15 +22,12 @@
 </template>
 
 <script lang="ts">
-import SkinComp from "./components/skin.vue";
-import windowOperation from "./components/windowOperation.vue";
-import SearchBox from './components/searchBox.vue';
 export default {
   name: "LayoutHeader",
   components: {
-    SkinComp,
-    windowOperation,
-    SearchBox
+    SkinComp: defineAsyncComponent(() => import('./components/skin.vue')),
+    windowOperation: defineAsyncComponent(() => import('./components/windowOperation.vue')),
+    SearchBox: defineAsyncComponent(() => import('./components/searchBox.vue'))
   },
 };
 </script>
