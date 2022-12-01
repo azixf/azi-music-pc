@@ -20,7 +20,7 @@
         <list-item
           :src="item.img"
           :detail="item.name"
-          show-mask
+          :show-mask="!!item.info"
           :mask-text="item.info"
           @click="onKWPlaylistClick(item)"
         ></list-item>

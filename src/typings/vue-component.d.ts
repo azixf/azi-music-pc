@@ -31,6 +31,7 @@ declare module '@vue/runtime-core' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    FontIcon: typeof import('./../components/common/fontIcon.vue')['default']
     ItemTitle: typeof import('./../components/home/itemTitle.vue')['default']
     ListItem: typeof import('./../components/home/listItem.vue')['default']
     MvItem: typeof import('./../components/home/mvItem.vue')['default']

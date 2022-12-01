@@ -1,0 +1,203 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3765994 */
+  src: url('//at.alicdn.com/t/c/font_3765994_f24uz9k50yt.woff2?t=1669865467899') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3765994_f24uz9k50yt.woff?t=1669865467899') format('woff'),
+       url('//at.alicdn.com/t/c/font_3765994_f24uz9k50yt.ttf?t=1669865467899') format('truetype'),
+       url('//at.alicdn.com/t/c/font_3765994_f24uz9k50yt.svg?t=1669865467899#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-icon_top1:before {
+  content: "\e668";
+}
+
+.icon-icon_top:before {
+  content: "\e647";
+}
+
+.icon-volume-x:before {
+  content: "\e67a";
+}
+
+.icon-volume-1:before {
+  content: "\e67b";
+}
+
+.icon-volume-2:before {
+  content: "\e67c";
+}
+
+.icon-arrowup:before {
+  content: "\e695";
+}
+
+.icon-arrow-down:before {
+  content: "\e665";
+}
+
+.icon-volume1:before {
+  content: "\e6d0";
+}
+
+.icon-LOOP_ONCE:before {
+  content: "\ea19";
+}
+
+.icon-skip-next:before {
+  content: "\e6d2";
+}
+
+.icon-skip_previous:before {
+  content: "\e99b";
+}
+
+.icon-svgprevious:before {
+  content: "\e693";
+}
+
+.icon-next2:before {
+  content: "\ea5a";
+}
+
+.icon-playfill:before {
+  content: "\e74f";
+}
+
+.icon-next1:before {
+  content: "\e648";
+}
+
+.icon-previous1:before {
+  content: "\e64a";
+}
+
+.icon-loop:before {
+  content: "\e69d";
+}
+
+.icon-pause:before {
+  content: "\e622";
+}
+
+.icon-minus:before {
+  content: "\e632";
+}
+
+.icon-search:before {
+  content: "\e6ac";
+}
+
+.icon-add:before {
+  content: "\e6b9";
+}
+
+.icon-download:before {
+  content: "\e651";
+}
+
+.icon-person:before {
+  content: "\e60c";
+}
+
+.icon-pausecircle:before {
+  content: "\e80d";
+}
+
+.icon-playcircle:before {
+  content: "\e80f";
+}
+
+.icon-dianzan:before {
+  content: "\ec7f";
+}
+
+.icon-close:before {
+  content: "\e6e9";
+}
+
+.icon-mic-outline:before {
+  content: "\e60d";
+}
+
+.icon-Heartbeat:before {
+  content: "\e6e4";
+}
+
+.icon-recent:before {
+  content: "\e6c4";
+}
+
+.icon-settings:before {
+  content: "\e699";
+}
+
+.icon-musiclist:before {
+  content: "\e69c";
+}
+
+.icon-random:before {
+  content: "\e6a4";
+}
+
+.icon-volume:before {
+  content: "\e6e3";
+}
+
+.icon-arrow-right:before {
+  content: "\e743";
+}
+
+.icon-arrow-left:before {
+  content: "\e744";
+}
+
+.icon-add1:before {
+  content: "\e626";
+}
+
+.icon-tubiaozhizuomoban-:before {
+  content: "\e60a";
+}
+
+.icon-netease:before {
+  content: "\e68a";
+}
+
+.icon-back:before {
+  content: "\e666";
+}
+
+.icon-email:before {
+  content: "\e66f";
+}
+
+.icon-netease-cloud-music-fill:before {
+  content: "\e631";
+}
+
+.icon-full_screen:before {
+  content: "\e66d";
+}
+
+.icon-next:before {
+  content: "\e600";
+}
+
+.icon-previous:before {
+  content: "\e601";
+}
+
+.icon-shunxubofang:before {
+  content: "\e6a1";
+}
+
+.icon-skin:before {
+  content: "\e618";
+}

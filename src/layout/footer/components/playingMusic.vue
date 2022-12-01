@@ -6,17 +6,6 @@
     <main>
       main
     </main>
-    <footer class="playing-music-footer">
-      <div>
-        <svg-icon name="heart" />
-        <svg-icon name="heart-fill" color="var(--color-primary)" />
-      </div>
-      <div class="audio-operation">
-        <audio-player />
-        <volume-box />
-        <playing-list />
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -50,20 +39,22 @@ const closeMask = () => {
 <style lang="scss" scoped>
 .playing-music {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 63px);
   position: absolute;
   top: 100vh;
   left: 0;
   z-index: 10;
+  opacity: 0;
   background-color: #fff;
-  transition: top .3s;
-  will-change: top;
+  transition: top .3s, opacity .3s;
+  will-change: top, opacity;
   padding: var(--padding-default);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   &.visible {
     top: 0;
+    opacity: 1;
   }
   .svg-icon {
     cursor: pointer;

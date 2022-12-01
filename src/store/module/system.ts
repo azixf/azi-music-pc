@@ -7,7 +7,8 @@ export const useSystemStore = defineStore('system', {
     return {
       theme: 'default',
       primaryColor: '#ec4141',
-      closeType: 'none' as CloseMethod
+      closeType: 'none' as CloseMethod,
+      onTop: false
     }
   },
   getters: {
