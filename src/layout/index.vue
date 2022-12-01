@@ -8,7 +8,6 @@
         <LayoutNav />
       </div>
       <div class="layout-page-content">
-        <!-- <router-view /> -->
         <router-view v-slot="{ Component }">
       <keep-alive>
         <component :is="Component" v-if="$route.meta.cache" :key="key"></component>

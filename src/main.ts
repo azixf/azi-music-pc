@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import SvgIcon from '@/components/common/svgIcon.vue'
-import { invoke } from '@tauri-apps/api'
 import { pinia } from './store'
 import { vPreventRepeatClick } from '@/lib/directives'
 
@@ -18,7 +17,5 @@ app.use(pinia)
 app.use(vPreventRepeatClick)
 
 router.isReady().then(() => {
-  invoke('close_splashscreen').then(() => {
-    app.mount('#app')
-  })
+  app.mount('#app')
 })

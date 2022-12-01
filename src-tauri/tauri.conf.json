@@ -16,11 +16,29 @@
       "iconAsTemplate": true
     },
     "allowlist": {
-      "all": true
+      "all": true,
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["https://**", "http://**"]
+      },
+      "fs": {
+        "all": true,
+        "copyFile": true,
+        "createDir": true,
+        "exists": true,
+        "readDir": true,
+        "readFile": true,
+        "removeDir": true,
+        "removeFile": true,
+        "renameFile": true,
+        "scope": ["*"],
+        "writeFile": true
+      }
     },
     "bundle": {
       "active": true,
-      "category": "Personal Music App",
+      "category": "Business",
       "copyright": "Designed By azi0427@163.com",
       "deb": {
         "depends": []
