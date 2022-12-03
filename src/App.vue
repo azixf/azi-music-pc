@@ -8,18 +8,27 @@
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 import { setTheme } from "./lib/utils/themeUtil";
 import { invoke } from "@tauri-apps/api";
-import { appWindow } from "@tauri-apps/api/window";
+import { appWindow, UserAttentionType } from "@tauri-apps/api/window";
 import { useStore } from "./store";
 
 const { system } = useStore();
 const { onTop } = storeToRefs(system);
 onMounted(() => {
+  // set custom theme
   const primaryColor = localStorage.primaryColor || "#ec4141";
   setTheme(primaryColor);
+  // prevent using context menu
+  if (!process.env.TAURI_DEBUG) {
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+    })
+  }
   setTimeout(async () => {
+    // close splash window
     await invoke("close_splashscreen");
+    await appWindow.requestUserAttention(UserAttentionType.Informational);
     appWindow.setAlwaysOnTop(onTop.value);
-  }, 2000);
+  }, 1500);
 });
 </script>
 

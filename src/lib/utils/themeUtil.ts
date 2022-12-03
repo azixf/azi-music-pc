@@ -1,5 +1,3 @@
-import { Ref } from "vue"
-
 // 生成色阶
 export const colorMix = (color1: string, color2: string, weight: number) => {
   weight = Math.max(Math.min(Number(weight), 1), 0)

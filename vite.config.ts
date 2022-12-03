@@ -43,6 +43,12 @@ export default defineConfig({
     svgBuilder('./src/assets/svg/'),
   ],
   envPrefix: ['VITE_', 'TAURI_'],
+  esbuild: {
+    pure: ['console.log']
+  },
+  define: {
+    'process.env.TAURI_DEBUG': process.env.TAURI_DEBUG 
+  },
   build: {
     target: ['es2021', 'chrome100', 'safari13'],
     assetsDir: 'assets',

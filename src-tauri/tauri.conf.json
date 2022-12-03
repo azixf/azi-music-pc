@@ -19,13 +19,11 @@
     "allowlist": {
       "http": {
         "all": true,
-        "request": true,
         "scope": ["https://**", "http://**"]
       },
       "fs": {
         "all": true,
-        "scope": ["*"],
-        "writeFile": true
+        "scope": ["*"]
       },
       "globalShortcut": {
         "all": true

@@ -17,6 +17,11 @@ fn main() {
 
     tauri::Builder::default()
         .plugin(PluginBuilder::default().stores([settings]).freeze().build())
+        .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
+            let window = app.get_window("main").unwrap();
+            window.set_focus().unwrap();
+            window.show().unwrap();
+        }))
         .system_tray(create_system_tray())
         .on_system_tray_event(tray_event)
         .invoke_handler(generate_handler![close_splashscreen])

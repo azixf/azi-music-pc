@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A music desktop App"
 authors = ["azixf"]
 license = ""
-repository = ""
+repository = "https://github.com/azixf/azi-music-pc"
 default-run = "app"
 edition = "2021"
 rust-version = "1.57"
@@ -14,6 +14,9 @@ rust-version = "1.57"
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/tauri-plugin-store"
 branch="renovate/rollup-plugin-node-resolve-15.x"
+
+[dependencies.tauri-plugin-single-instance]
+git = "https://github.com/tauri-apps/tauri-plugin-single-instance"
 
 [build-dependencies]
 tauri-build = { version = "1.1.1", features = [] }
