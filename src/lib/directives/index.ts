@@ -1,27 +1,22 @@
-import { App } from "vue";
+import { DirectiveBinding } from "vue";
+import { throttle } from "../utils/common";
 
-export const vPreventRepeatClick = {
-  install: (app: App) => {
-    app.directive("reclick", {
-      mounted: (el, { arg, value }) => {
-        console.log(value, arg);
-        // el.addEventListener('click', (e: MouseEvent) => {
-        //   console.log('click');
-        //   if (!el._disabled) {
-        //     el._disabled = true
-        //     setTimeout(() => {
-        //       el._disabled = false;
-        //     }, 2000)
-        //   } else {
-        //     e.preventDefault();
-        //     e.stopPropagation();
-        //   }
-        // })
-      },
+// 防重复点击
+export const vClick = {
+  mounted: (el: HTMLElement, binding: DirectiveBinding) => {
+    const { arg, value } = binding;
+    const func = !value || typeof value === "function" ? value : () => {};
+    const duration = !arg || isNaN(Number(arg)) ? 2000 : Number(arg);
+    watchEffect(destrory => {
+      el.addEventListener("click", throttle(func, duration, true));
+      destrory(() => {
+        el.removeEventListener("click", throttle(func, duration, true));
+      });
     });
   },
 };
 
+// 图片懒加载
 export const vLazyLoad = {
   mounted: (el: HTMLElement) => {
     const observer = new IntersectionObserver(entries => {
@@ -34,10 +29,31 @@ export const vLazyLoad = {
       });
     });
 
-    const imgList = el.getElementsByTagName("img");
+    const imgList = el.querySelectorAll("img");
     console.log(el, imgList);
     Array.from(imgList).forEach(img => {
       observer.observe(img);
+    });
+  },
+};
+
+// 检测点击外侧
+export const vClickOutside = {
+  mounted: (el: HTMLElement, binding: DirectiveBinding) => {
+    const func =
+      binding.value && typeof binding.value === "function"
+        ? binding.value
+        : () => {};
+    const handleFunc = (event: MouseEvent) => {
+      if (!el.contains(event.target as HTMLElement)) {
+        func();
+      }
+    };
+    watchEffect(destrory => {
+      document.addEventListener("click", handleFunc);
+      destrory(() => {
+        document.removeEventListener("click", handleFunc);
+      });
     });
   },
 };

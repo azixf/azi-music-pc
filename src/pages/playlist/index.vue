@@ -95,6 +95,9 @@
             <span>-</span>
           </template>
         </el-table-column>
+        <el-table-column prop="origin" label="来源">
+          <span>{{ getOrigin }}</span>
+        </el-table-column>
         <el-table-column prop="songTimeMinutes" label="时间">
           <template #default="{ row }" v-if="type !== 'kuwo'">
             <span> {{ duration(row.interval) }}</span>
@@ -275,6 +278,11 @@ const duration = computed(() => {
     const seconds = (interval % 60 + '').padStart(2, '0');
     return `${minutes}:${seconds}`
   }
+})
+
+const getOrigin = computed(():string => {
+  const { type } = route.query
+  return type as string;
 })
 </script>
 

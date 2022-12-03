@@ -9,7 +9,7 @@
       </div>
       <div class="layout-page-content">
         <router-view v-slot="{ Component }">
-          <keep-alive>
+          <keep-alive :max="50">
             <transition name="fade">
               <component
                 :is="Component"

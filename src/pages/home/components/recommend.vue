@@ -6,7 +6,7 @@
       </el-carousel-item>
     </el-carousel>
   </section>
-  <section>
+  <section v-click-outside>
     <item-title title="库硪推荐歌单" />
     <el-row :gutter="16">
       <el-col
@@ -53,6 +53,7 @@
           :music="item.songname"
           :singer="item.authors[0].author_name"
           :mv="!!item.mvhash"
+          v-click="() => test(item)"
         />
       </el-col>
     </el-row>
@@ -94,7 +95,7 @@ import {
   getKGNewSongs,
   getKGMvList,
 } from "@/api";
-
+import { vClick, vClickOutside } from '@/lib/directives'
 const images = ref<any>([]);
 
 interface recommendedListItem {
@@ -208,6 +209,11 @@ const onQEPlaylistClick = (item: QRecommendedListItem) => {
       pid: item.content_id
     }
   })
+}
+
+const test = (event: any) => {
+  console.log(123);
+  console.log(event);
 }
 </script>
 
