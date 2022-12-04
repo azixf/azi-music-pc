@@ -21,9 +21,11 @@ export interface MusicInfo {
   album_id?: string | number; // 专辑id
   mv_id?: string | number; // mv id
   mv?: string; // mv地址
-  origin?: string; // 来源
+  origin?: MusicOriginType; // 来源
   lyric?: string; // 歌词
 }
+
+export type PlayMode = "random" | "loop" | "single" | "order";
 
 export const usePlayerStore = defineStore("player", {
   state() {
@@ -43,26 +45,32 @@ export const usePlayerStore = defineStore("player", {
         album_name: "", // 专辑名称
         album_id: "", // 专辑id
         mv: "", // mv地址
-        origin: "", // 来源
+        origin: undefined, // 来源
         lyric: "", // 歌词
       } as MusicInfo,
       volume: 50, // 音量
       volumeState: "low" as VolumeState, // 音量状态高、低、静音
       autoplay: false, // 是否自动播放
-      loop: false, // 循环播放
+      mode: "order" as PlayMode, // 循环播放
       remember: false, // 记住进度
       lyric: false, // 是否显示歌词
-      currentList: [], // 正在播放列表
-      recentList: [], // 最近播放
-      favoriteList: [], // 我的收藏
+      currentList: [] as Array<MusicInfo>, // 正在播放列表
+      recentList: [] as Array<MusicInfo>, // 最近播放
+      favoriteList: [] as Array<MusicInfo>, // 我的收藏
       songsList: [], // 歌单列表
-      type: "kuwo" as MusicOriginType, // 歌曲来源
-      playState: "pause" as MusicPlayState, // 歌曲比方状态
+      playState: "pause" as MusicPlayState, // 歌曲播放状态
     };
   },
   actions: {
     PLAY_MUSIC(info: Required<MusicInfo>) {
       this.current_info = info;
+      let isIncluded = false;
+      this.currentList.forEach((item) => {
+        if (item.id === info.id && item.origin === info.origin) {
+          isIncluded = true;
+        }
+      })
+      !isIncluded && this.currentList.unshift(info);
     },
     UPDATE_MUSIC_INFO(id: string, info: MusicInfo) {
       if (id === this.current_info.id) {

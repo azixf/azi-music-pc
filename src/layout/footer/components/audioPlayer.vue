@@ -1,24 +1,28 @@
 <template>
   <div class="audio-player">
     <div class="music-operation-btns">
-      <div class="play-mode-box">
-        <svg-icon name="loop" size="20px" />
+      <div class="play-mode-box" :title="modeObj.title" @click="onPlaymodeChanged">
+        <font-icon :name="modeObj.icon" size="20" />
       </div>
       <svg-icon name="skip_previous" size="20px" />
-      <div class="play-state-box" @click="onPlayStateChange(play_state)">
+      <div class="play-state-box" @click="onPlayStateChange(playState)">
         <svg-icon
           name="play_fill"
           size="20px"
-          v-show="play_state === PlayState[1]"
+          v-show="playState === 'pause'"
         />
-        <svg-icon name="pause" size="20px" v-show="play_state === PlayState[0]" />
-        <loading-icon soze="20" v-show="play_state === PlayState[2]" />
+        <svg-icon
+          name="pause"
+          size="20px"
+          v-show="playState === 'playing'"
+        />
+        <loading-icon size="20" v-show="playState === 'loading'" />
       </div>
       <svg-icon name="skip-next" size="20px" />
       <lyric-box />
     </div>
     <div class="music-progress-bar">
-      <span>{{ current_info.time_ms || '0.00' }}</span>
+      <span>{{ current_info.time_ms || "0.00" }}</span>
       <div class="progress-bar-box">
         <el-slider
           v-model="current_info.progress"
@@ -26,12 +30,12 @@
           @change="onAudioProgressChanged"
         />
       </div>
-      <span>{{ current_info.duration_ms || '0.00' }}</span>
+      <span>{{ current_info.duration_ms || "0.00" }}</span>
     </div>
     <audio
       ref="audioRef"
       :src="current_info.src"
-      :loop="loop"
+      :loop="mode === 'single'"
       :autoplay="autoplay"
     ></audio>
   </div>
@@ -39,6 +43,7 @@
 
 <script lang="ts">
 import LyricBox from "./lyricBox.vue";
+import { PlayMode, MusicPlayState } from "@/store/module/player";
 export default {
   name: "AudioPlayer",
   components: {
@@ -56,13 +61,17 @@ import { apiVerifyMusicByHash } from "@/api";
 const audioRef = ref();
 
 const { player } = useStore();
-const { volume, current_info, loop, autoplay } = storeToRefs(player);
+const { volume, current_info, mode, autoplay, playState } = storeToRefs(player);
 
-watch(() => current_info.value.src, () => {
-  loadSrc(() => {
-    play_state.value = PlayState[2];
-  })
-})
+// listen src changed
+watch(
+  () => current_info.value.src,
+  () => {
+    loadSrc(() => {
+      playState.value = 'loading';
+    });
+  }
+);
 
 // listen volume changed
 watch(
@@ -72,7 +81,7 @@ watch(
   }
 );
 
-// listen src changed 
+// listen src changed
 
 interface KGData {
   author: string;
@@ -113,45 +122,40 @@ onMounted(() => {
 });
 
 const canplayHandler = (e: any) => {
-  console.log('canplay');
-  if (play_state.value === PlayState[2]) {
+  console.log("canplay");
+  if (playState.value === 'loading') {
     audioRef.value.play();
-    play_state.value = PlayState[0];
+    playState.value = 'playing';
   }
 };
 
 const endedHandler = (e: any) => {
-  play_state.value = PlayState[1];
+  playState.value = 'pause';
 };
 
 const timeupdateHandler = throttle((e: any) => {
   const current = e.target.currentTime;
-  current_info.value.progress = Math.ceil((current / current_info.value.duration!) * 100);
+  current_info.value.progress = Math.ceil(
+    (current / current_info.value.duration!) * 100
+  );
   current_info.value.time = current;
   current_info.value.time_ms = formatTime(current);
 }, 1000);
 
-enum PlayState {
-  "playing",
-  "pause",
-  "loading",
-}
-const play_state = ref(PlayState[1]);
-
 // play and pause
-const onPlayStateChange = (state: string) => {
-  if (!current_info.value.src || state === PlayState[2]) {
-    ElMessageBox.alert('未选择要播放的歌曲或正在加载中...', '播放提示', {
-      confirmButtonText: '确定'
-    })
+const onPlayStateChange = (state: MusicPlayState) => {
+  if (!current_info.value.src || state === 'loading') {
+    ElMessageBox.alert("未选择要播放的歌曲或正在加载中...", "播放提示", {
+      confirmButtonText: "确定",
+    });
     return;
   }
-  if (state === PlayState[0]) {
+  if (state === 'playing') {
     audioRef.value.pause();
-    play_state.value = PlayState[1];
-  } else if(state === PlayState[1]) {
+   playState.value = 'pause';
+  } else if (state === 'pause') {
     audioRef.value.play();
-    play_state.value = PlayState[0];
+    playState.value = 'playing';
   }
 };
 
@@ -169,6 +173,55 @@ const formatTime = (duration: number): string => {
   const seconds = Math.ceil(duration % 60);
   return `${minitues}:${(seconds + "").padStart(2, "0")}`;
 };
+
+interface PlayModeItem {
+  index: number,
+  key: PlayMode;
+  icon: string;
+  title: string;
+}
+
+const playModeList: Array<PlayModeItem> = [
+  {
+    index: 0,
+    key: "loop",
+    icon: "loop",
+    title: "循环播放",
+  },
+  {
+    index: 1,
+    key: "order",
+    icon: "shunxubofang",
+    title: "顺序播放",
+  },
+  {
+    index: 2,
+    key: "random",
+    icon: "random",
+    title: "随机播放",
+  },
+  {
+    index: 3,
+    key: "single",
+    icon: "LOOP_ONCE",
+    title: "单曲循环",
+  },
+];
+
+// play mode icon
+const modeObj = computed((): PlayModeItem => {
+  return playModeList.find(item => item.key === mode.value)!;
+});
+
+// listen playmode if changed
+const onPlaymodeChanged = () => {
+  const index = modeObj.value.index + 1;
+  if ( index > 3) {
+    mode.value = playModeList[0].key;
+  } else {
+    mode.value = playModeList[index].key;
+  }
+}
 </script>
 
 <style lang="scss" scoped>

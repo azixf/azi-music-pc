@@ -226,7 +226,7 @@ const play = (item: NewSongsItem) => {
   PLAY_MUSIC({
     id: item.audio_id,
     title: item.songname,
-    src: item.hash,
+    src: item.hash_high || item.hash,
     singer: item.authors[0].author_name,
     singer_id: item.authors[0].author_id,
     detail: item.remark,
