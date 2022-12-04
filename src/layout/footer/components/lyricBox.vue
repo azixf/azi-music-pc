@@ -18,9 +18,9 @@ const { lyric } = storeToRefs(player)
 const content = computed(() => {
   let msg = ''
   if (lyric.value) {
-    msg = '关闭歌词';
+    msg = '关闭桌面歌词';
   } else {
-    msg = '打开歌词';
+    msg = '打开桌面歌词';
   }
   return msg;
 })

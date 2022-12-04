@@ -230,7 +230,7 @@ const play = (item: NewSongsItem) => {
     singer: item.authors[0].author_name,
     singer_id: item.authors[0].author_id,
     detail: item.remark,
-    cover: item.cover,
+    cover: item.album_cover.replace('{size}', '480'),
     time: 0,
     time_ms: '',
     duration: item.duration,

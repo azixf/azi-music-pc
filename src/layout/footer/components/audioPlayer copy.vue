@@ -65,7 +65,8 @@ watch(
   () => current_info.value.src,
   () => {
     loadSrc(() => {
-      audioRef.value.play();
+      audioRef.value.load();
+      // audioRef.value.play();
     });
   }
 );

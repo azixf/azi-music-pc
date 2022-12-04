@@ -3,7 +3,7 @@
     <div class="play-music-mask">
       <svg-icon name="arrow-up" color="#eee" />
     </div>
-    <img src="@/assets/vue.svg" alt="" />
+    <img :src="player.current_info.cover" alt="music-cover" />
   </div>
   <div class="play-music-operation" v-show="visible">
     <div class="play-music-icon">
@@ -16,14 +16,15 @@
       <font-icon name="add1" />
     </div>
   </div>
-  <div class="play-name text-ellipsis cursor" v-show="!visible">
-    <div class="song-name">晴天</div>
-    <div class="song-singer">周杰伦</div>
+  <div class="play-name" v-show="!visible">
+    <div class="song-name" :title="player.current_info.title">{{ player.current_info.title }}</div>
+    <div class="song-singer">{{ player.current_info.singer }}</div>
   </div>
   <playing-music v-model="visible" />
 </template>
 
 <script lang="ts">
+import { useStore } from "@/store";
 import PlayingMusic from "./playingMusic.vue";
 export default {
   name: "MusicCover",
@@ -34,6 +35,8 @@ export default {
 </script>
 
 <script lang="ts" setup>
+const { player } = useStore()
+
 const visible = ref(false);
 const showPlayingMusic = () => {
   visible.value = true;
@@ -64,7 +67,8 @@ const showPlayingMusic = () => {
     display: none;
   }
   img {
-    object-fit: cover;
+    width: 40px;
+    height: 40px;
   }
 }
 .play-music-operation {
@@ -87,6 +91,15 @@ const showPlayingMusic = () => {
 }
 
 .play-name {
-  width: 80px;
+  .song-name {
+    width: 80px;
+    @extend .text-ellipsis;
+  }
+  .song-singer {
+    font-size: 12px;
+    color: var(--color-text);
+    font-style: italic;
+    margin-top: var(--padding-mini);
+  }
 }
 </style>

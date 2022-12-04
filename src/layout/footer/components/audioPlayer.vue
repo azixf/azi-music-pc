@@ -9,9 +9,10 @@
         <svg-icon
           name="play_fill"
           size="20px"
-          v-show="play_state === 'pause'"
+          v-show="play_state === PlayState[1]"
         />
-        <svg-icon name="pause" size="20px" v-show="play_state === 'playing'" />
+        <svg-icon name="pause" size="20px" v-show="play_state === PlayState[0]" />
+        <loading-icon soze="20" v-show="play_state === PlayState[2]" />
       </div>
       <svg-icon name="skip-next" size="20px" />
       <lyric-box />
@@ -57,6 +58,12 @@ const audioRef = ref();
 const { player } = useStore();
 const { volume, current_info, loop, autoplay } = storeToRefs(player);
 
+watch(() => current_info.value.src, () => {
+  loadSrc(() => {
+    play_state.value = PlayState[2];
+  })
+})
+
 // listen volume changed
 watch(
   () => volume.value,
@@ -99,14 +106,18 @@ const loadSrc = (cb?: () => void) => {
 
 onMounted(() => {
   audioRef.value.currentTime = current_info.value.time;
+  audioRef.value.volume = volume.value / 100;
   audioRef.value.addEventListener("canplay", canplayHandler);
   audioRef.value.addEventListener("ended", endedHandler);
   audioRef.value.addEventListener("timeupdate", timeupdateHandler);
 });
 
 const canplayHandler = (e: any) => {
-  duration.value = e.target.duration;
-  setStartAndEndTime(e.target.duration);
+  console.log('canplay');
+  if (play_state.value === PlayState[2]) {
+    audioRef.value.play();
+    play_state.value = PlayState[0];
+  }
 };
 
 const endedHandler = (e: any) => {
@@ -115,7 +126,7 @@ const endedHandler = (e: any) => {
 
 const timeupdateHandler = throttle((e: any) => {
   const current = e.target.currentTime;
-  current_info.value.progress = Math.ceil((current / duration.value) * 100);
+  current_info.value.progress = Math.ceil((current / current_info.value.duration!) * 100);
   current_info.value.time = current;
   current_info.value.time_ms = formatTime(current);
 }, 1000);
@@ -135,17 +146,14 @@ const onPlayStateChange = (state: string) => {
     })
     return;
   }
-  if (state === "playing") {
+  if (state === PlayState[0]) {
     audioRef.value.pause();
     play_state.value = PlayState[1];
-  } else if(state === 'pause') {
+  } else if(state === PlayState[1]) {
     audioRef.value.play();
     play_state.value = PlayState[0];
   }
 };
-
-const endTime = ref("0:00"); // 音频的长度  minitues:seconds
-const duration = ref(0); // 音频的长度 ms
 
 // 拖动播放进度条
 const onAudioProgressChanged = (current: number) => {
@@ -153,11 +161,6 @@ const onAudioProgressChanged = (current: number) => {
   current_info.value.time = (current / 100) * current_info.value.duration!;
   audioRef.value.currentTime = current_info.value.time;
   current_info.value.time_ms = formatTime(current_info.value.time);
-};
-
-// 获取音频时间长度
-const setStartAndEndTime = (duration: number) => {
-  endTime.value = formatTime(duration);
 };
 
 // 格式化时间
