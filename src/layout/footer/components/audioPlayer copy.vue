@@ -9,15 +9,19 @@
         <svg-icon
           name="play_fill"
           size="20px"
-          v-show="play_state === 'pause'"
+          v-show="play_state === PlayState.pause"
         />
-        <svg-icon name="pause" size="20px" v-show="play_state === 'playing'" />
+        <svg-icon
+          name="pause"
+          size="20px"
+          v-show="play_state === PlayState.playing"
+        />
       </div>
       <svg-icon name="skip-next" size="20px" />
       <lyric-box />
     </div>
     <div class="music-progress-bar">
-      <span>{{ current_info.time_ms || '0.00' }}</span>
+      <span>{{ current_info.time_ms || "0.00" }}</span>
       <div class="progress-bar-box">
         <el-slider
           v-model="current_info.progress"
@@ -25,12 +29,12 @@
           @change="onAudioProgressChanged"
         />
       </div>
-      <span>{{ current_info.duration_ms || '0.00' }}</span>
+      <span>{{ current_info.duration_ms || "0.00" }}</span>
     </div>
     <audio
       ref="audioRef"
       :src="current_info.src"
-      :loop="loop"
+      :currentTime="current_info.time"
       :autoplay="autoplay"
     ></audio>
   </div>
@@ -47,7 +51,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { throttle } from "@/lib/utils/common";
+import { formatTime } from "@/lib/utils/common";
 import { useStore } from "@/store";
 import { ElMessageBox } from "element-plus";
 import { apiVerifyMusicByHash } from "@/api";
@@ -55,17 +59,23 @@ import { apiVerifyMusicByHash } from "@/api";
 const audioRef = ref();
 
 const { player } = useStore();
-const { volume, current_info, loop, autoplay } = storeToRefs(player);
+const { volume, current_info, autoplay } = storeToRefs(player);
 
-// listen volume changed
+watch(
+  () => current_info.value.src,
+  () => {
+    loadSrc(() => {
+      audioRef.value.play();
+    });
+  }
+);
+
 watch(
   () => volume.value,
   current => {
     audioRef.value.volume = current / 100;
   }
 );
-
-// listen src changed 
 
 interface KGData {
   author: string;
@@ -79,11 +89,10 @@ onBeforeMount(() => {
   loadSrc();
 });
 
-// verify hash to audio src
-const loadSrc = (cb?: () => void) => {
+const loadSrc = (cb?: any) => {
   if (
     current_info.value.origin === "kugou" &&
-    !current_info.value.src?.startsWith("http")
+    !current_info.value.src?.includes("http")
   ) {
     apiVerifyMusicByHash(current_info.value.src!).then((res: any) => {
       const data = res.data as KGData;
@@ -98,73 +107,53 @@ const loadSrc = (cb?: () => void) => {
 };
 
 onMounted(() => {
-  audioRef.value.currentTime = current_info.value.time;
-  audioRef.value.addEventListener("canplay", canplayHandler);
   audioRef.value.addEventListener("ended", endedHandler);
   audioRef.value.addEventListener("timeupdate", timeupdateHandler);
 });
 
-const canplayHandler = (e: any) => {
-  duration.value = e.target.duration;
-  setStartAndEndTime(e.target.duration);
-};
-
 const endedHandler = (e: any) => {
-  play_state.value = PlayState[1];
+  play_state.value = PlayState.pause;
 };
 
-const timeupdateHandler = throttle((e: any) => {
+const timeupdateHandler = (e: any) => {
   const current = e.target.currentTime;
-  current_info.value.progress = Math.ceil((current / duration.value) * 100);
+  current_info.value.progress = Math.ceil(
+    (current / current_info.value.duration!) * 100
+  );
   current_info.value.time = current;
   current_info.value.time_ms = formatTime(current);
-}, 1000);
+}
 
 enum PlayState {
   "playing",
   "pause",
   "loading",
 }
-const play_state = ref(PlayState[1]);
+const play_state = ref(PlayState.pause);
 
-// play and pause
-const onPlayStateChange = (state: string) => {
-  if (!current_info.value.src || state === PlayState[2]) {
-    ElMessageBox.alert('未选择要播放的歌曲或正在加载中...', '播放提示', {
-      confirmButtonText: '确定'
-    })
+// 播放和暂停
+const onPlayStateChange = (state: PlayState) => {
+  console.log(state);
+  if (!current_info.value.src || state === PlayState.loading) {
+    ElMessageBox.alert("未选择要播放的歌曲或正在加载中...", "温馨提示", {
+      confirmButtonText: "我知道了",
+    });
     return;
   }
-  if (state === "playing") {
-    audioRef.value.pause();
-    play_state.value = PlayState[1];
-  } else if(state === 'pause') {
+  if (state === PlayState.pause) {
     audioRef.value.play();
-    play_state.value = PlayState[0];
+    play_state.value = PlayState.playing;
+  } else if (state === PlayState.playing) {
+    audioRef.value.pause();
+    play_state.value = PlayState.pause;
   }
 };
-
-const endTime = ref("0:00"); // 音频的长度  minitues:seconds
-const duration = ref(0); // 音频的长度 ms
 
 // 拖动播放进度条
 const onAudioProgressChanged = (current: number) => {
   current_info.value.progress = current;
   current_info.value.time = (current / 100) * current_info.value.duration!;
-  audioRef.value.currentTime = current_info.value.time;
   current_info.value.time_ms = formatTime(current_info.value.time);
-};
-
-// 获取音频时间长度
-const setStartAndEndTime = (duration: number) => {
-  endTime.value = formatTime(duration);
-};
-
-// 格式化时间
-const formatTime = (duration: number): string => {
-  const minitues = Math.floor(duration / 60);
-  const seconds = Math.ceil(duration % 60);
-  return `${minitues}:${(seconds + "").padStart(2, "0")}`;
 };
 </script>
 

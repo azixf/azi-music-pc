@@ -38,7 +38,12 @@
         :lg="4"
         v-for="item in qRecommendedList"
       >
-        <list-item :src="item.cover" :detail="item.title" center @click="onQEPlaylistClick(item)"/>
+        <list-item
+          :src="item.cover"
+          :detail="item.title"
+          center
+          @click="onQEPlaylistClick(item)"
+        />
       </el-col>
     </el-row>
   </section>
@@ -53,7 +58,7 @@
           :music="item.songname"
           :singer="item.authors[0].author_name"
           :mv="!!item.mvhash"
-          v-click="() => test(item)"
+          v-click="() => play(item)"
         />
       </el-col>
     </el-row>
@@ -95,15 +100,17 @@ import {
   getKGNewSongs,
   getKGMvList,
 } from "@/api";
-import { vClick, vClickOutside } from '@/lib/directives'
+import { vClick, vClickOutside } from "@/lib/directives";
+import { formatTime } from "@/lib/utils/common";
+import { useStore } from "@/store";
 const images = ref<any>([]);
 
 interface recommendedListItem {
-  id: string,
-  img: string,
-  name: string,
-  uid: string,
-  info: string
+  id: string;
+  img: string;
+  name: string;
+  uid: string;
+  info: string;
 }
 
 const recommendedList = ref<recommendedListItem[]>([]);
@@ -125,13 +132,15 @@ type AuthorArray = Array<{
 }>;
 
 interface NewSongsItem {
+  audio_id: number;
   album_cover: string;
   "320hash"?: string;
-  alnum_id: string;
+  album_id: string;
   authors: AuthorArray;
   cover: string;
   duration: number;
   filename: string;
+  filesize: number;
   hash: string;
   hash_high: string;
   mvhash: string;
@@ -175,7 +184,6 @@ onBeforeMount(() => {
     images.value = res.focus.data.content;
   });
   getRecommendedList().then((res: any) => {
-    console.log(res);
     recommendedList.value = res.data?.data?.slice(0, 12);
   });
   getQRecommendedList().then((res: any) => {
@@ -189,32 +197,53 @@ onBeforeMount(() => {
   });
 });
 
-const router = useRouter()
+const router = useRouter();
 const onKWPlaylistClick = (item: recommendedListItem) => {
   router.push({
-    path: '/playlist',
+    path: "/playlist",
     query: {
-      type: 'kuwo',
-      pid: item.id
-    }
-  })
-}
+      type: "kuwo",
+      pid: item.id,
+    },
+  });
+};
 
 const onQEPlaylistClick = (item: QRecommendedListItem) => {
   console.log(item);
   router.push({
-    path: '/playlist',
+    path: "/playlist",
     query: {
-      type: 'qq',
-      pid: item.content_id
-    }
-  })
-}
+      type: "qq",
+      pid: item.content_id,
+    },
+  });
+};
 
-const test = (event: any) => {
-  console.log(123);
-  console.log(event);
-}
+const { player } = useStore();
+const { PLAY_MUSIC } = player;
+const play = (item: NewSongsItem) => {
+  console.log(item);
+  PLAY_MUSIC({
+    id: item.audio_id,
+    title: item.songname,
+    src: item.hash,
+    singer: item.authors[0].author_name,
+    singer_id: item.authors[0].author_id,
+    detail: item.remark,
+    cover: item.cover,
+    time: 0,
+    time_ms: '',
+    duration: item.duration,
+    duration_ms: formatTime(item.duration),
+    album_id: item.album_id,
+    album_name: '',
+    mv_id: '',
+    mv: item.mvhash,
+    origin: 'kugou',
+    lyric: '',
+    progress: 0
+  })
+};
 </script>
 
 <style lang="scss" scoped>

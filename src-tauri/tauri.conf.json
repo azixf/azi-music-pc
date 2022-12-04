@@ -19,6 +19,7 @@
     "allowlist": {
       "http": {
         "all": true,
+        "request": true,
         "scope": ["https://**", "http://**"]
       },
       "fs": {
@@ -32,6 +33,9 @@
         "all": true
       },
       "window": {
+        "all": true
+      },
+      "dialog": {
         "all": true
       }
     },
@@ -59,7 +63,9 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": [
+        "./App"
+      ],
       "shortDescription": "a music app",
       "targets": "all",
       "windows": {

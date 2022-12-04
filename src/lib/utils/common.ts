@@ -1,3 +1,10 @@
+/**
+ * throttle the function called times
+ * @param fn 
+ * @param delay 
+ * @param immidiately 
+ * @returns 
+ */
 export const throttle = (
   fn: (...args: unknown[]) => void,
   delay = 200,
@@ -17,4 +24,24 @@ export const throttle = (
       }, delay);
     }
   };
+};
+
+/**
+ * get keys of object data
+ * @param obj 
+ * @returns 
+ */
+export function getKeys<T extends object>(obj: T) {
+  return Object.keys(obj) as Array<keyof T>;
+}
+
+/**
+ * format time
+ * @param duration 
+ * @returns 
+ */
+export const formatTime = (duration: number): string => {
+  const minitues = Math.floor(duration / 60);
+  const seconds = Math.ceil(duration % 60);
+  return `${minitues}:${(seconds + "").padStart(2, "0")}`;
 };
