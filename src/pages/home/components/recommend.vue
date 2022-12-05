@@ -1,12 +1,12 @@
 <template>
-  <section>
+  <section v-loading="!images.length">
     <el-carousel trigger="click" :interval="4000" type="card" height="20vw">
       <el-carousel-item v-for="img in images">
         <img :src="img?.pic_info?.url" alt="" class="carousel-img" />
       </el-carousel-item>
     </el-carousel>
   </section>
-  <section v-click-outside>
+  <section v-loading="!recommendedList.length">
     <item-title title="库硪推荐歌单" />
     <el-row :gutter="16">
       <el-col
@@ -27,7 +27,7 @@
       </el-col>
     </el-row>
   </section>
-  <section>
+  <section v-loading="!qRecommendedList.length">
     <item-title title="Q鹅推荐歌单" />
     <el-row :gutter="16">
       <el-col
@@ -47,7 +47,7 @@
       </el-col>
     </el-row>
   </section>
-  <section>
+  <section v-loading="!newSongsList.length">
     <item-title title="最新音乐" />
     <el-row :gutter="16">
       <el-col class="m-b-16" :span="6" v-for="item in newSongsList">
@@ -63,7 +63,7 @@
       </el-col>
     </el-row>
   </section>
-  <section>
+  <section v-loading="!mvList.length">
     <item-title title="推荐MV" />
     <el-row :gutter="16">
       <el-col
@@ -101,7 +101,7 @@ import {
   getKGMvList,
 } from "@/api";
 import { vClick, vClickOutside } from "@/lib/directives";
-import { formatTime } from "@/lib/utils/common";
+import { formateDateTime, formatTime } from "@/lib/utils/common";
 import { useStore } from "@/store";
 const images = ref<any>([]);
 
@@ -241,7 +241,8 @@ const play = (item: NewSongsItem) => {
     mv: item.mvhash,
     origin: 'kugou',
     lyric: '',
-    progress: 0
+    progress: 0,
+    play_time: formateDateTime(new Date(), 'YYYY-MM-DD HH:mm')
   })
 };
 </script>

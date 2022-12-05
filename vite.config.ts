@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import path from 'path'
 import vueComponents from 'unplugin-vue-components/vite'
 import autoImport from 'unplugin-auto-import/vite'
@@ -16,7 +17,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src')
-    }
+    },
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
   },
   css: {
     preprocessorOptions: {
@@ -27,6 +29,7 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    vueJsx(),
     vueComponents({
       dts: './src/typings/vue-component.d.ts',
       resolvers: [

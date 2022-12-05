@@ -1,22 +1,22 @@
 <template>
   <div class="audio-player">
     <div class="music-operation-btns">
-      <div class="play-mode-box" :title="modeObj.title" @click="onPlaymodeChanged">
+      <div
+        class="play-mode-box"
+        :title="modeObj.title"
+        @click="onPlaymodeChanged"
+      >
         <font-icon :name="modeObj.icon" size="20" />
       </div>
       <svg-icon name="skip_previous" size="20px" />
-      <div class="play-state-box" @click="onPlayStateChange(playState)">
+      <div class="play-state-box" @click="onplay_stateChange(play_state)">
         <svg-icon
           name="play_fill"
           size="20px"
-          v-show="playState === 'pause'"
+          v-show="play_state === 'pause'"
         />
-        <svg-icon
-          name="pause"
-          size="20px"
-          v-show="playState === 'playing'"
-        />
-        <loading-icon size="20" v-show="playState === 'loading'" />
+        <svg-icon name="pause" size="20px" v-show="play_state === 'playing'" />
+        <loading-icon size="20" v-show="play_state === 'loading'" />
       </div>
       <svg-icon name="skip-next" size="20px" />
       <lyric-box />
@@ -53,7 +53,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { throttle } from "@/lib/utils/common";
+import { formatTime, throttle } from "@/lib/utils/common";
 import { useStore } from "@/store";
 import { ElMessageBox } from "element-plus";
 import { apiVerifyMusicByHash } from "@/api";
@@ -61,14 +61,14 @@ import { apiVerifyMusicByHash } from "@/api";
 const audioRef = ref();
 
 const { player } = useStore();
-const { volume, current_info, mode, autoplay, playState } = storeToRefs(player);
+const { volume, current_info, mode, autoplay } = storeToRefs(player);
 
 // listen src changed
 watch(
   () => current_info.value.src,
   () => {
     loadSrc(() => {
-      playState.value = 'loading';
+      play_state.value = "loading";
     });
   }
 );
@@ -123,14 +123,14 @@ onMounted(() => {
 
 const canplayHandler = (e: any) => {
   console.log("canplay");
-  if (playState.value === 'loading') {
+  if (play_state.value === "loading") {
     audioRef.value.play();
-    playState.value = 'playing';
+    play_state.value = "playing";
   }
 };
 
 const endedHandler = (e: any) => {
-  playState.value = 'pause';
+  play_state.value = "pause";
 };
 
 const timeupdateHandler = throttle((e: any) => {
@@ -142,20 +142,22 @@ const timeupdateHandler = throttle((e: any) => {
   current_info.value.time_ms = formatTime(current);
 }, 1000);
 
+const play_state = ref<MusicPlayState>("pause");
+
 // play and pause
-const onPlayStateChange = (state: MusicPlayState) => {
-  if (!current_info.value.src || state === 'loading') {
+const onplay_stateChange = (state: MusicPlayState) => {
+  if (!current_info.value.src || state === "loading") {
     ElMessageBox.alert("未选择要播放的歌曲或正在加载中...", "播放提示", {
       confirmButtonText: "确定",
     });
     return;
   }
-  if (state === 'playing') {
+  if (state === "playing") {
     audioRef.value.pause();
-   playState.value = 'pause';
-  } else if (state === 'pause') {
+    play_state.value = "pause";
+  } else if (state === "pause") {
     audioRef.value.play();
-    playState.value = 'playing';
+    play_state.value = "playing";
   }
 };
 
@@ -167,15 +169,8 @@ const onAudioProgressChanged = (current: number) => {
   current_info.value.time_ms = formatTime(current_info.value.time);
 };
 
-// 格式化时间
-const formatTime = (duration: number): string => {
-  const minitues = Math.floor(duration / 60);
-  const seconds = Math.ceil(duration % 60);
-  return `${minitues}:${(seconds + "").padStart(2, "0")}`;
-};
-
 interface PlayModeItem {
-  index: number,
+  index: number;
   key: PlayMode;
   icon: string;
   title: string;
@@ -216,12 +211,12 @@ const modeObj = computed((): PlayModeItem => {
 // listen playmode if changed
 const onPlaymodeChanged = () => {
   const index = modeObj.value.index + 1;
-  if ( index > 3) {
+  if (index > 3) {
     mode.value = playModeList[0].key;
   } else {
     mode.value = playModeList[index].key;
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

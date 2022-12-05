@@ -1,4 +1,4 @@
-import { getKeys } from "@/lib/utils/common";
+import { formateDateTime, getKeys } from "@/lib/utils/common";
 import { defineStore } from "pinia";
 
 export type VolumeState = "muted" | "low" | "high";
@@ -23,6 +23,7 @@ export interface MusicInfo {
   mv?: string; // mv地址
   origin?: MusicOriginType; // 来源
   lyric?: string; // 歌词
+  play_time?: string
 }
 
 export type PlayMode = "random" | "loop" | "single" | "order";
@@ -47,6 +48,7 @@ export const usePlayerStore = defineStore("player", {
         mv: "", // mv地址
         origin: undefined, // 来源
         lyric: "", // 歌词
+        play_time: "", // 播放时间
       } as MusicInfo,
       volume: 50, // 音量
       volumeState: "low" as VolumeState, // 音量状态高、低、静音
@@ -62,15 +64,30 @@ export const usePlayerStore = defineStore("player", {
     };
   },
   actions: {
-    PLAY_MUSIC(info: Required<MusicInfo>) {
+    PLAY_MUSIC(info: MusicInfo) {
       this.current_info = info;
       let isIncluded = false;
+      // update currentList
       this.currentList.forEach((item) => {
         if (item.id === info.id && item.origin === info.origin) {
           isIncluded = true;
         }
       })
       !isIncluded && this.currentList.unshift(info);
+
+      // update recentList
+      let isRecentIncluded = false;
+      for (let i = 0; i < this.recentList.length; i++) {
+        const current = this.recentList[i];
+        if (current.id === info.id && current.origin === info.origin) {
+          this.recentList.splice(i, 1)
+          info.play_time = formateDateTime(new Date(), 'YYYY-MM-DD HH:mm')
+          this.recentList.unshift(info);
+          isRecentIncluded = true;
+          break;
+        }
+      }
+      !isRecentIncluded && this.recentList.unshift(info);
     },
     UPDATE_MUSIC_INFO(id: string, info: MusicInfo) {
       if (id === this.current_info.id) {
