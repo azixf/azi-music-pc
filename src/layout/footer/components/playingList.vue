@@ -35,8 +35,8 @@
               {{ item.origin }}
             </el-col>
           </el-row>
-          <font-icon name="pause" size="16" :cursor="false" v-if="((item.id === current_info.id) && playState === 'playing')" class="font-icon" />
-          <font-icon name="playfill" size="16" :cursor="false" v-if="((item.id === current_info.id) && playState === 'pause')" class="font-icon" />
+          <font-icon name="pause" size="16" :cursor="false" v-show="(item.id === current_info.id && playState === 'playing')" class="font-icon" />
+          <font-icon name="playfill" size="16" :cursor="false" v-show="(item.id === current_info.id && playState === 'pause')" class="font-icon" />
         </li>
       </ul>
       <div class="tips flex space-center p-t-8 p-b-8" v-if="(currentList.length > 0)">--到底了--</div>
@@ -52,6 +52,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
+import { usePlayMusic } from '@/lib/hooks/usePlayMusic';
 import { useStore } from '@/store';
 import { MusicInfo } from '@/store/module/player';
 
@@ -64,8 +65,9 @@ const onVisibleToggled = () => {
   musicListVisivle.value = true;
 };
 
+const { play } = usePlayMusic(); 
 const onMusicListItemClicked = (item: MusicInfo, idx: number) => {
-  console.log(item, idx);
+  play(item);
 }
 </script>
 
@@ -111,6 +113,7 @@ const onMusicListItemClicked = (item: MusicInfo, idx: number) => {
 .el-drawer.music-list-drawer {
   .el-drawer__header {
     margin-bottom: 0;
+    box-shadow: 0 1px 4px var(--color-border);
   }
   .el-drawer__body {
     padding: 0;

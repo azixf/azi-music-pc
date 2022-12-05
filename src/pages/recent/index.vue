@@ -20,7 +20,7 @@
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="singer" label="歌手"></el-table-column>
       <el-table-column prop="origin" label="来源"></el-table-column>
-      <el-table-column prop="play_time" label="播放时间"></el-table-column>
+      <el-table-column prop="play_time_ms" label="播放时间"></el-table-column>
     </el-table>
   </div>
 </template>

@@ -9,14 +9,10 @@
         <font-icon :name="modeObj.icon" size="20" />
       </div>
       <svg-icon name="skip_previous" size="20px" />
-      <div class="play-state-box" @click="onplay_stateChange(play_state)">
-        <svg-icon
-          name="play_fill"
-          size="20px"
-          v-show="play_state === 'pause'"
-        />
-        <svg-icon name="pause" size="20px" v-show="play_state === 'playing'" />
-        <loading-icon size="20" v-show="play_state === 'loading'" />
+      <div class="play-state-box" @click="onplay_stateChange(playState)">
+        <svg-icon name="play_fill" size="20px" v-if="playState === 'pause'" />
+        <svg-icon name="pause" size="20px" v-else-if="playState === 'playing'" />
+        <loading-icon size="20" v-else />
       </div>
       <svg-icon name="skip-next" size="20px" />
       <lyric-box />
@@ -61,15 +57,34 @@ import { apiVerifyMusicByHash } from "@/api";
 const audioRef = ref();
 
 const { player } = useStore();
-const { volume, current_info, mode, autoplay } = storeToRefs(player);
+const { volume, current_info, mode, autoplay, playState } = storeToRefs(player);
 
-// listen src changed
+// listen playState change
 watch(
-  () => current_info.value.src,
-  () => {
-    loadSrc(() => {
-      play_state.value = "loading";
-    });
+  () => playState.value,
+  state => {
+    console.log("state:", state);
+    if (state === "playing") {
+      audioRef.value.play();
+    } else if (state === "pause") {
+      audioRef.value.pause();
+    }
+  }
+);
+
+// listen music changed
+watch(
+  [() => current_info.value.src, () => current_info.value.play_time],
+  ([src, time], [psrc, ptime]) => {
+    console.log(src, psrc, time, ptime);
+    if (src) {
+      loadSrc(() => {
+        console.log('executed');
+        playState.value = "pause";
+        audioRef.value.currentTime = current_info.value.time;
+        playState.value = "loading";
+      });
+    }
   }
 );
 
@@ -123,14 +138,14 @@ onMounted(() => {
 
 const canplayHandler = (e: any) => {
   console.log("canplay");
-  if (play_state.value === "loading") {
-    audioRef.value.play();
-    play_state.value = "playing";
+  if (playState.value === "loading") {
+    // audioRef.value.play();
+    playState.value = "playing";
   }
 };
 
 const endedHandler = (e: any) => {
-  play_state.value = "pause";
+  playState.value = "pause";
 };
 
 const timeupdateHandler = throttle((e: any) => {
@@ -142,8 +157,6 @@ const timeupdateHandler = throttle((e: any) => {
   current_info.value.time_ms = formatTime(current);
 }, 1000);
 
-const play_state = ref<MusicPlayState>("pause");
-
 // play and pause
 const onplay_stateChange = (state: MusicPlayState) => {
   if (!current_info.value.src || state === "loading") {
@@ -153,11 +166,11 @@ const onplay_stateChange = (state: MusicPlayState) => {
     return;
   }
   if (state === "playing") {
-    audioRef.value.pause();
-    play_state.value = "pause";
+    // audioRef.value.pause();
+    playState.value = "pause";
   } else if (state === "pause") {
-    audioRef.value.play();
-    play_state.value = "playing";
+    // audioRef.value.play();
+    playState.value = "playing";
   }
 };
 

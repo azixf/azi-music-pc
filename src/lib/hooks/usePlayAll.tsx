@@ -6,11 +6,13 @@ import {
   ElRadioGroup,
   MessageBoxData,
 } from "element-plus";
+import { usePlayMusic } from "./usePlayMusic";
 
 export const usePlayAll = (list: Array<MusicInfo>) => {
   const playAllMode = ref("1");
   const { player } = useStore();
   const { currentList } = storeToRefs(player);
+  const { play } = usePlayMusic();
   const playAll = () => {
     ElMessageBox({
       title: "播放提示",
@@ -27,7 +29,7 @@ export const usePlayAll = (list: Array<MusicInfo>) => {
         if (result === "confirm") {
           if (playAllMode.value === "1") {
             const arr: Array<MusicInfo> = [];
-            list.forEach(item => {
+            list.forEach((item, index) => {
               if (
                 currentList.value.findIndex(
                   currentItem =>
@@ -35,6 +37,7 @@ export const usePlayAll = (list: Array<MusicInfo>) => {
                     currentItem.origin === item.origin
                 ) < 0
               ) {
+                currentList.value.splice(index, 1);
                 arr.push(item);
               }
             });
@@ -42,7 +45,8 @@ export const usePlayAll = (list: Array<MusicInfo>) => {
           } else {
             currentList.value = list;
           }
-          player.PLAY_MUSIC(currentList.value[0])
+          const item = currentList.value[0];
+          play(item);
         }
       })
       .catch(e => e);

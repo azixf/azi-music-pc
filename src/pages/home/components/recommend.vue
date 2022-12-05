@@ -101,7 +101,7 @@ import {
   getKGMvList,
 } from "@/api";
 import { vClick, vClickOutside } from "@/lib/directives";
-import { formateDateTime, formatTime } from "@/lib/utils/common";
+import { formatDateTime, formatTime } from "@/lib/utils/common";
 import { useStore } from "@/store";
 const images = ref<any>([]);
 
@@ -222,7 +222,7 @@ const onQEPlaylistClick = (item: QRecommendedListItem) => {
 const { player } = useStore();
 const { PLAY_MUSIC } = player;
 const play = (item: NewSongsItem) => {
-  console.log(item);
+  const time = +new Date();
   PLAY_MUSIC({
     id: item.audio_id,
     title: item.songname,
@@ -234,7 +234,7 @@ const play = (item: NewSongsItem) => {
     time: 0,
     time_ms: '',
     duration: item.duration,
-    duration_ms: formatTime(item.duration),
+    duration_ms: formatTime(item.duration, true),
     album_id: item.album_id,
     album_name: '',
     mv_id: '',
@@ -242,7 +242,8 @@ const play = (item: NewSongsItem) => {
     origin: 'kugou',
     lyric: '',
     progress: 0,
-    play_time: formateDateTime(new Date(), 'YYYY-MM-DD HH:mm')
+    play_time: time,
+    play_time_ms: formatDateTime(time, 'YYYY-MM-DD HH:mm')
   })
 };
 </script>

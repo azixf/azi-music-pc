@@ -77,7 +77,7 @@ const key = computed(() => {
     .layout-page-content {
       flex: 1;
       height: calc(100vh - 118px);
-      overflow: auto;
+      overflow: hidden auto;
       padding: var(--padding-default) var(--padding-large);
     }
   }
@@ -87,10 +87,16 @@ const key = computed(() => {
   }
 }
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s ease;
+  transition: transform 0.3s ease, opacity 0.2s linear;
 }
 
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from {
+  transform: translate(-100%, 0);
+  opacity: 0;
+}
+
+.fade-leave-to {
+  transform: translate(100%, 0);
   opacity: 0;
 }
 </style>

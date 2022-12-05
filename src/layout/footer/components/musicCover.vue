@@ -3,7 +3,7 @@
     <div class="play-music-mask">
       <svg-icon name="arrow-up" color="#eee" />
     </div>
-    <img :src="player.current_info.cover" alt="music-cover" />
+    <img :src="(player.current_info.cover || DefaultImg)" alt="music-cover" />
   </div>
   <div class="play-music-operation" v-show="visible">
     <div class="play-music-icon">
@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts">
+import DefaultImg from '@/assets/img/default.jpg'
 import { useStore } from "@/store";
 import PlayingMusic from "./playingMusic.vue";
 export default {

@@ -40,9 +40,9 @@ export function getKeys<T extends object>(obj: T) {
  * @param duration
  * @returns
  */
-export const formatTime = (duration: number): string => {
+export const formatTime = (duration: number, up?: boolean): string => {
   const minitues = Math.floor(duration / 60);
-  const seconds = Math.ceil(duration % 60);
+  const seconds = up ? Math.ceil(duration % 60) : Math.floor(duration % 60);
   return `${minitues}:${(seconds + "").padStart(2, "0")}`;
 };
 
@@ -52,7 +52,7 @@ export const formatTime = (duration: number): string => {
  * @param format 
  * @returns 
  */
-export const formateDateTime = (
+export const formatDateTime = (
   dateLike: Date | string | number,
   format: string = "YYYY-MM-DD HH:mm:ss"
 ): string => {
