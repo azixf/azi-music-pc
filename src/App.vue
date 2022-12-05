@@ -18,11 +18,9 @@ onMounted(() => {
   const primaryColor = localStorage.primaryColor || "#ec4141";
   setTheme(primaryColor);
   // prevent using context menu
-  if (!process.env.TAURI_DEBUG) {
-    document.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-    })
-  }
+  document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+  })
   setTimeout(async () => {
     // close splash window
     await invoke("close_splashscreen");

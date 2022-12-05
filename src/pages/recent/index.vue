@@ -15,7 +15,7 @@
       <font-icon name="add" class="m-r-8" color="#fff" />
       <span>播放全部</span>
     </div>
-    <el-table :data="recentList">
+    <el-table :data="recentList" highlight-current-row @row-dblclick="playMusic">
       <el-table-column type="index" label="序号" :index="setIndex" width="60"></el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="singer" label="歌手"></el-table-column>
@@ -33,7 +33,9 @@ export default {
 
 <script lang="ts" setup>
 import { usePlayAll } from '@/lib/hooks/usePlayAll';
+import { usePlayMusic } from '@/lib/hooks/usePlayMusic';
 import { useStore } from '@/store';
+import { MusicInfo } from '@/store/module/player';
 
 const { player } = useStore();
 const { recentList } = storeToRefs(player);
@@ -45,6 +47,12 @@ const setIndex = (index: number): number => {
 
 const clearRecentList = () => {
   recentList.value = [];
+}
+
+
+const { play } = usePlayMusic();
+const playMusic = (row: MusicInfo) => {
+  play(row);
 }
 </script>
 

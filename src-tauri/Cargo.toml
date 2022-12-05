@@ -11,10 +11,6 @@ rust-version = "1.57"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[dependencies.tauri-plugin-store]
-git = "https://github.com/tauri-apps/tauri-plugin-store"
-branch="renovate/rollup-plugin-node-resolve-15.x"
-
 [dependencies.tauri-plugin-single-instance]
 git = "https://github.com/tauri-apps/tauri-plugin-single-instance"
 
