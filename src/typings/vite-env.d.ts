@@ -9,3 +9,7 @@ declare module '*.vue' {
 declare module '*.mjs';
 
 declare module 'axios-tauri-adapter';
+
+declare module 'vue3-contextmenu';
+
+declare module 'postcss-px-to-viewport';

@@ -8,7 +8,7 @@
         name="netease-cloud-music-fill"
         color="#ffffff"
         size="32px"
-      ></svg-icon>
+      />
       <strong class="logo-text">4U Music</strong>
     </div>
     <search-box />
@@ -48,6 +48,7 @@ export default {
     margin-left: var(--padding-small);
     font-size: 18px;
     font-weight: 600;
+    margin-right: 2vw;
   }
 }
 
