@@ -8,15 +8,27 @@ import FontIcon from "@/components/common/fontIcon.vue";
 import { MusicInfo } from "@/store/module/player";
 
 import "@/style/_contextmenu.scss";
+import { useStore } from "@/store";
+import { usePlayMusic } from "./usePlayMusic";
 
 export const useContextMenu = () => {
+  const info = ref<MusicInfo>();
+  const { player } = useStore();
+  const { songsList } = storeToRefs(player);
+  const list = ref<Array<MusicInfo>>([]);
+
+  const { play } = usePlayMusic();
+  const playMusic = () => {
+    play(info.value)
+  }
+
   const contextmenuComponent = {
     name: "ContextmenuComp",
     setup() {
       return () => {
         return (
           <Contextmenu name="context-menu">
-            <ContextmenuItem>
+            <ContextmenuItem onClick={() => playMusic()}>
               <div class="v-contextmenu-item-content">
                 <FontIcon name="play" size="16" />
                 <span>播放</span>
@@ -28,18 +40,22 @@ export const useContextMenu = () => {
                 <span>下一首播放</span>
               </div>
             </ContextmenuItem>
-            <ContextmenuItem>
-              <div class="v-contextmenu-item-content">
-                <FontIcon name="album-line" size="18" />
-                <span>专辑</span>
-              </div>
-            </ContextmenuItem>
-            <ContextmenuItem>
-              <div class="v-contextmenu-item-content">
-                <FontIcon name="person" size="16" />
-                <span>歌手</span>
-              </div>
-            </ContextmenuItem>
+            {info.value?.album_name ? (
+              <ContextmenuItem>
+                <div class="v-contextmenu-item-content">
+                  <FontIcon name="album-line" size="18" />
+                  <span>专辑: { info.value?.album_name }</span>
+                </div>
+              </ContextmenuItem>
+            ) : null}
+            {info.value?.singer ? (
+              <ContextmenuItem>
+                <div class="v-contextmenu-item-content">
+                  <FontIcon name="person" size="16" />
+                  <span>歌手: { info.value?.singer }</span>
+                </div>
+              </ContextmenuItem>
+            ) : null}
             <ContextmenuSubmenu
               v-slots={{
                 label: () => (
@@ -53,15 +69,19 @@ export const useContextMenu = () => {
               <ContextmenuItem>
                 <div class="v-contextmenu-item-content">
                   <FontIcon name="addto" size="18" />
-                  <span>添加到歌单</span>
+                  <span>新增歌单</span>
                 </div>
               </ContextmenuItem>
-              <ContextmenuItem>
-                <div class="v-contextmenu-item-content">
-                  <FontIcon name="music-list" size="18" />
-                  <span>歌单名</span>
-                </div>
-              </ContextmenuItem>
+              {songsList.value.map(item => {
+                return (
+                  <ContextmenuItem>
+                    <div class="v-contextmenu-item-content">
+                      <FontIcon name="music-list" size="18" />
+                      <span>歌单名</span>
+                    </div>
+                  </ContextmenuItem>
+                );
+              })}
             </ContextmenuSubmenu>
             <ContextmenuItem>
               <div class="v-contextmenu-item-content">
@@ -84,8 +104,9 @@ export const useContextMenu = () => {
   const instance = createApp(contextmenuComponent);
   instance.mount(document.createElement("div"));
 
-  const openContextmenu = (row: MusicInfo, e: MouseEvent) => {
-    emitContext(e, { name: "context-menu"});
+  const openContextmenu = (row: MusicInfo, ls: Array<MusicInfo>, e: MouseEvent) => {
+    info.value = row;
+    emitContext(e, { name: "context-menu" });
   };
   return {
     openContextmenu,
