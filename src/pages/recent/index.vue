@@ -59,7 +59,7 @@ const playMusic = (row: MusicInfo) => {
 const { openContextmenu } = useContextMenu()
 const onContextmenuOpened = (row: MusicInfo, column: any, event: MouseEvent) => {
   console.log('contextmenu: ', row, column, event);
-  openContextmenu(event);
+  openContextmenu(row, event);
 }
 </script>
 

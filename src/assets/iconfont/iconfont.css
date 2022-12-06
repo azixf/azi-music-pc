@@ -1,9 +1,9 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3765994 */
-  src: url('//at.alicdn.com/t/c/font_3765994_uoq46czuss9.woff2?t=1670327035904') format('woff2'),
-       url('//at.alicdn.com/t/c/font_3765994_uoq46czuss9.woff?t=1670327035904') format('woff'),
-       url('//at.alicdn.com/t/c/font_3765994_uoq46czuss9.ttf?t=1670327035904') format('truetype'),
-       url('//at.alicdn.com/t/c/font_3765994_uoq46czuss9.svg?t=1670327035904#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/c/font_3765994_407gm9zgupk.woff2?t=1670332260072') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3765994_407gm9zgupk.woff?t=1670332260072') format('woff'),
+       url('//at.alicdn.com/t/c/font_3765994_407gm9zgupk.ttf?t=1670332260072') format('truetype'),
+       url('//at.alicdn.com/t/c/font_3765994_407gm9zgupk.svg?t=1670332260072#iconfont') format('svg');
 }
 
 .iconfont {
@@ -12,6 +12,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-iconfontplay2:before {
+  content: "\e719";
+}
+
+.icon-download1:before {
+  content: "\e6ae";
+}
+
+.icon-play:before {
+  content: "\e6b0";
+}
+
+.icon-addto:before {
+  content: "\e698";
+}
+
+.icon-delete:before {
+  content: "\e69a";
+}
+
+.icon-album-line:before {
+  content: "\ea74";
+}
+
+.icon-music-list:before {
+  content: "\e69b";
 }
 
 .icon-refresh:before {

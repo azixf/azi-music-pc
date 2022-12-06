@@ -100,7 +100,7 @@ import {
   getKGNewSongs,
   getKGMvList,
 } from "@/api";
-import { vClick, vClickOutside } from "@/lib/directives";
+import { vClick } from "@/lib/directives";
 import { formatDateTime, formatTime } from "@/lib/utils/common";
 import { useStore } from "@/store";
 const images = ref<any>([]);
@@ -222,6 +222,7 @@ const onQEPlaylistClick = (item: QRecommendedListItem) => {
 const { player } = useStore();
 const { PLAY_MUSIC } = player;
 const play = (item: NewSongsItem) => {
+  console.log('kugou item: ', item);
   const time = +new Date();
   PLAY_MUSIC({
     id: item.audio_id,
