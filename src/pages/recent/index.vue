@@ -36,7 +36,7 @@ import { useContextMenu } from '@/lib/hooks/useContextMenu';
 import { usePlayAll } from '@/lib/hooks/usePlayAll';
 import { usePlayMusic } from '@/lib/hooks/usePlayMusic';
 import { useStore } from '@/store';
-import { MusicInfo } from '@/store/module/player';
+import { MusicInfo } from '@/typings/player';
 
 const { player } = useStore();
 const { recentList } = storeToRefs(player);

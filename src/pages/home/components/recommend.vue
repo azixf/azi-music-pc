@@ -103,79 +103,20 @@ import {
 import { vClick } from "@/lib/directives";
 import { formatDateTime, formatTime } from "@/lib/utils/common";
 import { useStore } from "@/store";
+import {
+  recommendedListItem,
+  QRecommendedListItem,
+  NewSongsItem,
+  MVListItem,
+} from "@/typings/home";
+import { ElCarousel, ElCarouselItem, ElRow, ElCol } from "element-plus";
 const images = ref<any>([]);
-
-interface recommendedListItem {
-  id: string;
-  img: string;
-  name: string;
-  uid: string;
-  info: string;
-}
 
 const recommendedList = ref<recommendedListItem[]>([]);
 
-interface QRecommendedListItem {
-  cover: string;
-  listen_num: number;
-  rcmdtemplate: string;
-  title: string;
-  content_id: number;
-}
-
 const qRecommendedList = ref<QRecommendedListItem[]>([]);
 
-type AuthorArray = Array<{
-  author_id: string;
-  author_name: string;
-  sizable_cover: string;
-}>;
-
-interface NewSongsItem {
-  audio_id: number;
-  album_cover: string;
-  "320hash"?: string;
-  album_id: string;
-  authors: AuthorArray;
-  cover: string;
-  duration: number;
-  filename: string;
-  filesize: number;
-  hash: string;
-  hash_high: string;
-  mvhash: string;
-  remark: string;
-  songname: string;
-  sort: number;
-}
-
 const newSongsList = ref<NewSongsItem[]>([]);
-
-interface MVListItem {
-  album_audio_id: string;
-  album_cover: string;
-  authors: AuthorArray;
-  description: string;
-  duration: number;
-  fhd_filesize: number;
-  fhd_hash: string;
-  hd_hash: string;
-  img: string;
-  ld_filesize: string;
-  ld_hash: string;
-  mvhash: string;
-  playcount: number;
-  publish: string;
-  qhd_filesize: string;
-  qhd_hash: string;
-  remark: string;
-  sd_filesize: string;
-  sd_hash: string;
-  singername: string;
-  title: string;
-  videoid: number;
-  videoname: string;
-}
 
 const mvList = ref<MVListItem[]>([]);
 
@@ -222,7 +163,7 @@ const onQEPlaylistClick = (item: QRecommendedListItem) => {
 const { player } = useStore();
 const { PLAY_MUSIC } = player;
 const play = (item: NewSongsItem) => {
-  console.log('kugou item: ', item);
+  console.log("kugou item: ", item);
   const time = +new Date();
   PLAY_MUSIC({
     id: item.audio_id,
@@ -231,21 +172,21 @@ const play = (item: NewSongsItem) => {
     singer: item.authors[0].author_name,
     singer_id: item.authors[0].author_id,
     detail: item.remark,
-    cover: item.album_cover.replace('{size}', '480'),
+    cover: item.album_cover.replace("{size}", "480"),
     time: 0,
-    time_ms: '',
+    time_ms: "",
     duration: item.duration,
     duration_ms: formatTime(item.duration, true),
     album_id: item.album_id,
-    album_name: '',
-    mv_id: '',
+    album_name: "",
+    mv_id: "",
     mv: item.mvhash,
-    origin: 'kugou',
-    lyric: '',
+    origin: "kugou",
+    lyric: "",
     progress: 0,
     play_time: time,
-    play_time_ms: formatDateTime(time, 'YYYY-MM-DD HH:mm')
-  })
+    play_time_ms: formatDateTime(time, "YYYY-MM-DD HH:mm"),
+  });
 };
 </script>
 

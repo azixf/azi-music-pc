@@ -17,10 +17,12 @@ onMounted(() => {
   // set custom theme
   const primaryColor = localStorage.primaryColor || "#ec4141";
   setTheme(primaryColor);
+
   // prevent using context menu
   document.addEventListener('contextmenu', (e) => {
     e.preventDefault();
   })
+  
   setTimeout(async () => {
     // close splash window
     await invoke("close_splashscreen");

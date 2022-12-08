@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import LyricBox from "./lyricBox.vue";
-import { PlayMode, MusicPlayState } from "@/store/module/player";
+import { MusicPlayState, PlayMode } from "@/typings/player";
 export default {
   name: "AudioPlayer",
   components: {

@@ -126,6 +126,8 @@ export default {
 
 <script lang="ts" setup>
 import { apiGetKWPlaylistInfo, apiGetQEPlaylistInfo } from "@/api";
+import { PlaylistInfoData, QQPlaylistInfoData } from "@/typings/playlist";
+import { ElRow, ElCol, ElDivider, ElTag, ElInput, ElTable, ElTableColumn, ElPagination } from "element-plus";
 
 const state = reactive({
   cover: '',
@@ -143,83 +145,12 @@ const pagination = reactive({
   total: 100,
 });
 
-// 库硪
-interface MusicListItem {
-  album: string;
-  albumid: number;
-  albumpic: string;
-  artist: string;
-  artistid: number;
-  duration: number;
-  hasmv: number;
-  name: string;
-  pic: string;
-  pic120: string;
-  songTimeMinutes: string;
-  releaseDate: string;
-}
-
-interface PlaylistInfoData {
-  desc: string;
-  id: number;
-  img: string;
-  img300: string;
-  img500: string;
-  img700: string;
-  info: string;
-  isOfficial: number;
-  listencnt: number;
-  musicList: Array<MusicListItem>;
-  name: string;
-  tag: string;
-  total: number;
-  uPic: string;
-  uname: string;
-  userName: string;
-}
-
 const route = useRoute();
 const type = ref('');
 onBeforeMount(() => {
   type.value = route.query.type as string;
   getPlayListInfo();
 });
-
-// qq
-interface QQSongList  {
-  albumdesc: string,
-  albumid: number,
-  albummid: string,
-  albumname: string,
-  singer: Array<{ id: number, mid: string, name: string }>,
-  interval: number,
-  songid: number,
-  songmid: string,
-  songname: string,
-  strMediaMid: string
-}
-
-interface QQPlaylistInfoData {
-  album_pic_mid: string,
-  coveradurl: string,
-  cur_song_num: number,
-  desc: string,
-  dissid: number,
-  dissname: string,
-  headurl: string,
-  ifpicurl: string,
-  logo: string,
-  nick: string,
-  nickname: string,
-  pic_dpi: string,
-  singerid: number,
-  songlist: Array<QQSongList>,
-  songnum: number,
-  total_song_num: number,
-  tags: Array<{id: number, name: string, pid: number}>,
-  visitnum: number
-}
-
 
 const getPlayListInfo = () => {
   const { query } = route;

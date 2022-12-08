@@ -54,7 +54,7 @@ export default {
 <script lang="ts" setup>
 import { usePlayMusic } from '@/lib/hooks/usePlayMusic';
 import { useStore } from '@/store';
-import { MusicInfo } from '@/store/module/player';
+import { MusicInfo } from '@/typings/player';
 
 const { player } = useStore();
 const { currentList, current_info, playState } = storeToRefs(player);

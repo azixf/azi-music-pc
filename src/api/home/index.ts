@@ -1,4 +1,4 @@
-import { http } from '@/lib/request/request';
+import { http } from '@/lib/utils/request';
 
 // 获取焦点图
 export const getFocusImages = () => {

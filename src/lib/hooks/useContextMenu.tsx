@@ -5,22 +5,31 @@ import {
   ContextmenuSubmenu,
 } from "vue3-contextmenu";
 import FontIcon from "@/components/common/fontIcon.vue";
-import { MusicInfo } from "@/store/module/player";
 
 import "@/style/_contextmenu.scss";
 import { useStore } from "@/store";
 import { usePlayMusic } from "./usePlayMusic";
+import { MusicInfo } from "@/typings/player";
 
 export const useContextMenu = () => {
-  const info = ref<MusicInfo>();
   const { player } = useStore();
   const { songsList } = storeToRefs(player);
-  const list = ref<Array<MusicInfo>>([]);
-
+  
+  const info = ref<MusicInfo>();
   const { play } = usePlayMusic();
   const playMusic = () => {
-    play(info.value)
+    play(info.value!)
   }
+  
+  const list = ref<Array<MusicInfo>>([]);
+  const playMusicForNext = () => {
+
+  }
+
+  const deleteMusicInFromList = () => {
+
+  }
+
 
   const contextmenuComponent = {
     name: "ContextmenuComp",
@@ -106,6 +115,7 @@ export const useContextMenu = () => {
 
   const openContextmenu = (row: MusicInfo, ls: Array<MusicInfo>, e: MouseEvent) => {
     info.value = row;
+    list.value = ls;
     emitContext(e, { name: "context-menu" });
   };
   return {

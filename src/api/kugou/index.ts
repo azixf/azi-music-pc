@@ -1,4 +1,4 @@
-import { http } from '@/lib/request/request'
+import { http } from '@/lib/utils/request'
 
 // verify music by hash
 export const apiVerifyMusicByHash = (hash: string) => {
