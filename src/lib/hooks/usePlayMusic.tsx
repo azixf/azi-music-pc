@@ -1,19 +1,29 @@
 import { useStore } from "@/store";
 import { MusicInfo } from "@/typings/player";
+import { formatDateTime } from "../utils/common";
 import {
   ElMessageBox,
   ElRadio,
   ElRadioGroup,
   MessageBoxData,
 } from "element-plus";
-import { usePlayMusic } from "./usePlayMusic";
 
-export const usePlayAll = (list: Array<MusicInfo>) => {
-  const playAllMode = ref("1");
+export const usePlayMusic = () => {
   const { player } = useStore();
   const { currentList } = storeToRefs(player);
-  const { play } = usePlayMusic();
-  const playAll = () => {
+
+  const play = (item: MusicInfo) => {
+    item.progress = 0;
+    item.time = 0;
+    item.time_ms = "0:00";
+    const time = +new Date();
+    item.play_time = time;
+    item.play_time_ms = formatDateTime(new Date(), "YYYY-MM-DD HH:mm");
+    player.PLAY_MUSIC(item);
+  };
+
+  const playAllMode = ref("1");
+  const playAll = (list: Array<MusicInfo>) => {
     ElMessageBox({
       title: "播放提示",
       message: () => {
@@ -51,7 +61,9 @@ export const usePlayAll = (list: Array<MusicInfo>) => {
       })
       .catch(e => e);
   };
+
   return {
+    play,
     playAll,
   };
 };

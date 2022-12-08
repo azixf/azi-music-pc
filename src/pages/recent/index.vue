@@ -11,7 +11,7 @@
         </template>
       </el-popconfirm>
     </div>
-    <div class="recent-play-all" @click="playAll">
+    <div class="recent-play-all" @click="playAll(recentList)">
       <font-icon name="add" class="m-r-8" color="#fff" />
       <span>播放全部</span>
     </div>
@@ -33,14 +33,12 @@ export default {
 
 <script lang="ts" setup>
 import { useContextMenu } from '@/lib/hooks/useContextMenu';
-import { usePlayAll } from '@/lib/hooks/usePlayAll';
 import { usePlayMusic } from '@/lib/hooks/usePlayMusic';
 import { useStore } from '@/store';
 import { MusicInfo } from '@/typings/player';
 
 const { player } = useStore();
 const { recentList } = storeToRefs(player);
-const { playAll } = usePlayAll(recentList.value);
 
 const setIndex = (index: number): number => {
   return index + 1;
@@ -51,7 +49,7 @@ const clearRecentList = () => {
 }
 
 
-const { play } = usePlayMusic();
+const { play, playAll } = usePlayMusic();
 const playMusic = (row: MusicInfo) => {
   play(row);
 }
