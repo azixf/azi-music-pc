@@ -120,22 +120,21 @@ const newSongsList = ref<NewSongsItem[]>([]);
 
 const mvList = ref<MVListItem[]>([]);
 
-onBeforeMount(() => {
-  getFocusImages().then((res: any) => {
-    images.value = res.focus.data.content;
-  });
-  getRecommendedList().then((res: any) => {
-    recommendedList.value = res.data?.data?.slice(0, 12);
-  });
-  getQRecommendedList().then((res: any) => {
-    qRecommendedList.value = res.recomPlaylist.data.v_hot;
-  });
-  getKGNewSongs().then((res: any) => {
-    newSongsList.value = res.data.info.slice(0, 12);
-  });
-  getKGMvList().then((res: any) => {
-    mvList.value = res.data.info.slice(0, 12);
-  });
+onBeforeMount(async () => {
+  const [e1, r1] = await getFocusImages();
+  !e1 && (images.value = (r1 as any).focus.data.content);
+
+  const [e2, r2] = await getRecommendedList();
+  !e2 && (recommendedList.value = (r2 as any).data?.data?.slice(0, 12));
+  
+  const [e3, r3] = await getQRecommendedList()
+  !e3 && (qRecommendedList.value = (r3 as any).recomPlaylist.data.v_hot);
+
+  const [e4, r4] = await getKGNewSongs()
+  !e4 && (newSongsList.value = (r4 as any).data.info.slice(0, 12));
+
+  const [e5, r5] = await getKGMvList()
+  !e5 && (mvList.value = (r5 as any).data.info.slice(0, 12));
 });
 
 const router = useRouter();

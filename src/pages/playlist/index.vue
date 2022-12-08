@@ -152,29 +152,31 @@ onBeforeMount(() => {
   getPlayListInfo();
 });
 
-const getPlayListInfo = () => {
+const getPlayListInfo = async () => {
   const { query } = route;
   if (query.type === "kuwo") {
     if (state.songsList?.length) {
         state.songsList = []
       }
-    apiGetKWPlaylistInfo({
+    const [e1, r1] = await apiGetKWPlaylistInfo({
       pid: query.pid as string,
       page: pagination.page - 1,
       size: pagination.size,
-    }).then((res: any) => {
-      pagination.total = res.data.total;
-      const data = res.data as PlaylistInfoData;
+    })
+    if (!e1) {
+      pagination.total = r1!.data.total;
+      const data = r1!.data as PlaylistInfoData;
       state.cover = data?.img700 || data?.img500 || data?.img300 || data?.img;
       state.listencnt = data.listencnt;
       state.playlistCreator = data.uname;
       state.songsList = data.musicList;
       state.total = data.total;
       state.tags = data.tag?.split(',') || [];
-    });
+    } 
   } else if (query.type === 'qq') {
-    apiGetQEPlaylistInfo(query.pid as string).then((res: any) => {
-      const data = res.cdlist?.[0] as QQPlaylistInfoData;
+    const [e2, r2] = await apiGetQEPlaylistInfo(query.pid as string)
+    if (!e2) {
+      const data = (r2 as any).cdlist?.[0] as QQPlaylistInfoData;
       if (data) {
         state.cover = data.logo;
         state.listencnt = data.visitnum;
@@ -184,7 +186,7 @@ const getPlayListInfo = () => {
         state.songsList = data.songlist;
         state.total = data.total_song_num;
       }
-    });
+    }
   }
 }
 

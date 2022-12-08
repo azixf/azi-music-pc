@@ -5,13 +5,13 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
 } from "axios";
-import axiosTauriAdapter from 'axios-tauri-adapter'
+import axiosTauriAdapter from "axios-tauri-adapter";
 
 const service: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL,
   timeout: 10 * 1000,
   timeoutErrorMessage: "请求超时，请稍后重试",
-  adapter: axiosTauriAdapter
+  adapter: axiosTauriAdapter,
 });
 
 service.interceptors.request.use(
@@ -64,26 +64,6 @@ export interface Result<T> {
   [key: string]: any;
 }
 
-export const http = {
-  get<T = any>(
-    url: string,
-    data?: object,
-    config?: AxiosRequestConfig
-  ): Promise<T> {
-    return service.get(url, {
-      params: data,
-      ...config,
-    });
-  },
-  post<T = any>(
-    url: string,
-    data?: object,
-    config?: AxiosRequestConfig
-  ): Promise<T> {
-    return service.post(url, data, config);
-  },
-};
-
 function errHandler(res: AxiosResponse): {
   status: number | string;
   msg: string;
@@ -98,3 +78,35 @@ function errHandler(res: AxiosResponse): {
     msg: statusText,
   };
 }
+
+type ResponseType = [AxiosError | undefined, AxiosResponse<any, any> | undefined];
+
+export const http = {
+  get(
+    url: string,
+    data?: object,
+    config?: AxiosRequestConfig
+  ): Promise<ResponseType> {
+    return new Promise(resolve => {
+      service
+        .get(url, {
+          params: data,
+          ...config,
+        })
+        .then(res => resolve([undefined, res]))
+        .catch(err => resolve([err, undefined]));
+    });
+  },
+  post(
+    url: string,
+    data?: object,
+    config?: AxiosRequestConfig
+  ): Promise<ResponseType> {
+    return new Promise(resolve => {
+      service
+        .post(url, data, config)
+        .then(res => resolve([undefined, res]))
+        .catch(err => resolve([err, undefined]));
+    });
+  },
+};

@@ -11,7 +11,11 @@
       <svg-icon name="skip_previous" size="20px" />
       <div class="play-state-box" @click="onplay_stateChange(playState)">
         <svg-icon name="play_fill" size="20px" v-if="playState === 'pause'" />
-        <svg-icon name="pause" size="20px" v-else-if="playState === 'playing'" />
+        <svg-icon
+          name="pause"
+          size="20px"
+          v-else-if="playState === 'playing'"
+        />
         <loading-icon size="20" v-else />
       </div>
       <svg-icon name="skip-next" size="20px" />
@@ -79,7 +83,7 @@ watch(
     console.log(src, psrc, time, ptime);
     if (src) {
       loadSrc(() => {
-        console.log('executed');
+        console.log("executed");
         playState.value = "pause";
         audioRef.value.currentTime = current_info.value.time;
         playState.value = "loading";
@@ -111,18 +115,19 @@ onBeforeMount(() => {
 });
 
 // verify hash to audio src
-const loadSrc = (cb?: () => void) => {
+const loadSrc = async (cb?: () => void) => {
   if (
     current_info.value.origin === "kugou" &&
     !current_info.value.src?.startsWith("http")
   ) {
-    apiVerifyMusicByHash(current_info.value.src!).then((res: any) => {
-      const data = res.data as KGData;
+    const [err, res] = await apiVerifyMusicByHash(current_info.value.src!);
+    if (!err) {
+      const data = res!.data as KGData;
       if (data.url) {
         current_info.value.src = data.url;
         cb && cb();
       }
-    });
+    }
   } else {
     cb && cb();
   }

@@ -1,5 +1,11 @@
 import { formatDateTime } from "@/lib/utils/common";
-import { MusicInfo, MusicPlayState, PlayMode, VolumeState } from "@/typings/player";
+import {
+  MusicInfo,
+  MusicPlayState,
+  PlayMode,
+  SongsListType,
+  VolumeState,
+} from "@/typings/player";
 import { defineStore } from "pinia";
 
 export const usePlayerStore = defineStore("player", {
@@ -34,7 +40,7 @@ export const usePlayerStore = defineStore("player", {
       currentList: [] as Array<MusicInfo>, // 正在播放列表
       recentList: [] as Array<MusicInfo>, // 最近播放
       favoriteList: [] as Array<MusicInfo>, // 我的收藏
-      songsList: [], // 歌单列表
+      songsList: [] as Array<SongsListType>, // 歌单列表
       playState: "pause" as MusicPlayState, // 歌曲播放状态
     };
   },
@@ -65,7 +71,7 @@ export const usePlayerStore = defineStore("player", {
         }
       }
       !isRecentIncluded && this.recentList.unshift(info);
-    }
+    },
   },
   persist: {
     paths: [

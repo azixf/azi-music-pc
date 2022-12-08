@@ -1,5 +1,5 @@
 import { useStore } from "@/store";
-import { MusicInfo } from "@/store/module/player";
+import { MusicInfo } from "@/typings/player";
 import {
   ElMessageBox,
   ElRadio,

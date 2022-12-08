@@ -25,3 +25,11 @@ export interface MusicInfo {
 }
 
 export type PlayMode = "random" | "loop" | "single" | "order";
+
+export interface SongsListType {
+  id: string,
+  name: string,
+  create_at: string,
+  update_at: string,
+  songs_list: Array<MusicInfo>
+}
