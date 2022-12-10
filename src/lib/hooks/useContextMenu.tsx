@@ -6,7 +6,7 @@ import {
 } from "vue3-contextmenu";
 import FontIcon from "@/components/common/fontIcon.vue";
 
-import "@/style/_contextmenu.scss";
+import "@/style/contextmenu.scss";
 import { useStore } from "@/store";
 import { usePlayMusic } from "./usePlayMusic";
 import { MusicInfo } from "@/typings/player";

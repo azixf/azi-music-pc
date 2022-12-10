@@ -6,7 +6,7 @@ import { commonComponent } from '@/components/common';
 
 import 'normalize.css'
 import './style/global.scss'
-import './style/_elementplus.scss'
+import './style/elementplus.scss'
 import '@/assets/iconfont/iconfont.css'
 
 const app = createApp(App)

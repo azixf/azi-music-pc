@@ -1,0 +1,27 @@
+@import "vue3-contextmenu/dist/vue3-contextmenu.css";
+
+.v-contextmenu {
+  z-index: 10;
+  &-submenu {
+    &--hover > &-label {
+      color: var(--color-primary);
+    }
+  }
+  & > div {
+    &:hover {
+      .v-contextmenu-item {
+        &-content {
+          color: var(--color-primary);
+        }
+      }
+    }
+    .v-contextmenu-item {
+      &-content {
+        width: 120px;
+        display: flex;
+        align-items: center;
+        gap: var(--padding-small);
+      }
+    }
+  }
+}
