@@ -21,13 +21,23 @@ pub fn create_system_tray() -> SystemTray {
     let quit = CustomMenuItem::new("quit", "退出");
     let hide_or_show = CustomMenuItem::new("hide", "隐藏/显示");
     let open_devtools = CustomMenuItem::new("devtools", "打开devtools");
-    let tray_menu = SystemTrayMenu::new()
-        .add_item(open_devtools)
-        .add_native_item(SystemTrayMenuItem::Separator)
-        .add_item(hide_or_show)
-        .add_item(restart)
-        .add_item(quit);
-    SystemTray::new().with_menu(tray_menu)
+    let tray_menu;
+    if cfg!(debug_assertions) {
+        tray_menu = SystemTrayMenu::new()
+            .add_item(open_devtools)
+            .add_native_item(SystemTrayMenuItem::Separator)
+            .add_item(hide_or_show)
+            .add_item(restart)
+            .add_native_item(SystemTrayMenuItem::Separator)
+            .add_item(quit);
+    } else {
+        tray_menu = SystemTrayMenu::new()
+            .add_item(hide_or_show)
+            .add_item(restart)
+            .add_native_item(SystemTrayMenuItem::Separator)
+            .add_item(quit);
+    };
+    return SystemTray::new().with_menu(tray_menu);
 }
 
 // 处理托盘事件
@@ -40,9 +50,11 @@ pub fn tray_event(app: &AppHandle, event: SystemTrayEvent) {
                 window.app_handle().restart();
             }
             "devtools" => {
-                if !window.is_devtools_open() {
-                    window.open_devtools();
-                }
+                #[cfg(debug_assertions)]{
+                    if !window.is_devtools_open() {
+                        window.open_devtools();
+                    }
+                } 
             }
             "quit" => {
                 window.app_handle().exit(0);
