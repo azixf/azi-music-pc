@@ -44,7 +44,7 @@
             >
           </div>
           <div class="playlist-tag m-t-16" v-if="state.tags.length > 0">
-            <el-tag v-for="tag in state.tags">{{ tag }}</el-tag>
+            <el-tag v-for="tag in state.tags" :key="tag">{{ tag }}</el-tag>
           </div>
         </el-col>
       </el-row>
@@ -127,7 +127,6 @@ export default {
 <script lang="ts" setup>
 import { apiGetKWPlaylistInfo, apiGetQEPlaylistInfo } from "@/api";
 import { PlaylistInfoData, QQPlaylistInfoData } from "@/typings/playlist";
-import { ElRow, ElCol, ElDivider, ElTag, ElInput, ElTable, ElTableColumn, ElPagination } from "element-plus";
 
 const state = reactive({
   cover: '',

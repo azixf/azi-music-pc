@@ -7,6 +7,7 @@ import {
   VolumeState,
 } from "@/typings/player";
 import { defineStore } from "pinia";
+import { apiGetMusicLyric } from "../../api/kugou";
 
 export const usePlayerStore = defineStore("player", {
   state() {
@@ -15,6 +16,7 @@ export const usePlayerStore = defineStore("player", {
         id: "", // id
         title: "", // 名称
         src: "", // 地址
+        hash: "", // hash
         singer: "", // 歌手
         detail: "", // 详情
         cover: "", // 封面
@@ -71,6 +73,17 @@ export const usePlayerStore = defineStore("player", {
         }
       }
       !isRecentIncluded && this.recentList.unshift(info);
+    },
+    async GET_LYRIC() {
+      if (!this.current_info.id) return null;
+      let result: any = null;
+      if (this.current_info.origin === "kugou") {
+        const [err, data] = await apiGetMusicLyric(this.current_info.hash!);
+        if (!err) {
+          result = data;
+        }
+      }
+      return result;
     },
   },
   persist: {

@@ -3,7 +3,7 @@
     :class="svgClass"
     aria-hidden="true"
     :style="{ color: props.color, width: props.size, height: props.size }"
-    v-on="$attrs"
+    v-bind="$attrs"
   >
     <use :xlink:href="iconName" />
   </svg>
@@ -50,7 +50,8 @@ const svgClass = computed((): string => {
 .svg-icon {
   width: 1em;
   height: 1em;
-  vertical-align: -0.15em;
+  /* vertical-align: -0.15em; */
+  vertical-align: middle;
   fill: currentColor;
   overflow: hidden;
 }

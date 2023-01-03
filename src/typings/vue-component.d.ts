@@ -32,6 +32,7 @@ declare module '@vue/runtime-core' {
     ItemTitle: typeof import('./../components/home/itemTitle.vue')['default']
     ListItem: typeof import('./../components/home/listItem.vue')['default']
     LoadingIcon: typeof import('./../components/common/loadingIcon.vue')['default']
+    MdiIcon: typeof import('./../components/mdi-icon/index.vue')['default']
     MvItem: typeof import('./../components/home/mvItem.vue')['default']
     NewItem: typeof import('./../components/home/newItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

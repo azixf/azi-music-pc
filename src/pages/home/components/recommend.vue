@@ -7,7 +7,7 @@
     </el-carousel>
   </section>
   <section v-loading="!recommendedList.length">
-    <item-title title="库硪推荐歌单" />
+    <item-title title="kuwo推荐歌单" />
     <el-row :gutter="16">
       <el-col
         class="m-b-16"
@@ -28,7 +28,7 @@
     </el-row>
   </section>
   <section v-loading="!qRecommendedList.length">
-    <item-title title="Q鹅推荐歌单" />
+    <item-title title="qq推荐歌单" />
     <el-row :gutter="16">
       <el-col
         class="m-b-16"
@@ -126,14 +126,14 @@ onBeforeMount(async () => {
 
   const [e2, r2] = await getRecommendedList();
   !e2 && (recommendedList.value = (r2 as any).data?.data?.slice(0, 12));
-  
-  const [e3, r3] = await getQRecommendedList()
+
+  const [e3, r3] = await getQRecommendedList();
   !e3 && (qRecommendedList.value = (r3 as any).recomPlaylist.data.v_hot);
 
-  const [e4, r4] = await getKGNewSongs()
+  const [e4, r4] = await getKGNewSongs();
   !e4 && (newSongsList.value = (r4 as any).data.info.slice(0, 12));
 
-  const [e5, r5] = await getKGMvList()
+  const [e5, r5] = await getKGMvList();
   !e5 && (mvList.value = (r5 as any).data.info.slice(0, 12));
 });
 
@@ -168,6 +168,7 @@ const play = (item: NewSongsItem) => {
     id: item.audio_id,
     title: item.songname,
     src: item.hash_high || item.hash,
+    hash: item.hash_high || item.hash,
     singer: item.authors[0].author_name,
     singer_id: item.authors[0].author_id,
     detail: item.remark,

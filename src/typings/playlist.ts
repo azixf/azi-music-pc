@@ -1,4 +1,4 @@
-// 库硪
+// kuwo
 export interface MusicListItem {
   album: string;
   albumid: number;

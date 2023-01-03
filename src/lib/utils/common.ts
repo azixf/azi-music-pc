@@ -61,7 +61,7 @@ export const formatDateTime = (
   }
   const date = new Date(dateLike);
   const YYYY = date.getFullYear() + "";
-  const MM = (date.getMonth() + "").padStart(2, "0");
+  const MM = (date.getMonth() + 1 + "").padStart(2, "0");
   const DD = (date.getDate() + "").padStart(2, "0");
 
   const HH = (date.getHours() + "").padStart(2, "0");

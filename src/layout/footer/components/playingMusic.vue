@@ -1,29 +1,34 @@
 <template>
-  <div :class="['playing-music', { visible: modelValue }]">
+  <div :class="['playing-music', 'flex', { visible: modelValue }]">
+    <img :src="current_info.cover" alt="cover-bg" class="playing-music-bg">
     <header>
-      <svg-icon name="arrow-down" @click="closeMask" />
+      <svg-icon name="arrow-down" color="#fff" @click="closeMask" />
     </header>
-    <main>
-      main
+    <main class="flex align-center flex-1">
+      <aside>
+        <img :src="current_info.cover" alt="cover" class="playing-music-cover">
+      </aside>
+      <aside class="flex-1">
+        歌词
+      </aside>
     </main>
   </div>
 </template>
 
 <script lang="ts">
-import AudioPlayer from './audioPlayer.vue';
-import VolumeBox from './volumeBox.vue';
-import PlayingList from './playingList.vue';
 export default {
   name: "PlayingMusic",
   components: {
-    AudioPlayer,
-    VolumeBox,
-    PlayingList
+    AudioPlayer: () => defineAsyncComponent(() => import('./audioPlayer.vue')),
+    VolumeBox: () => defineAsyncComponent(() => import('./volumeBox.vue')),
+    PlayingList: () => defineAsyncComponent(() => import('./playingList.vue'))
   }
 };
 </script>
 
 <script lang="ts" setup>
+import { useStore } from '@/store';
+
 interface PlayingMusicProps {
   modelValue: boolean;
 }
@@ -34,6 +39,15 @@ const emits = defineEmits<{ (event: "update:modelValue", value: boolean): void }
 const closeMask = () => {
   emits("update:modelValue", false);
 };
+
+const { player } = useStore();
+const { current_info } = storeToRefs(player)
+
+onBeforeMount(async () => {
+  console.log('current: ', current_info.value);
+  const res = await player.GET_LYRIC()
+  console.log('res: ',  res);
+})
 </script>
 
 <style lang="scss" scoped>
@@ -55,6 +69,24 @@ const closeMask = () => {
   &.visible {
     top: 0;
     opacity: 1;
+  }
+  &-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    height: calc(100vh - 63px);
+    width: 100%;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  &-cover {
+    width: 45vw;
+    height: 45vw;
+    margin-right: 5vw;
+  }
+  &-main {
+    margin-right: 5vw;
   }
   .svg-icon {
     cursor: pointer;

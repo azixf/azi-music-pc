@@ -5,6 +5,7 @@ export interface MusicInfo {
   id?: string | number; // id
   title?: string; // 名称
   src?: string; // 地址
+  hash?: string; // hash
   singer?: string; // 歌手
   singer_id?: string; // 歌手id
   detail?: string; // 详情
@@ -27,9 +28,9 @@ export interface MusicInfo {
 export type PlayMode = "random" | "loop" | "single" | "order";
 
 export interface SongsListType {
-  id: string,
-  name: string,
-  create_at: string,
-  update_at: string,
-  songs_list: Array<MusicInfo>
+  id: string;
+  name: string;
+  create_at: string;
+  update_at: string;
+  songs_list: Array<MusicInfo>;
 }

@@ -5,7 +5,7 @@ export const getFocusImages = () => {
   return http.get('/qq/getMultiple/focus')
 }
 
-// 获取库硪推荐歌单
+// 获取kuwo推荐歌单
 export const getRecommendedList = () => {
   return http.post('/kuwo/rcmPlayList', {
     order: 'new',
@@ -14,12 +14,12 @@ export const getRecommendedList = () => {
   })
 }
 
-// 获取Q鹅推荐歌单
+// 获取qq推荐歌单
 export const getQRecommendedList = () => {
   return http.get('/qq/getMultiple/recomPlaylist') 
 }
 
-// 获取库苟最新音乐
+// 获取kugou最新音乐
 export const getKGNewSongs = () => {
   return http.post('/kugou/getNewSongs', {
     type: 1,
@@ -28,7 +28,7 @@ export const getKGNewSongs = () => {
   })
 }
 
-// 获取推荐MV
+// 获取kugou推荐MV
 export const getKGMvList = () => {
   return http.get('/kugou/getMVList')
 }

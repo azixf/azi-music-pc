@@ -5,7 +5,7 @@ interface KWPlaylistInfoRequest {
   page: number,
   size: number
 }
-// 获取库硪歌单详情
+// 获取kuwo歌单详情
 export const apiGetKWPlaylistInfo = (
   data: KWPlaylistInfoRequest
 ) => {
