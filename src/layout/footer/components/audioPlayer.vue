@@ -56,7 +56,7 @@ export default {
 import { formatTime, throttle } from "@/lib/utils/common";
 import { useStore } from "@/store";
 import { ElMessageBox } from "element-plus";
-import { apiVerifyMusicByHash } from "@/api";
+import { apiKGVerifyMusicByHash } from "@/api";
 
 const audioRef = ref();
 
@@ -100,8 +100,6 @@ watch(
   }
 );
 
-// listen src changed
-
 interface KGData {
   author: string;
   avatar: string;
@@ -120,7 +118,7 @@ const loadSrc = async (cb?: () => void) => {
     current_info.value.origin === "kugou" &&
     !current_info.value.src?.startsWith("http")
   ) {
-    const [err, res] = await apiVerifyMusicByHash(current_info.value.src!);
+    const [err, res] = await apiKGVerifyMusicByHash(current_info.value.src!);
     if (!err) {
       const data = res!.data as KGData;
       if (data.url) {

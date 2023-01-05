@@ -1,7 +1,7 @@
 <template>
   <section v-loading="!images.length">
     <el-carousel trigger="click" :interval="4000" type="card" height="20vw">
-      <el-carousel-item v-for="img in images">
+      <el-carousel-item v-for="img in images" :key="img.id">
         <img :src="img?.pic_info?.url" alt="" class="carousel-img" />
       </el-carousel-item>
     </el-carousel>
@@ -16,6 +16,7 @@
         :xl="6"
         :lg="4"
         v-for="item in recommendedList"
+        :key="item.id"
       >
         <list-item
           :src="item.img"
@@ -37,6 +38,7 @@
         :xl="6"
         :lg="4"
         v-for="item in qRecommendedList"
+        :key="item.content_id"
       >
         <list-item
           :src="item.cover"
@@ -50,7 +52,7 @@
   <section v-loading="!newSongsList.length">
     <item-title title="最新音乐" />
     <el-row :gutter="16">
-      <el-col class="m-b-16" :span="6" v-for="item in newSongsList">
+      <el-col class="m-b-16" :span="6" v-for="item in newSongsList" :key="item.hash">
         <new-item
           :src="item.album_cover.replace('{size}', '480')"
           width="8vw"
@@ -73,6 +75,7 @@
         :xl="6"
         :lg="4"
         v-for="item in mvList"
+        :key="item.mvhash"
       >
         <mv-item
           :cover="item.album_cover.replace('{size}', '480')"
@@ -94,11 +97,11 @@ export default {
 
 <script lang="ts" setup>
 import {
-  getFocusImages,
-  getRecommendedList,
-  getQRecommendedList,
-  getKGNewSongs,
-  getKGMvList,
+  apiGetQQFocusImages,
+  apiGetQQRecommendedList,
+  apiGetKGNewSongs,
+  apiGetKGMvList,
+  apiGetKWRecommendedList,
 } from "@/api";
 import { vClick } from "@/lib/directives";
 import { formatDateTime, formatTime } from "@/lib/utils/common";
@@ -121,19 +124,19 @@ const newSongsList = ref<NewSongsItem[]>([]);
 const mvList = ref<MVListItem[]>([]);
 
 onBeforeMount(async () => {
-  const [e1, r1] = await getFocusImages();
+  const [e1, r1] = await apiGetQQFocusImages();
   !e1 && (images.value = (r1 as any).focus.data.content);
 
-  const [e2, r2] = await getRecommendedList();
+  const [e2, r2] = await apiGetKWRecommendedList();
   !e2 && (recommendedList.value = (r2 as any).data?.data?.slice(0, 12));
 
-  const [e3, r3] = await getQRecommendedList();
+  const [e3, r3] = await apiGetQQRecommendedList();
   !e3 && (qRecommendedList.value = (r3 as any).recomPlaylist.data.v_hot);
 
-  const [e4, r4] = await getKGNewSongs();
+  const [e4, r4] = await apiGetKGNewSongs();
   !e4 && (newSongsList.value = (r4 as any).data.info.slice(0, 12));
 
-  const [e5, r5] = await getKGMvList();
+  const [e5, r5] = await apiGetKGMvList();
   !e5 && (mvList.value = (r5 as any).data.info.slice(0, 12));
 });
 

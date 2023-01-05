@@ -1,10 +1,6 @@
 import { http } from "@/lib/utils/request"
+import { KWPlaylistInfoRequest } from "@/typings/api"
 
-interface KWPlaylistInfoRequest {
-  pid: string | number,
-  page: number,
-  size: number
-}
 // 获取kuwo歌单详情
 export const apiGetKWPlaylistInfo = (
   data: KWPlaylistInfoRequest
@@ -16,7 +12,12 @@ export const apiGetKWPlaylistInfo = (
   })
 }
 
-// 获取q鹅歌单详情
-export const apiGetQEPlaylistInfo = (id: string) => {
-  return http.get(`/qq/getPlaylistIngo/${id}`)
+// 获取kuwo推荐歌单
+export const apiGetKWRecommendedList = () => {
+  return http.post('/kuwo/rcmPlayList', {
+    order: 'new',
+    page: 0,
+    size: 20
+  })
 }
+

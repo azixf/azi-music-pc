@@ -125,7 +125,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { apiGetKWPlaylistInfo, apiGetQEPlaylistInfo } from "@/api";
+import { apiGetKWPlaylistInfo, apiGetQQPlaylistInfo } from "@/api";
 import { PlaylistInfoData, QQPlaylistInfoData } from "@/typings/playlist";
 
 const state = reactive({
@@ -173,7 +173,7 @@ const getPlayListInfo = async () => {
       state.tags = data.tag?.split(',') || [];
     } 
   } else if (query.type === 'qq') {
-    const [e2, r2] = await apiGetQEPlaylistInfo(query.pid as string)
+    const [e2, r2] = await apiGetQQPlaylistInfo(query.pid as string)
     if (!e2) {
       const data = (r2 as any).cdlist?.[0] as QQPlaylistInfoData;
       if (data) {
