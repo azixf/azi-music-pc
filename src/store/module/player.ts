@@ -7,7 +7,7 @@ import {
   VolumeState,
 } from "@/typings/player";
 import { defineStore } from "pinia";
-import { apiGetMusicLyric } from "../../api/kugou";
+import { apiGetKGMusicLyric } from "@/api";
 
 export const usePlayerStore = defineStore("player", {
   state() {
@@ -78,9 +78,9 @@ export const usePlayerStore = defineStore("player", {
       if (!this.current_info.id) return null;
       let result: any = null;
       if (this.current_info.origin === "kugou") {
-        const [err, data] = await apiGetMusicLyric(this.current_info.hash!);
+        const [err, data] = await apiGetKGMusicLyric(this.current_info.hash!);
         if (!err) {
-          result = data;
+          result = data?.data?.items;
         }
       }
       return result;

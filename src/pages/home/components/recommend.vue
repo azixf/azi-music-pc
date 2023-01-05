@@ -60,7 +60,7 @@
           :music="item.songname"
           :singer="item.authors[0].author_name"
           :mv="!!item.mvhash"
-          v-click="() => play(item)"
+          @click="play(item)"
         />
       </el-col>
     </el-row>
@@ -103,7 +103,6 @@ import {
   apiGetKGMvList,
   apiGetKWRecommendedList,
 } from "@/api";
-import { vClick } from "@/lib/directives";
 import { formatDateTime, formatTime } from "@/lib/utils/common";
 import { useStore } from "@/store";
 import {
@@ -112,7 +111,7 @@ import {
   NewSongsItem,
   MVListItem,
 } from "@/typings/home";
-import { ElCarousel, ElCarouselItem, ElRow, ElCol } from "element-plus";
+
 const images = ref<any>([]);
 
 const recommendedList = ref<recommendedListItem[]>([]);

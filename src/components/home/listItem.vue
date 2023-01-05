@@ -1,7 +1,7 @@
 <template>
-  <div class="list-item-wrapper">
-    <div class="list-item-bg">
-      <img :src="src" alt="" :style="{ width, height: width}" />
+  <div class="list-item-wrapper flex flex-col">
+    <div class="list-item-bg flex-1">
+      <img :src="src" alt="music-cover" :style="{ width, height: width}" />
       <div :class="[ center ? 'center' : 'icon-wrapper']" v-if="showIcon">
         <svg-icon name="play_fill" size="18px" color="red" />
       </div>
@@ -46,6 +46,7 @@ withDefaults(defineProps<ListItemProps>(), {
 <style lang='scss' scoped>
 .list-item-wrapper {
   cursor: pointer;
+  height: 100%;
   .list-item-bg {
     position: relative;
     border-radius: var(--radius-default);

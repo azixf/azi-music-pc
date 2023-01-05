@@ -10,21 +10,17 @@
       <div class="layout-page-content">
         <router-view v-slot="{ Component }">
           <keep-alive :max="50">
-            <transition name="fade">
-              <component
-                :is="Component"
-                v-if="$route.meta.cache"
-                :key="key"
-              ></component>
-            </transition>
-          </keep-alive>
-          <transition name="fade">
             <component
               :is="Component"
-              v-if="!$route.meta.cache"
+              v-if="$route.meta.cache"
               :key="key"
             ></component>
-          </transition>
+          </keep-alive>
+          <component
+            :is="Component"
+            v-if="!$route.meta.cache"
+            :key="key"
+          ></component>
         </router-view>
       </div>
     </div>
@@ -38,9 +34,9 @@
 export default {
   name: "LayoutPage",
   components: {
-    LayoutHeader: defineAsyncComponent(() => import('./header/index.vue')),
-    LayoutFooter: defineAsyncComponent(() => import('./footer/index.vue')),
-    LayoutNav: defineAsyncComponent(() => import('./navbar/index.vue'))
+    LayoutHeader: defineAsyncComponent(() => import("./header/index.vue")),
+    LayoutFooter: defineAsyncComponent(() => import("./footer/index.vue")),
+    LayoutNav: defineAsyncComponent(() => import("./navbar/index.vue")),
   },
 };
 </script>
@@ -85,18 +81,5 @@ const key = computed(() => {
     height: 64px;
     border-top: 1px solid var(--color-border);
   }
-}
-.fade-enter-active, .fade-leave-active {
-  transition: transform 0.3s ease, opacity 0.2s linear;
-}
-
-.fade-enter-from {
-  transform: translate(-100%, 0);
-  opacity: 0;
-}
-
-.fade-leave-to {
-  transform: translate(100%, 0);
-  opacity: 0;
 }
 </style>
