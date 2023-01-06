@@ -24,7 +24,7 @@
       },
       "fs": {
         "all": true,
-        "scope": ["*"]
+        "scope": ["$RESOURCE/*"]
       },
       "globalShortcut": {
         "all": true
@@ -36,6 +36,9 @@
         "all": true
       },
       "dialog": {
+        "all": true
+      },
+      "path": {
         "all": true
       }
     },

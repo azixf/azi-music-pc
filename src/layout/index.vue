@@ -8,20 +8,14 @@
         <LayoutNav />
       </div>
       <div class="layout-page-content">
-        <router-view v-slot="{ Component }">
-          <keep-alive :max="50">
-            <component
-              :is="Component"
-              v-if="$route.meta.cache"
-              :key="key"
-            ></component>
-          </keep-alive>
-          <component
-            :is="Component"
-            v-if="!$route.meta.cache"
-            :key="key"
-          ></component>
-        </router-view>
+        <!-- <transition name="cache"> -->
+          <router-view v-slot="{ Component }">
+            <keep-alive :max="30">
+              <component :is="Component" v-if="$route.meta.cache"></component>
+            </keep-alive>
+            <component :is="Component" v-if="!$route.meta.cache" :key="key"></component>
+          </router-view>
+        <!-- </transition> -->
       </div>
     </div>
     <div class="layout-page-footer">
@@ -82,4 +76,6 @@ const key = computed(() => {
     border-top: 1px solid var(--color-border);
   }
 }
+
+
 </style>

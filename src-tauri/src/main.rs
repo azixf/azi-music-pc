@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::{ generate_handler, Manager };
+use tauri::{generate_handler, Manager};
 mod command;
 mod download;
 
@@ -19,7 +19,7 @@ fn main() {
         .invoke_handler(generate_handler![
             command::close_splashscreen,
             download::download_file
-            ])
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

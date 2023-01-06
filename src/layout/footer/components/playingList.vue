@@ -2,7 +2,12 @@
   <div class="playing-list" @click="onVisibleToggled">
     <svg-icon name="musiclist" />
   </div>
-  <el-drawer v-model="musicListVisivle" size="40%" :show-close="false" custom-class="music-list-drawer">
+  <el-drawer
+    v-model="musicListVisivle"
+    size="40%"
+    :show-close="false"
+    custom-class="music-list-drawer"
+  >
     <template #header>
       <div class="drawer-header">
         <h2 class="m-b-8">正在播放</h2>
@@ -19,14 +24,19 @@
       </div>
     </template>
     <div class="drawer-content">
-      <ul v-if="(currentList.length > 0)">
-        <li :class="{ 'gap-bg': index % 2 === 1 }" v-for="(item, index) in currentList" @click="onMusicListItemClicked(item, index)">
-          <el-row :gutter="8" align="middle" style="width: 100%;">
+      <ul v-if="currentList.length > 0">
+        <li
+          :class="{ 'gap-bg': index % 2 === 1 }"
+          v-for="(item, index) in currentList"
+          :key="item.hash"
+          @click="onMusicListItemClicked(item, index)"
+        >
+          <el-row :gutter="8" align="middle" style="width: 100%">
             <el-col :span="12" class="text-ellipsis">
               {{ item.title }}
             </el-col>
             <el-col :span="5" class="text-ellipsis">
-             {{ item.singer }}
+              {{ item.singer }}
             </el-col>
             <el-col :span="3">
               {{ item.duration_ms }}
@@ -35,11 +45,28 @@
               {{ item.origin }}
             </el-col>
           </el-row>
-          <font-icon name="pause" size="16" :cursor="false" v-show="(item.id === current_info.id && playState === 'playing')" class="font-icon" />
-          <font-icon name="playfill" size="16" :cursor="false" v-show="(item.id === current_info.id && playState === 'pause')" class="font-icon" />
+          <font-icon
+            name="pause"
+            size="16"
+            :cursor="false"
+            v-show="item.id === current_info.id && playState === 'playing'"
+            class="font-icon"
+          />
+          <font-icon
+            name="playfill"
+            size="16"
+            :cursor="false"
+            v-show="item.id === current_info.id && playState === 'pause'"
+            class="font-icon"
+          />
         </li>
       </ul>
-      <div class="tips flex space-center p-t-8 p-b-8" v-if="(currentList.length > 0)">--到底了--</div>
+      <div
+        class="tips flex space-center p-t-8 p-b-8"
+        v-if="currentList.length > 0"
+      >
+        --到底了--
+      </div>
       <el-empty description="暂无数据" v-else></el-empty>
     </div>
   </el-drawer>
@@ -52,9 +79,9 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { usePlayMusic } from '@/lib/hooks/usePlayMusic';
-import { useStore } from '@/store';
-import { MusicInfo } from '@/typings/player';
+import { usePlayMusic } from "@/lib/hooks/usePlayMusic";
+import { useStore } from "@/store";
+import { MusicInfo } from "@/typings/player";
 
 const { player } = useStore();
 const { currentList, current_info, playState } = storeToRefs(player);
@@ -65,10 +92,10 @@ const onVisibleToggled = () => {
   musicListVisivle.value = true;
 };
 
-const { play } = usePlayMusic(); 
+const { play } = usePlayMusic();
 const onMusicListItemClicked = (item: MusicInfo, idx: number) => {
   play(item);
-}
+};
 </script>
 
 <style lang="scss" scoped>
