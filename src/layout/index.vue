@@ -10,8 +10,8 @@
       <div class="layout-page-content">
         <!-- <transition name="cache"> -->
           <router-view v-slot="{ Component }">
-            <keep-alive :max="30">
-              <component :is="Component" v-if="$route.meta.cache"></component>
+            <keep-alive :max="50">
+              <component :is="Component" v-if="$route.meta.cache" :key="key"></component>
             </keep-alive>
             <component :is="Component" v-if="!$route.meta.cache" :key="key"></component>
           </router-view>

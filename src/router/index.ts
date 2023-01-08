@@ -51,17 +51,9 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   routes,
   history: createWebHistory(),
-  scrollBehavior(to, from, savePosition) {
-    if (savePosition) {
-      return savePosition;
-    } else {
-      return { left: 0, top: 0 };
-    }
-  },
 });
 
 router.beforeEach((to, from, next) => {
-  console.log("route: ", to);
   const { _router } = useStore();
   _router.current = to;
   if (to.fullPath !== from.fullPath || from.fullPath !== "/") {
@@ -69,5 +61,10 @@ router.beforeEach((to, from, next) => {
   }
   next();
 });
+
+router.afterEach(() => {
+  const content = document.querySelector('.layout-page-content')
+  content && (content.scrollTop = 0)
+})
 
 export default router;

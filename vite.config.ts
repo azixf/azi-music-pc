@@ -6,6 +6,7 @@ import vueComponents from "unplugin-vue-components/vite";
 import autoImport from "unplugin-auto-import/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import { svgBuilder } from "./src/lib/plugins/svgBuilder";
+import postcssPresetEnv from 'postcss-preset-env'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -21,6 +22,27 @@ export default defineConfig({
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
   },
   css: {
+    postcss: {
+      plugins: [
+        postcssPresetEnv({
+          stage: 2,
+            autoprefixer: {
+              grid: true,
+            },
+            features: {
+              'logical-properties-and-values': false,
+              'prefers-color-scheme-query': false,
+              'gap-properties': false,
+              'custom-properties': false,
+              'place-properties': false,
+              'not-pseudo-class': false,
+              'focus-visible-pseudo-class': false,
+              'focus-within-pseudo-class': false,
+              'color-functional-notation': false,
+            },
+        })
+      ]
+    },
     preprocessorOptions: {
       scss: {
         additionalData: `@use "@/style/_mixins.scss";`,

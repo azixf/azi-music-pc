@@ -1,7 +1,7 @@
 <template>
   <div class="list-item-wrapper flex flex-col">
     <div class="list-item-bg flex-1">
-      <img :src="src" alt="music-cover" :style="{ width, height: width}" />
+      <img v-lazy-load="src" alt="music-cover" :style="{ width, height: width}" />
       <div :class="[ center ? 'center' : 'icon-wrapper']" v-if="showIcon">
         <svg-icon name="play_fill" size="18px" color="red" />
       </div>
@@ -22,6 +22,8 @@
 </script>
 
 <script lang='ts' setup>
+import { vLazyLoad } from '@/lib/directives'
+
 interface ListItemProps {
   width?: string
   showMask?: boolean,

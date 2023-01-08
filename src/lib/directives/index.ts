@@ -18,22 +18,19 @@ export const vClick = {
 
 // 图片懒加载
 export const vLazyLoad = {
-  mounted: (el: HTMLElement) => {
+  mounted: (el: HTMLElement, bingding: DirectiveBinding) => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        const img = entry.target as HTMLElement;
-        const src = img.dataset.src;
-        console.log(img, src);
-        img.setAttribute("src", src!);
-        observer.unobserve(img);
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLElement;
+          const src = bingding.value;
+          img.setAttribute("src", src!);
+          observer.unobserve(img);
+        }
       });
     });
 
-    const imgList = el.querySelectorAll("img");
-    console.log(el, imgList);
-    Array.from(imgList).forEach(img => {
-      observer.observe(img);
-    });
+    observer.observe(el)
   },
 };
 

@@ -1,6 +1,6 @@
 <template>
   <div class="mv-item-wrapper">
-    <img :src="cover" alt="bg" />
+    <img v-lazy-load="cover" alt="bg" />
     <div class="mv-item-mask" v-if="!!info">
       {{ info }}
     </div>
@@ -21,6 +21,8 @@ export default {
 </script>
 
 <script lang="ts" setup>
+import { vLazyLoad } from '@/lib/directives'
+ 
 interface MVItemProp {
   cover: string,
   name: string,

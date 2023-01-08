@@ -59,6 +59,9 @@ export const formatDateTime = (
   if (new Date(dateLike).toString() == "Invalide Date") {
     return dateLike as string;
   }
+  if (typeof dateLike === 'string') {
+    dateLike = dateLike.replace('-', '/')
+  }
   const date = new Date(dateLike);
   const YYYY = date.getFullYear() + "";
   const MM = (date.getMonth() + 1 + "").padStart(2, "0");
