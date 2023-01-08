@@ -42,6 +42,7 @@
           v-click="() => onSearch()"
         />
         <input
+          ref="input"
           v-model="searchKey"
           type="text"
           placeholder="请输入"
@@ -71,24 +72,28 @@
             </ul>
             <el-empty :image-size="64" description="暂无搜索提示" v-else />
           </div>
-          <div class="search-popover-history">
+          <div class="search-popover-history" v-if="!!searchHistory.length">
             <p class="search-popover-title">
               <span>搜索历史</span>
-              <mdi-icon name="delete_forever" hover />
+              <mdi-icon name="delete_forever" hover @click="clearHistory" />
             </p>
-            <ul class="history-wrapper" v-if="!!searchHistory.length">
+            <ul class="history-wrapper">
               <li
                 class="history-item"
                 v-for="item in searchHistory"
                 :key="item"
-                v-click="() => onTipClick(item)"
               >
-                <el-tag type="info" round class="history-tag cursor">{{
-                  item
-                }}</el-tag>
+                <el-tag
+                  type="info"
+                  round
+                  closable
+                  class="history-tag cursor"
+                  @click="onTipClick(item)"
+                  @close="onTagClose(item)"
+                  >{{ item }}</el-tag
+                >
               </li>
             </ul>
-            <el-empty :image-size="64" description="暂无搜索历史" v-else />
           </div>
         </section>
       </div>
@@ -107,6 +112,7 @@ import { vClickOutside, vClick } from "@/lib/directives";
 import { useStore } from "@/store";
 import { debounce } from "@/lib/utils/common";
 import { apiGetKWSearchTips } from "@/api";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const { _router, system } = useStore();
 const { searchHistory, keyword } = storeToRefs(system);
@@ -115,7 +121,7 @@ const refeshWindow = () => {
   location.reload();
 };
 
-const searchKey = ref('')
+const searchKey = ref("");
 const tipsList = ref<string[]>([]);
 
 const onInputChange = debounce(() => {
@@ -145,8 +151,16 @@ const onTipClick = (key: string) => {
   onSearch();
 };
 
+const onTagClose = (key: string) => {
+  const index = searchHistory.value.findIndex(item => item === key);
+  if (index > -1) {
+    searchHistory.value.splice(index, 1);
+  }
+};
+
 const route = useRoute();
 const router = useRouter();
+const input = ref<HTMLInputElement>()
 const onSearch = async () => {
   keyword.value = searchKey.value;
   system.UPDATE_SEARCHHISTORY(searchKey.value);
@@ -157,6 +171,7 @@ const onSearch = async () => {
       name: "search",
     });
   }
+  input.value?.blur()
   isPopoverVisible.value = false;
 };
 
@@ -167,6 +182,27 @@ const onPopoverVisivibleChange = (visible: boolean) => {
     getSearchTips();
   }
   isPopoverVisible.value = visible;
+};
+
+const clearHistory = () => {
+  ElMessageBox.confirm("确认清空搜索历史?", "温馨提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      searchHistory.value = [];
+      ElMessage({
+        type: "success",
+        message: "删除成功",
+      });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "取消删除成功",
+      });
+    });
 };
 </script>
 

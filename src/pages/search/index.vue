@@ -5,7 +5,6 @@
       stripe
       highlight-current-row
       @row-dblclick="playMusic"
-      @row-contextmenu="onContextMenuOpend"
     >
       <el-table-column type="index" :index="setIndex" width="64" />
       <el-table-column label="操作">

@@ -52,6 +52,14 @@ const routes: Array<RouteRecordRaw> = [
           title: "搜索",
         },
       },
+      {
+        path: "setting",
+        name: "setting",
+        component: () => import("@/pages/setting/index.vue"),
+        meta: {
+          title: "设置",
+        },
+      },
     ],
   },
 ];

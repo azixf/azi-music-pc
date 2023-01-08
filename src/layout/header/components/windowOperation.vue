@@ -1,7 +1,7 @@
 <template>
   <div class="window-operation">
     <font-icon
-      :name="onTop ? 'icon_top1' :'icon_top'"
+      :name="onTop ? 'icon_top1' : 'icon_top'"
       size="18"
       color="var(--color-header-icon)"
       hover-color="#ffffff"
@@ -75,7 +75,7 @@ const onOperateWindow = (type: WindowOperitionType) => {
     appWindow.minimize();
   } else if (type === "toggleMaxize") {
     appWindow.toggleMaximize();
-  } else if(type === 'close') {
+  } else if (type === "close") {
     if (closeType.value === "close") return appWindow.close();
     if (closeType.value === "hide") return appWindow.hide();
     closeDialogVisible.value = true;

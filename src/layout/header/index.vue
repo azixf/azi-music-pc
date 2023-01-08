@@ -4,17 +4,17 @@
     class="layout-header-wrapper flex align-center justify-between"
   >
     <div class="layout-header-logo flex align-center">
-      <svg-icon
-        name="netease-cloud-music-fill"
-        color="#ffffff"
-        size="32px"
-      />
+      <svg-icon name="netease-cloud-music-fill" color="#ffffff" size="32px" />
       <strong class="logo-text">4U Music</strong>
     </div>
     <search-box />
     <div class="layout-header-operations">
       <skin-comp />
-      <svg-icon name="settings" color="var(--color-header-icon)" />
+      <svg-icon
+        name="settings"
+        color="var(--color-header-icon)"
+        @click="$router.push({ name: 'setting' })"
+      />
       <el-divider direction="vertical" />
       <window-operation />
     </div>
@@ -25,15 +25,16 @@
 export default {
   name: "LayoutHeader",
   components: {
-    SkinComp: defineAsyncComponent(() => import('./components/skin.vue')),
-    windowOperation: defineAsyncComponent(() => import('./components/windowOperation.vue')),
-    SearchBox: defineAsyncComponent(() => import('./components/searchBox.vue'))
+    SkinComp: defineAsyncComponent(() => import("./components/skin.vue")),
+    windowOperation: defineAsyncComponent(
+      () => import("./components/windowOperation.vue")
+    ),
+    SearchBox: defineAsyncComponent(() => import("./components/searchBox.vue")),
   },
 };
 </script>
 
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>
 
 <style lang="scss" scoped>
 .layout-header-wrapper {
@@ -51,8 +52,6 @@ export default {
     margin-right: 2vw;
   }
 }
-
-
 
 .layout-header-operations {
   display: flex;
