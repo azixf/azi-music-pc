@@ -13,6 +13,7 @@ interface MdiIconProps {
   size?: string | number
   color?: string
   transition?: string | number
+  hover?: boolean
   type?: 'filled' | 'outlined' | 'round' | 'sharp' | 'two-one'
   onClick?: () => void
 }
@@ -21,6 +22,7 @@ const props = withDefaults(defineProps<MdiIconProps>(), {
   size: 20,
   color: 'inherit',
   transition: '300',
+  hover: false,
   type: 'filled',
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onClick: () => {},
@@ -38,6 +40,9 @@ const classes = computed(() => {
     cls += ' material-icons-sharp'
   } else {
     cls += ' material-icons-two-one'
+  }
+  if (props.hover) {
+    cls += ' cursor'
   }
   if (shrinking.value) {
     cls += ' mdi-icon--shrinking'

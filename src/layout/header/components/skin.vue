@@ -1,13 +1,19 @@
 <template>
   <div class="skin-icon" @click="changeDrawerVisible">
-    <svg-icon name="skin" size="18px" color="var(--color-header-icon)"/>
+    <svg-icon name="skin" size="18px" color="var(--color-header-icon)" />
   </div>
   <el-drawer v-model="drawerVisible" title="更换皮肤">
     <div class="theme-title">预设主题</div>
     <div class="themes">
-      <template v-for="item in Object.keys(themeColorObj)">
-        <div :class="[{checked: theme === item },'theme-box']" :style="{ backgroundColor: themes[item]}" @click="onThemeClick(item)">{{ themeColorObj[item]?.title }}</div>
-      </template>
+        <div
+          v-for="item in Object.keys(themeColorObj)"
+          :class="[{ checked: theme === item }, 'theme-box']"
+          :style="{ backgroundColor: themes[item] }"
+          :key="item"
+          @click="onThemeClick(item)"
+        >
+          {{ themeColorObj[item]?.title }}
+        </div>
     </div>
     <div class="theme-title">自定义主题</div>
     <div>
@@ -16,47 +22,47 @@
   </el-drawer>
 </template>
 
-<script lang='ts'>
-  export default {
-    name: 'SkinComp'
-  }
+<script lang="ts">
+export default {
+  name: "SkinComp",
+};
 </script>
 
-<script lang='ts' setup>
-import { ThemeName, themes } from '@/theme/theme';
-import { setTheme } from '@/lib/utils/themeUtil';
-import { useStore } from '@/store';
+<script lang="ts" setup>
+import { ThemeName, themes } from "@/theme/theme";
+import { setTheme } from "@/lib/utils/themeUtil";
+import { useStore } from "@/store";
 
-const themeColorObj: any = ref<any>({})
+const themeColorObj: any = ref<any>({});
 Object.keys(themes).forEach(item => {
   themeColorObj.value[item] = {
-    title: (ThemeName as any)[item]
-  }
-})
+    title: (ThemeName as any)[item],
+  };
+});
 
-const { system } = useStore()
-const { theme, primaryColor } = storeToRefs(system)
+const { system } = useStore();
+const { theme, primaryColor } = storeToRefs(system);
 
 const onThemeClick = (current: string) => {
-  theme.value = current
-  primaryColor.value = themes[current]
-  setTheme(themes[current])
-}
+  theme.value = current;
+  primaryColor.value = themes[current];
+  setTheme(themes[current]);
+};
 
-const drawerVisible = ref(false)
+const drawerVisible = ref(false);
 
 const changeDrawerVisible = () => {
-  drawerVisible.value = !drawerVisible.value
-}
+  drawerVisible.value = !drawerVisible.value;
+};
 
 const onColorChange = (current: string) => {
-  theme.value = 'custom'
-  primaryColor.value = current
-  setTheme(current)
-}
+  theme.value = "custom";
+  primaryColor.value = current;
+  setTheme(current);
+};
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .skin-icon {
   .svg-icon {
     cursor: pointer;

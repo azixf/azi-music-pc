@@ -44,6 +44,14 @@ const routes: Array<RouteRecordRaw> = [
           title: "最近播放",
         },
       },
+      {
+        path: "search",
+        name: "search",
+        component: () => import("@/pages/search/index.vue"),
+        meta: {
+          title: "搜索",
+        },
+      },
     ],
   },
 ];
@@ -63,8 +71,8 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach(() => {
-  const content = document.querySelector('.layout-page-content')
-  content && (content.scrollTop = 0)
-})
+  const content = document.querySelector(".layout-page-content");
+  content && (content.scrollTop = 0);
+});
 
 export default router;

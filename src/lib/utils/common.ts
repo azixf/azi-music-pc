@@ -10,21 +10,47 @@ export const throttle = (
   delay = 200,
   immidiately = false
 ) => {
-  let timer: NodeJS.Timeout | null = null;
+  let timer: ReturnType<typeof setTimeout>;
   return function (this: unknown, ...args: unknown[]) {
     if (timer) return;
     if (immidiately) {
       immidiately = false;
       fn.apply(this, args);
-    } else {
-      timer = setTimeout(() => {
-        fn.apply(this, args);
-        clearTimeout(timer!);
-        timer = null;
-      }, delay);
-    }
+    } 
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+      clearTimeout(timer);
+    }, delay);
   };
 };
+
+/**
+ * debounce the function called times
+ * @param fn 
+ * @param delay 
+ * @param immidiately 
+ * @returns 
+ */
+export const debounce = (
+  fn: (...args: unknown[]) => void,
+  delay = 200,
+  immidiately = false
+) => {
+  let timer: ReturnType<typeof setTimeout>
+  return function (this: unknown, ...args: unknown[]) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    if (immidiately) {
+      immidiately = false;
+      fn.apply(this, args);
+    } 
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+      clearTimeout(timer);
+    }, delay);
+  }
+}
 
 /**
  * get keys of object data

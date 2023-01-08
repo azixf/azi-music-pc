@@ -1,20 +1,30 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export type CloseMethod = 'close' | 'hide' | 'none'
+export type CloseMethod = "close" | "hide" | "none";
 
-export const useSystemStore = defineStore('system', {
+export const useSystemStore = defineStore("system", {
   state() {
     return {
-      theme: 'default',
-      primaryColor: '#ec4141',
-      closeType: 'none' as CloseMethod,
-      onTop: false
-    }
+      theme: "default",
+      primaryColor: "#ec4141",
+      closeType: "none" as CloseMethod,
+      onTop: false,
+      searchHistory: [] as string[],
+      keyword: "",
+    };
   },
-  getters: {
-
-  },
+  getters: {},
   actions: {
+    UPDATE_SEARCHHISTORY(key: string) {
+      if (!key) return;
+      if (this.searchHistory.includes(key)) return;
+      if (this.searchHistory.length >= 20) {
+        this.searchHistory.shift();
+      }
+      this.searchHistory.push(key);
+    },
   },
-  persist: true
-})
+  persist: {
+    paths: ["theme", "primaryColor", "closeType", "onTop", "searchHistory"],
+  },
+});

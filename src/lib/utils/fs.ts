@@ -14,10 +14,17 @@ export class JSONFS {
       await createDir(this.path, { dir: BaseDirectory.Resource, recursive: true })
     }
   }
-
-  async read(): Promise<string> {
-    const result = await readTextFile(this.path, { dir: BaseDirectory.Resource })
-    return result;
+  
+  async read<T>(): Promise<T> {
+    let result = null
+    try {
+      result = await readTextFile(this.path, { dir: BaseDirectory.Resource })
+      result = JSON.parse(result)
+    } catch(e) {
+      console.log('read file failed: ',e);
+    }
+    console.log('read result: ', result);
+    return result
   }
 
   async write(content: string): Promise<void> {

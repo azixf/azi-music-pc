@@ -12,7 +12,7 @@
     <div class="play-music-icon-wrapper" title="我的喜欢">
       <font-icon name="tubiaozhizuomoban-" />
     </div>
-    <div class="play-music-icon-wrapper m-l-16" title="收藏到歌单">
+    <div class="play-music-icon-wrapper m-l-8" title="收藏到歌单">
       <font-icon name="add1" />
     </div>
   </div>

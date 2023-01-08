@@ -21,3 +21,20 @@ export const apiGetKWRecommendedList = () => {
   })
 }
 
+// kuwou搜索提示
+export const apiGetKWSearchTips = (keyword: string) => {
+  return http.post('/kuwo/searchSelections', {
+    key: keyword
+  })
+}
+
+
+
+// kuwo搜索
+export const apiKWSearch = (key: string, page: number, size: number) => {
+  return http.post('/kuwo/searchByKey', {
+    key,
+    page,
+    size
+  })
+}

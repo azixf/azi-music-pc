@@ -5,6 +5,7 @@
       :label="item.label"
       :active="activeIndex === index"
       :type="item.type"
+      :key="item.id"
       @click="onNavItemClick(item)"
     >
       <template #prefix v-if="item.prefix">
@@ -20,6 +21,7 @@
 <script lang="ts">
 import { VNode } from "vue";
 import SvgIcon from '@/components/common/svgIcon.vue';
+import { usePlaylist } from '@/lib/hooks/userPlaylist';
 export default {
   name: "LayoutNav",
   components: {
@@ -39,6 +41,8 @@ interface NavItemType {
   prefix?: VNode;
   suffix?: VNode;
 }
+
+usePlaylist()
 
 const navItemList = ref<NavItemType[]>([
   {

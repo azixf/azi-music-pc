@@ -6,7 +6,7 @@
       </el-carousel-item>
     </el-carousel>
   </section>
-  <section v-loading="!recommendedList.length">
+  <!-- <section v-loading="!recommendedList.length">
     <item-title title="kuwo推荐歌单" />
     <el-row :gutter="16">
       <el-col
@@ -27,9 +27,9 @@
         ></list-item>
       </el-col>
     </el-row>
-  </section>
+  </section> -->
   <section v-loading="!qRecommendedList.length">
-    <item-title title="qq推荐歌单" />
+    <item-title title="推荐歌单" />
     <el-row :gutter="16">
       <el-col
         class="m-b-16"
@@ -126,8 +126,8 @@ onBeforeMount(async () => {
   const [e1, r1] = await apiGetQQFocusImages();
   !e1 && (images.value = (r1 as any).focus.data.content);
 
-  const [e2, r2] = await apiGetKWRecommendedList();
-  !e2 && (recommendedList.value = (r2 as any).data?.data?.slice(0, 12));
+  // const [e2, r2] = await apiGetKWRecommendedList();
+  // !e2 && (recommendedList.value = (r2 as any).data?.data?.slice(0, 12));
 
   const [e3, r3] = await apiGetQQRecommendedList();
   !e3 && (qRecommendedList.value = (r3 as any).recomPlaylist.data.v_hot);

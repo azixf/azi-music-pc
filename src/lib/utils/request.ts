@@ -29,6 +29,7 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (res: AxiosResponse) => {
+    console.log('request response: ', res);
     const { code, status } = res.data;
     if (code != 200 && code != 0 && status != 1) {
       const { status, msg } = errHandler(res);
