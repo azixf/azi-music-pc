@@ -28,13 +28,19 @@ export const apiGetKWSearchTips = (keyword: string) => {
   })
 }
 
-
-
 // kuwo搜索
 export const apiKWSearch = (key: string, page: number, size: number) => {
   return http.post('/kuwo/searchByKey', {
     key,
     page,
     size
+  })
+}
+
+// kuwo获取歌曲或MV
+export const apiGetKWSongOrMV = (rid: string, type: 'mp3' | 'mp4') => {
+  return http.post('/kuwo/mvOrMusic', {
+    rid,
+    type
   })
 }

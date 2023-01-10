@@ -17,8 +17,8 @@
     </div>
   </div>
   <div class="play-name" v-show="!visible">
-    <div class="song-name" :title="player.current_info.title">{{ player.current_info.title }}</div>
-    <div class="song-singer">{{ player.current_info.singer }}</div>
+    <div class="song-name" :title="player.current_info.title" v-html="player.current_info.title"></div>
+    <div class="song-singer" v-html="player.current_info.singer"></div>
   </div>
   <playing-music v-model="visible" />
 </template>

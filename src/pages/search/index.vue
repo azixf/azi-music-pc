@@ -5,6 +5,7 @@
       stripe
       highlight-current-row
       @row-dblclick="playMusic"
+      @row-contextmenu="onContextmenuOpend"
     >
       <el-table-column type="index" :index="setIndex" width="64" />
       <el-table-column label="操作">
@@ -54,7 +55,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { useStore } from "@/store";
-import { apiKWSearch } from "@/api";
+import { apiGetKWSongOrMV, apiKWSearch } from "@/api";
 import { useLoading } from "@/lib/hooks/useLoading";
 import { usePlayMusic } from '@/lib/hooks/usePlayMusic';
 import { MusicInfo } from '@/typings/player';
@@ -67,6 +68,7 @@ const size = ref(30);
 const total = ref(0);
 
 interface KWResultInterface {
+  musicid: string,
   album: string;
   albumid: string;
   albumpic: string;
@@ -79,6 +81,7 @@ interface KWResultInterface {
   pic120: string;
   score100: string;
   songTimeMinutes: string;
+  rid: number;
 }
 
 const { loading, exec } = useLoading();
@@ -122,15 +125,71 @@ const onSizeChange = (current: number) => {
   getSearchResult();
 };
 
+const getMusicSrc = async (rid: number) => {
+  const [err, data] = await apiGetKWSongOrMV(rid + '', 'mp3')
+  console.log('data: ', data);
+  let src = ''
+  if (!err) {
+    src = data?.data || ''
+  }
+  return src
+}
+
 const { play } = usePlayMusic()
-const playMusic = (row: MusicInfo) => {
-  play(row)
+const playMusic = async(row: KWResultInterface) => {
+  const src = await getMusicSrc(row.rid)
+  console.log(src);
+  const musicInfo: MusicInfo = {
+    id: row.musicid,
+    title: row.name,
+    src,
+    hash: "",
+    singer: row.artist,
+    detail: "",
+    cover: row.pic,
+    time: 0,
+    time_ms: "0:00",
+    duration: row.duration,
+    progress: 0,
+    duration_ms: row.songTimeMinutes,
+    album_name: row.album,
+    album_id: row.albumid,
+    mv: "",
+    origin: "kuwo",
+    lyric: "",
+    play_time: 0,
+    play_time_ms: ""
+  }
+  play(musicInfo)
 }
 
 const { player } = useStore()
+const { recentList } = storeToRefs(player)
 const { openContextmenu } = useContextMenu()
-const onContextmenuOpend = (row: MusicInfo, _: any, event: MouseEvent) => {
-  openContextmenu(row, player.recentList, event)
+const onContextmenuOpend = async (row: KWResultInterface, _: any, event: MouseEvent) => {
+  const src = await getMusicSrc(row.rid)
+  const musicInfo: MusicInfo = {
+    id: row.musicid,
+    title: row.name,
+    src,
+    hash: "",
+    singer: row.artist,
+    detail: "",
+    cover: row.pic,
+    time: 0,
+    time_ms: "0:00",
+    duration: row.duration,
+    progress: 0,
+    duration_ms: row.songTimeMinutes,
+    album_name: row.album,
+    album_id: row.albumid,
+    mv: "",
+    origin: "kuwo",
+    lyric: "",
+    play_time: 0,
+    play_time_ms: ""
+  }
+  openContextmenu(musicInfo, recentList.value, event)
 }
 </script>
 <style lang="scss" scoped></style>
