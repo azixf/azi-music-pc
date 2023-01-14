@@ -10,47 +10,50 @@ export const throttle = (
   delay = 200,
   immidiately = false
 ) => {
-  let timer: ReturnType<typeof setTimeout>;
+  let timer: NodeJS.Timeout | null = null;
   return function (this: unknown, ...args: unknown[]) {
     if (timer) return;
     if (immidiately) {
       immidiately = false;
       fn.apply(this, args);
-    } 
-    timer = setTimeout(() => {
-      fn.apply(this, args);
-      clearTimeout(timer);
-    }, delay);
+    } else {
+      timer = setTimeout(() => {
+        fn.apply(this, args);
+        clearTimeout(timer!);
+        timer = null;
+      }, delay);
+    }
   };
 };
 
 /**
  * debounce the function called times
- * @param fn 
- * @param delay 
- * @param immidiately 
- * @returns 
+ * @param fn
+ * @param delay
+ * @param immidiately
+ * @returns
  */
 export const debounce = (
   fn: (...args: unknown[]) => void,
   delay = 200,
   immidiately = false
 ) => {
-  let timer: ReturnType<typeof setTimeout>
+  let timer: NodeJS.Timeout | null = null;
   return function (this: unknown, ...args: unknown[]) {
     if (timer) {
-      clearTimeout(timer)
+      clearTimeout(timer);
     }
     if (immidiately) {
       immidiately = false;
       fn.apply(this, args);
-    } 
+    }
     timer = setTimeout(() => {
       fn.apply(this, args);
-      clearTimeout(timer);
+      clearTimeout(timer!);
+      timer = null;
     }, delay);
-  }
-}
+  };
+};
 
 /**
  * get keys of object data
@@ -74,9 +77,9 @@ export const formatTime = (duration: number, up?: boolean): string => {
 
 /**
  * formate date time
- * @param dateLike 
- * @param format 
- * @returns 
+ * @param dateLike
+ * @param format
+ * @returns
  */
 export const formatDateTime = (
   dateLike: Date | string | number,
@@ -85,8 +88,8 @@ export const formatDateTime = (
   if (new Date(dateLike).toString() == "Invalide Date") {
     return dateLike as string;
   }
-  if (typeof dateLike === 'string') {
-    dateLike = dateLike.replace('-', '/')
+  if (typeof dateLike === "string") {
+    dateLike = dateLike.replace("-", "/");
   }
   const date = new Date(dateLike);
   const YYYY = date.getFullYear() + "";

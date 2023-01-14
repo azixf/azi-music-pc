@@ -158,6 +158,7 @@ const timeupdateHandler = throttle((e: any) => {
   );
   current_info.value.time = current;
   current_info.value.time_ms = formatTime(current);
+  console.log('time: ', current, current_info.value.time, formatTime(current));
 }, 1000);
 
 // play and pause
