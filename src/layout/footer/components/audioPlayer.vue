@@ -6,19 +6,19 @@
         :title="modeObj.title"
         @click="onPlaymodeChanged"
       >
-        <font-icon :name="modeObj.icon" size="20" />
+        <mdi-icon :name="modeObj.icon" hover/>
       </div>
-      <svg-icon name="skip_previous" size="20px" />
+      <mdi-icon name="skip_previous" hover />
       <div class="play-state-box" @click="onplay_stateChange(playState)">
-        <svg-icon name="play_fill" size="20px" v-if="playState === 'pause'" />
-        <svg-icon
+        <mdi-icon name="play_arrow" hover v-if="playState === 'pause'" />
+        <mdi-icon
           name="pause"
-          size="20px"
+          hover
           v-else-if="playState === 'playing'"
         />
         <loading-icon size="20" v-else />
       </div>
-      <svg-icon name="skip-next" size="20px" />
+      <mdi-icon name="skip_next" hover />
       <lyric-box />
     </div>
     <div class="music-progress-bar">
@@ -198,24 +198,24 @@ const playModeList: Array<PlayModeItem> = [
     index: 0,
     key: "loop",
     icon: "loop",
-    title: "循环播放",
+    title: "列表循环",
   },
   {
     index: 1,
     key: "order",
-    icon: "shunxubofang",
+    icon: "reorder",
     title: "顺序播放",
   },
   {
     index: 2,
     key: "random",
-    icon: "random",
+    icon: "shuffle",
     title: "随机播放",
   },
   {
     index: 3,
     key: "single",
-    icon: "LOOP_ONCE",
+    icon: "settings_backup_restore",
     title: "单曲循环",
   },
 ];
@@ -244,9 +244,6 @@ const onPlaymodeChanged = () => {
   .music-operation-btns {
     display: flex;
     gap: 0 var(--padding-default);
-    .svg-icon {
-      cursor: pointer;
-    }
   }
   .music-progress-bar {
     display: flex;

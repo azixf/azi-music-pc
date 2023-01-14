@@ -21,17 +21,17 @@
           </div>
           <div class="playlist-content">
             <div class="playlist-content__playall">
-              <svg-icon name="play_fill" size="18px" color="#fff" />
+              <mdi-icon name="play_arrow" color="#fff" />
               <span class="cursor">播放全部</span>
               <el-divider direction="vertical" />
-              <svg-icon class="cursor" name="add" size="18px" color="#fff" />
+              <mdi-icon hover name="add" color="#fff" />
             </div>
             <div class="playlist-content__collect">
-              <svg-icon name="download" size="18px" />
+              <mdi-icon name="favorite_border" hover/>
               <span class="cursor">收藏</span>
             </div>
             <div class="playlist-content__download">
-              <svg-icon name="download" size="18px" />
+              <mdi-icon name="download" hover />
               <span class="cursor">下载全部</span>
             </div>
           </div>
@@ -64,12 +64,11 @@
         <el-table-column type="index" :index="setIndex" width="64" />
         <el-table-column prop="operation" label="操作">
           <div class="playlist-table__operation">
-            <svg-icon
-              name="heart-fill"
-              color="var(--color-primary)"
-              size="18px"
-            ></svg-icon>
-            <svg-icon name="download" size="18px"></svg-icon>
+            <mdi-icon
+              name="favorite_border"
+              hover
+            ></mdi-icon>
+            <mdi-icon name="download" hover></mdi-icon>
           </div>
         </el-table-column>
         <el-table-column prop="title" label="标题">

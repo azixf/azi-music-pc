@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { VNode } from "vue";
-import SvgIcon from '@/components/common/svgIcon.vue';
+import MdiIcon from '@/components/mdi-icon/index.vue';
 import { usePlaylist } from '@/lib/hooks/userPlaylist';
 export default {
   name: "LayoutNav",
@@ -59,11 +59,10 @@ const navItemList = ref<NavItemType[]>([
   {
     id: 2,
     label: "我喜欢的音乐",
-    route: "/playlist?type=favorite",
+    route: "/collection",
     type: "main",
-    prefix: h(SvgIcon, {
-      name: 'heart',
-      size: '18px'
+    prefix: h(MdiIcon, {
+      name: 'favorite_border'
     }, {}),
   },
   {
@@ -71,9 +70,8 @@ const navItemList = ref<NavItemType[]>([
     label: "本地与下载",
     route: "/download",
     type: "main",
-    prefix: h(SvgIcon, {
-      name: 'download',
-      size: '18px'
+    prefix: h(MdiIcon, {
+      name: 'download'
     })
   },
   {
@@ -81,21 +79,17 @@ const navItemList = ref<NavItemType[]>([
     label: "最近播放",
     route: "/recent",
     type: "main",
-    prefix: h(SvgIcon, {
-      name: 'recent',
-      size: '18px',
-      style: {
-        transform: 'scale(1.6)'
-      }
+    prefix: h(MdiIcon, {
+      name: 'update',
     })
   },
   {
     id: 5,
     label: "创建歌单",
     type: "second",
-    suffix: h(SvgIcon, {
+    suffix: h(MdiIcon, {
       name: 'add',
-      size: '14px',
+      hover: true,
       color: 'var(--color-subtitle)',
       onclick: () => {
         console.log('add')

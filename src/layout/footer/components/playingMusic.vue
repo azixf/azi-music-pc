@@ -2,7 +2,7 @@
   <div :class="['playing-music', 'flex', { visible: modelValue }]">
     <img :src="current_info.cover" alt="cover-bg" class="playing-music-bg">
     <header>
-      <svg-icon name="arrow-down" color="#fff" @click="closeMask" />
+      <mdi-icon name="keyboard_double_arrow_down" hover color="#fff" @click="closeMask" />
     </header>
     <main class="flex align-center flex-1">
       <aside>
@@ -87,9 +87,6 @@ onBeforeMount(async () => {
   }
   &-main {
     margin-right: 5vw;
-  }
-  .svg-icon {
-    cursor: pointer;
   }
   &-footer {
     display: flex;

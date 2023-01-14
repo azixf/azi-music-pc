@@ -3,7 +3,7 @@
     <div class="list-item-bg flex-1">
       <img v-lazy-load="src" alt="music-cover" :style="{ width, height: width}" />
       <div :class="[ center ? 'center' : 'icon-wrapper']" v-if="showIcon">
-        <svg-icon name="play_fill" size="18px" color="red" />
+        <mdi-icon name="play_arrow" color="red" />
       </div>
       <div class="mask text-2-ellipsis" v-if="showMask">
         {{ maskText }}

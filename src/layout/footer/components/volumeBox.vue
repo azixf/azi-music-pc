@@ -3,9 +3,9 @@
     <el-popover placement="top" :width="38" popper-class="volume-box-popper">
       <template #reference>
         <div @click="onVolumeClicked">
-          <svg-icon name="volume-2" color="var(--color-icon)" v-show="!muted && volumeState === 'high'" />
-          <svg-icon name="volume-1" color="var(--color-icon)" v-show="!muted && volumeState === 'low'" />
-          <svg-icon name="volume-x" color="var(--color-icon)" size="24px" v-show="muted" />
+          <mdi-icon name="volume_up" hover color="var(--color-icon)" v-show="!muted && volumeState === 'high'" />
+          <mdi-icon name="volume_down" hover color="var(--color-icon)" v-show="!muted && volumeState === 'low'" />
+          <mdi-icon name="volume_off" color="var(--color-icon)" hover v-show="muted" />
         </div>
       </template>
       <el-slider v-model="volume" vertical height="80px"  @change="onAudioProgressChanged" />
@@ -58,9 +58,6 @@ watch(() => volume.value, (current: number) => {
 <style lang="scss" scoped>
 .volume-box {
   position: relative;
-  .svg-icon {
-    cursor: pointer;
-  }
 }
 :deep(.el-slider__button) {
   width: 14px;

@@ -20,6 +20,14 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "collection",
+        name: "collection",
+        component: () => import("@/pages/collection/index.vue"),
+        meta: {
+          title: "我的喜欢"
+        },
+      },
+      {
         path: "playlist",
         name: "playlist",
         component: () => import("@/pages/playlist/index.vue"),

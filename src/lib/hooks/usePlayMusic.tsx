@@ -24,6 +24,7 @@ export const usePlayMusic = () => {
 
   const playAllMode = ref("1");
   const playAll = (list: Array<MusicInfo>) => {
+    if (!list.length) return;
     ElMessageBox({
       title: "播放提示",
       message: () => {

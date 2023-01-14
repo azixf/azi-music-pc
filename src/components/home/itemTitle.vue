@@ -1,7 +1,7 @@
 <template>
   <div class="item-title-wrapper">
     <span>{{ title }}</span>
-    <svg-icon name="arrow-right" @click="onIconClick"/>
+    <mdi-icon name="arrow_forward_ios" hover @click="onIconClick"/>
   </div>
 </template>
 
@@ -33,9 +33,6 @@ const onIconClick = () => {
     font-size: var(--font-extra-large);
     font-weight: var(--font-weight-600);
     margin-right: var(--padding-default);
-  }
-  .svg-icon {
-    cursor: pointer;
   }
 }
 </style>

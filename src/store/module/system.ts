@@ -1,3 +1,4 @@
+import { MusicOriginType } from "@/typings/player";
 import { defineStore } from "pinia";
 
 export type CloseMethod = "close" | "hide" | "none";
@@ -11,6 +12,7 @@ export const useSystemStore = defineStore("system", {
       onTop: false,
       searchHistory: [] as string[],
       keyword: "",
+      musicOrigin: "kuwo" as MusicOriginType,
     };
   },
   getters: {},
@@ -25,6 +27,13 @@ export const useSystemStore = defineStore("system", {
     },
   },
   persist: {
-    paths: ["theme", "primaryColor", "closeType", "onTop", "searchHistory"],
+    paths: [
+      "theme",
+      "primaryColor",
+      "closeType",
+      "onTop",
+      "searchHistory",
+      "musicOrigin",
+    ],
   },
 });

@@ -9,10 +9,26 @@
     >
       <el-table-column type="index" :index="setIndex" width="64" />
       <el-table-column label="操作">
-        <el-space>
-          <mdi-icon name="favorite_border" hover></mdi-icon>
-          <mdi-icon name="queue" hover></mdi-icon>
-        </el-space>
+        <template #default="{ row }">
+          <el-space>
+            <mdi-icon
+              name="favorite_border"
+              hover
+              v-if="!isSongExistInCollecton(row.musicrid, system.musicOrigin)"
+              @click="addToCollection(row)"
+            ></mdi-icon>
+            <mdi-icon
+              name="favorite"
+              hover
+              color="var(--color-primary)"
+             v-else
+              @click="
+                removeSongFormCollection(row.musicrid, system.musicOrigin)
+              "
+            ></mdi-icon>
+            <mdi-icon name="queue" hover></mdi-icon>
+          </el-space>
+        </template>
       </el-table-column>
       <el-table-column prop="name" label="歌曲名">
         <template #default="{ row }">
@@ -37,7 +53,7 @@
     <div class="flex justify-end">
       <el-pagination
         v-model:current-page="page"
-        :current-size="size"
+        :page-size="size"
         layout="prev, pager, next, sizes, total"
         background
         :total="total"
@@ -57,9 +73,10 @@ export default {
 import { useStore } from "@/store";
 import { apiGetKWSongOrMV, apiKWSearch } from "@/api";
 import { useLoading } from "@/lib/hooks/useLoading";
-import { usePlayMusic } from '@/lib/hooks/usePlayMusic';
-import { MusicInfo } from '@/typings/player';
-import { useContextMenu } from '@/lib/hooks/useContextMenu';
+import { usePlayMusic } from "@/lib/hooks/usePlayMusic";
+import { MusicInfo } from "@/typings/player";
+import { useContextMenu } from "@/lib/hooks/useContextMenu";
+import { useCollection } from "@/lib/hooks/useCollection";
 const { system } = useStore();
 const { keyword } = storeToRefs(system);
 
@@ -68,7 +85,7 @@ const size = ref(30);
 const total = ref(0);
 
 interface KWResultInterface {
-  musicid: string,
+  musicrid: string;
   album: string;
   albumid: string;
   albumpic: string;
@@ -126,21 +143,21 @@ const onSizeChange = (current: number) => {
 };
 
 const getMusicSrc = async (rid: number) => {
-  const [err, data] = await apiGetKWSongOrMV(rid + '', 'mp3')
-  console.log('data: ', data);
-  let src = ''
+  const [err, data] = await apiGetKWSongOrMV(rid + "", "mp3");
+  console.log("data: ", data);
+  let src = "";
   if (!err) {
-    src = data?.data || ''
+    src = data?.data || "";
   }
-  return src
-}
+  return src;
+};
 
-const { play } = usePlayMusic()
-const playMusic = async(row: KWResultInterface) => {
-  const src = await getMusicSrc(row.rid)
+const { play } = usePlayMusic();
+const playMusic = async (row: KWResultInterface) => {
+  const src = await getMusicSrc(row.rid);
   console.log(src);
   const musicInfo: MusicInfo = {
-    id: row.musicid,
+    id: row.musicrid,
     title: row.name,
     src,
     hash: "",
@@ -158,18 +175,22 @@ const playMusic = async(row: KWResultInterface) => {
     origin: "kuwo",
     lyric: "",
     play_time: 0,
-    play_time_ms: ""
-  }
-  play(musicInfo)
-}
+    play_time_ms: "",
+  };
+  play(musicInfo);
+};
 
-const { player } = useStore()
-const { recentList } = storeToRefs(player)
-const { openContextmenu } = useContextMenu()
-const onContextmenuOpend = async (row: KWResultInterface, _: any, event: MouseEvent) => {
-  const src = await getMusicSrc(row.rid)
+const { player } = useStore();
+const { recentList } = storeToRefs(player);
+const { openContextmenu } = useContextMenu();
+const onContextmenuOpend = async (
+  row: KWResultInterface,
+  _: any,
+  event: MouseEvent
+) => {
+  const src = await getMusicSrc(row.rid);
   const musicInfo: MusicInfo = {
-    id: row.musicid,
+    id: row.musicrid,
     title: row.name,
     src,
     hash: "",
@@ -184,12 +205,44 @@ const onContextmenuOpend = async (row: KWResultInterface, _: any, event: MouseEv
     album_name: row.album,
     album_id: row.albumid,
     mv: "",
-    origin: "kuwo",
+    origin: system.musicOrigin,
     lyric: "",
     play_time: 0,
-    play_time_ms: ""
-  }
-  openContextmenu(musicInfo, recentList.value, event)
-}
+    play_time_ms: "",
+  };
+  openContextmenu(musicInfo, recentList.value, event);
+};
+
+const {
+  isSongExistInCollecton,
+  addSongToCollection,
+  removeSongFormCollection,
+} = useCollection();
+const addToCollection = async (row: KWResultInterface) => {
+  const src = await getMusicSrc(row.rid);
+  console.log("src: ", src);
+  const musicInfo: MusicInfo = {
+    id: row.musicrid,
+    title: row.name,
+    src,
+    hash: "",
+    singer: row.artist,
+    detail: "",
+    cover: row.pic,
+    time: 0,
+    time_ms: "0:00",
+    duration: row.duration,
+    progress: 0,
+    duration_ms: row.songTimeMinutes,
+    album_name: row.album,
+    album_id: row.albumid,
+    mv: "",
+    origin: system.musicOrigin,
+    lyric: "",
+    play_time: 0,
+    play_time_ms: "",
+  };
+  addSongToCollection(musicInfo);
+};
 </script>
 <style lang="scss" scoped></style>

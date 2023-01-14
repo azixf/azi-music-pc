@@ -1,7 +1,7 @@
 <template>
   <div class="play-music-pic" @click="showPlayingMusic" v-show="!visible">
     <div class="play-music-mask">
-      <svg-icon name="arrow-up" color="#eee" />
+      <mdi-icon name="keyboard_double_arrow_up" color="#eee" />
     </div>
     <img :src="(player.current_info.cover || DefaultImg)" alt="music-cover" />
   </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="playing-list" @click="onVisibleToggled">
-    <svg-icon name="musiclist" />
+    <mdi-icon name="queue_music" hover />
   </div>
   <el-drawer
     v-model="musicListVisivle"
@@ -11,11 +11,11 @@
     <template #header>
       <div class="drawer-header">
         <h2 class="m-b-8">正在播放</h2>
-        <div class="flex justify-between align-center">
+        <div class="flex justify-between align-center m-b-12">
           <div class="text">总共{{ currentList.length }}首</div>
           <div class="flex align-center">
             <div class="m-r-8 cursor flex align-center">
-              <font-icon name="add1" size="24" class="m-r-4" />
+              <mdi-icon name="library_add" hover class="m-r-4" />
               <span class="text">收藏全部</span>
             </div>
             <div class="text cursor">清空列表</div>
@@ -33,10 +33,10 @@
         >
           <el-row :gutter="8" align="middle" style="width: 100%">
             <el-col :span="12" class="text-ellipsis">
-              {{ item.title }}
+              <span v-html="item.title"></span>
             </el-col>
             <el-col :span="5" class="text-ellipsis">
-              {{ item.singer }}
+              <span v-html="item.singer"></span>
             </el-col>
             <el-col :span="3">
               {{ item.duration_ms }}
@@ -45,17 +45,13 @@
               {{ item.origin }}
             </el-col>
           </el-row>
-          <font-icon
+          <mdi-icon
             name="pause"
-            size="16"
-            :cursor="false"
             v-show="item.id === current_info.id && playState === 'playing'"
             class="font-icon"
           />
-          <font-icon
-            name="playfill"
-            size="16"
-            :cursor="false"
+          <mdi-icon
+            name="play_arrow"
             v-show="item.id === current_info.id && playState === 'pause'"
             class="font-icon"
           />
@@ -99,11 +95,6 @@ const onMusicListItemClicked = (item: MusicInfo, idx: number) => {
 </script>
 
 <style lang="scss" scoped>
-.playing-list {
-  .svg-icon {
-    cursor: pointer;
-  }
-}
 .text {
   font-size: var(--font-small);
   color: var(--color-text);
@@ -128,7 +119,7 @@ const onMusicListItemClicked = (item: MusicInfo, idx: number) => {
     .font-icon {
       position: absolute;
       left: 0;
-      top: 0;
+      top: 6px;
     }
   }
   .tips {

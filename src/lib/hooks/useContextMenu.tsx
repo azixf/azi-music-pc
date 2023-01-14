@@ -4,7 +4,7 @@ import {
   ContextmenuItem,
   ContextmenuSubmenu,
 } from "vue3-contextmenu";
-import FontIcon from "@/components/common/fontIcon.vue";
+import MdiIcon from "@/components/mdi-icon/index.vue";
 
 import "@/style/contextmenu.scss";
 import { useStore } from "@/store";
@@ -39,20 +39,20 @@ export const useContextMenu = () => {
           <Contextmenu name="context-menu">
             <ContextmenuItem onClick={() => playMusic()}>
               <div class="v-contextmenu-item-content">
-                <FontIcon name="play" size="16" />
+                <MdiIcon name="play_circle_outline"/>
                 <span>播放</span>
               </div>
             </ContextmenuItem>
             <ContextmenuItem divider>
               <div class="v-contextmenu-item-content">
-                <FontIcon name="iconfontplay2" size="16" />
+                <MdiIcon name="fast_forward" />
                 <span>下一首播放</span>
               </div>
             </ContextmenuItem>
             {info.value?.album_name ? (
               <ContextmenuItem>
                 <div class="v-contextmenu-item-content">
-                  <FontIcon name="album-line" size="18" />
+                <MdiIcon name="album" />
                   <span>专辑: { info.value?.album_name }</span>
                 </div>
               </ContextmenuItem>
@@ -60,7 +60,7 @@ export const useContextMenu = () => {
             {info.value?.singer ? (
               <ContextmenuItem>
                 <div class="v-contextmenu-item-content">
-                  <FontIcon name="person" size="16" />
+                  <MdiIcon name="account_circle" />
                   <span>歌手: { info.value?.singer }</span>
                 </div>
               </ContextmenuItem>
@@ -69,7 +69,7 @@ export const useContextMenu = () => {
               v-slots={{
                 label: () => (
                   <div class="v-contextmenu-item-content">
-                    <FontIcon name="add1" size="18" />
+                    <MdiIcon name="post_add"/>
                     <span>收藏到歌单</span>
                   </div>
                 ),
@@ -77,7 +77,7 @@ export const useContextMenu = () => {
             >
               <ContextmenuItem>
                 <div class="v-contextmenu-item-content">
-                  <FontIcon name="addto" size="18" />
+                  <MdiIcon name="playlist_add" />
                   <span>新增歌单</span>
                 </div>
               </ContextmenuItem>
@@ -85,7 +85,7 @@ export const useContextMenu = () => {
                 return (
                   <ContextmenuItem>
                     <div class="v-contextmenu-item-content">
-                      <FontIcon name="music-list" size="18" />
+                      <MdiIcon name="queue_music" />
                       <span>歌单名</span>
                     </div>
                   </ContextmenuItem>
@@ -94,13 +94,13 @@ export const useContextMenu = () => {
             </ContextmenuSubmenu>
             <ContextmenuItem>
               <div class="v-contextmenu-item-content">
-                <FontIcon name="download1" size="16" />
+                <MdiIcon name="arrow_circle_down" />
                 <span>下载</span>
               </div>
             </ContextmenuItem>
             <ContextmenuItem>
               <div class="v-contextmenu-item-content">
-                <FontIcon name="delete" size="18" />
+                <MdiIcon name="delete_forever" />
                 <span>从列表中删除</span>
               </div>
             </ContextmenuItem>

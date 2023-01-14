@@ -12,7 +12,7 @@
       </el-popconfirm>
     </div>
     <div class="recent-play-all" @click="playAll(recentList)">
-      <font-icon name="add" class="m-r-8" color="#fff" />
+      <mdi-icon name="play_arrow" class="m-r-8" color="#fff" />
       <span>播放全部</span>
     </div>
     <el-table
