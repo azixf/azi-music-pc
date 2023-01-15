@@ -6,14 +6,19 @@
           <span>歌曲：{{ favoriteList.length }}</span>
         </div>
         <div class="flex align-center">
-          <div class="playlist-content__playall m-r-12" @click="playAllMusic">
+          <el-button
+            type="primary"
+            round
+            :disabled="!favoriteList.length"
+            @click="playAllMusic"
+          >
             <mdi-icon name="play_arrow" color="#fff" />
-            <span class="cursor">播放全部</span>
-          </div>
-          <div class="playlist-content__download">
+            播放全部
+          </el-button>
+          <el-button round :disabled="!favoriteList.length">
             <mdi-icon name="download" />
-            <span class="cursor">下载全部</span>
-          </div>
+            下载全部
+          </el-button>
         </div>
       </div>
     </section>
@@ -24,10 +29,17 @@
         </template>
         <el-table-column type="index" width="64" />
         <el-table-column prop="operation" label="操作">
-          <div class="playlist-table__operation">
-            <mdi-icon name="delete" hover />
-            <mdi-icon name="download" hover />
-          </div>
+          <template #default="{ row }">
+            <div class="playlist-table__operation">
+              <mdi-icon
+                name="delete"
+                title="移除"
+                hover
+                @click="removeSongFormCollection(row.id, row.origin)"
+              />
+              <mdi-icon name="download" title="下载" hover />
+            </div>
+          </template>
         </el-table-column>
         <el-table-column prop="title" label="标题">
           <template #default="{ row }">
@@ -66,14 +78,10 @@ const { player } = useStore();
 const { favoriteList } = storeToRefs(player);
 
 const { play, playAll } = usePlayMusic();
-const { isSongExistInCollecton } = useCollection();
+const { removeSongFormCollection } = useCollection();
 
 const playAllMusic = () => {
   playAll(favoriteList.value);
-}
-
-const setIndex = (idx: number) => {
-  return idx + 1;
 };
 </script>
 

@@ -3,42 +3,37 @@
     <section class="playlist-top">
       <el-row :gutter="16">
         <el-col :span="6">
-          <img
-            class="playlist-cover"
-            :src="state.cover"
-            alt="playlist-cover"
-          />
+          <img class="playlist-cover" :src="state.cover" alt="playlist-cover" />
         </el-col>
         <el-col :span="18">
           <div class="playlist-header">
-            <div class="playlist-header__tag">歌单</div>
-            <div class="playlist-header__name" v-html="state.playlistName"></div>
+            <el-tag>歌单</el-tag>
+            <div
+              class="playlist-header__name"
+              v-html="state.playlistName"
+            ></div>
           </div>
           <div class="playlist-info">
             <span v-if="state.playlistCreator"
-              >{{ state.playlistCreator }}创建</span
+              >创建by {{ state.playlistCreator }}</span
             >
           </div>
           <div class="playlist-content">
-            <div class="playlist-content__playall">
+            <el-button type="primary" round>
               <mdi-icon name="play_arrow" color="#fff" />
-              <span class="cursor">播放全部</span>
-              <el-divider direction="vertical" />
-              <mdi-icon hover name="add" color="#fff" />
-            </div>
-            <div class="playlist-content__collect">
-              <mdi-icon name="favorite_border" hover/>
-              <span class="cursor">收藏</span>
-            </div>
-            <div class="playlist-content__download">
+              播放全部
+            </el-button>
+            <el-button round>
+              <mdi-icon name="favorite_border" hover />
+              收藏
+            </el-button>
+            <el-button round>
               <mdi-icon name="download" hover />
-              <span class="cursor">下载全部</span>
-            </div>
+              下载全部
+            </el-button>
           </div>
           <div class="playlist-data">
-            <span v-if="state.total"
-              >歌曲：{{ state.total }}</span
-            >
+            <span v-if="state.total">歌曲：{{ state.total }}</span>
             <span class="m-l-24" v-if="state.listencnt > 0"
               >收听：{{ state.listencnt }}</span
             >
@@ -53,7 +48,7 @@
         <el-col :span="6" :offset="12">
           <el-input type="text" placeholder="搜索歌单音乐">
             <template #prefix>
-              <svg-icon name="search" size="14px"></svg-icon>
+              <mdi-icon name="search" />
             </template>
           </el-input>
         </el-col>
@@ -66,22 +61,23 @@
           <div class="playlist-table__operation">
             <mdi-icon
               name="favorite_border"
+              title="添加到我的喜欢"
               hover
             ></mdi-icon>
-            <mdi-icon name="download" hover></mdi-icon>
+            <mdi-icon name="download" title="下载" hover></mdi-icon>
           </div>
         </el-table-column>
         <el-table-column prop="title" label="标题">
           <template #default="{ row }">
             <div class="playlist-table__title">
-              <span>{{ type === 'kuwo' ? row.name : row.songname }}</span>
+              <span>{{ type === "kuwo" ? row.name : row.songname }}</span>
               <span class="flag" v-if="row.hasmv">MV</span>
             </div>
           </template>
         </el-table-column>
         <el-table-column prop="artist" label="歌手">
           <template #default="{ row }" v-if="type !== 'kuwo'">
-            <span>{{ row.singer?.[0]?.name || '-' }}</span>
+            <span>{{ row.singer?.[0]?.name || "-" }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="album" label="专辑">
@@ -89,10 +85,11 @@
             <span>{{ row.albumname }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="releaseDate" label="发行日期">
-          <template #default v-if="type !== 'kuwo'">
-            <span>-</span>
-          </template>
+        <el-table-column
+          prop="releaseDate"
+          label="发行日期"
+          v-if="type == 'kuwo'"
+        >
         </el-table-column>
         <el-table-column prop="origin" label="来源">
           <span>{{ getOrigin }}</span>
@@ -106,7 +103,7 @@
     </section>
     <section class="playlist-pagination" v-if="type === 'kuwo'">
       <el-pagination
-        background 
+        background
         v-model:current-page="pagination.page"
         :page-size="pagination.size"
         layout="prev, pager, next"
@@ -128,14 +125,14 @@ import { apiGetKWPlaylistInfo, apiGetQQPlaylistInfo } from "@/api";
 import { PlaylistInfoData, QQPlaylistInfoData } from "@/typings/playlist";
 
 const state = reactive({
-  cover: '',
-  playlistName: '',
-  playlistCreator: '',
+  cover: "",
+  playlistName: "",
+  playlistCreator: "",
   total: 0,
   listencnt: 0,
   tags: [] as string[],
-  songsList: [] as any
-})
+  songsList: [] as any,
+});
 
 const pagination = reactive({
   page: 1,
@@ -144,7 +141,7 @@ const pagination = reactive({
 });
 
 const route = useRoute();
-const type = ref('');
+const type = ref("");
 onBeforeMount(() => {
   type.value = route.query.type as string;
   getPlayListInfo();
@@ -154,13 +151,13 @@ const getPlayListInfo = async () => {
   const { query } = route;
   if (query.type === "kuwo") {
     if (state.songsList?.length) {
-        state.songsList = []
-      }
+      state.songsList = [];
+    }
     const [e1, r1] = await apiGetKWPlaylistInfo({
       pid: query.pid as string,
       page: pagination.page - 1,
       size: pagination.size,
-    })
+    });
     if (!e1) {
       pagination.total = r1!.data.total;
       const data = r1!.data as PlaylistInfoData;
@@ -169,10 +166,10 @@ const getPlayListInfo = async () => {
       state.playlistCreator = data.uname;
       state.songsList = data.musicList;
       state.total = data.total;
-      state.tags = data.tag?.split(',') || [];
-    } 
-  } else if (query.type === 'qq') {
-    const [e2, r2] = await apiGetQQPlaylistInfo(query.pid as string)
+      state.tags = data.tag?.split(",") || [];
+    }
+  } else if (query.type === "qq") {
+    const [e2, r2] = await apiGetQQPlaylistInfo(query.pid as string);
     if (!e2) {
       const data = (r2 as any).cdlist?.[0] as QQPlaylistInfoData;
       if (data) {
@@ -186,28 +183,30 @@ const getPlayListInfo = async () => {
       }
     }
   }
-}
+};
 
 const onPaginationChange = () => {
-  getPlayListInfo()
-}
+  getPlayListInfo();
+};
 
 const setIndex = (idx: number) => {
-  return route.query.type === 'kuwo' ? (pagination.page - 1) * pagination.size + idx + 1 : idx + 1;
-}
+  return route.query.type === "kuwo"
+    ? (pagination.page - 1) * pagination.size + idx + 1
+    : idx + 1;
+};
 
 const duration = computed(() => {
   return function (interval: number) {
-    const minutes = Math.floor(interval / 60) + '';
-    const seconds = (interval % 60 + '').padStart(2, '0');
-    return `${minutes}:${seconds}`
-  }
-})
+    const minutes = Math.floor(interval / 60) + "";
+    const seconds = ((interval % 60) + "").padStart(2, "0");
+    return `${minutes}:${seconds}`;
+  };
+});
 
-const getOrigin = computed(():string => {
-  const { type } = route.query
+const getOrigin = computed((): string => {
+  const { type } = route.query;
   return type as string;
-})
+});
 </script>
 
 <style lang="scss" scoped>

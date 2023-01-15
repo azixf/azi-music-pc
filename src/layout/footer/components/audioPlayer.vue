@@ -1,24 +1,26 @@
 <template>
   <div class="audio-player">
     <div class="music-operation-btns">
-      <div
-        class="play-mode-box"
-        :title="modeObj.title"
-        @click="onPlaymodeChanged"
-      >
-        <mdi-icon :name="modeObj.icon" hover/>
+      <div class="play-mode-box" @click="onPlaymodeChanged">
+        <mdi-icon :name="modeObj.icon" :title="modeObj.title" hover />
       </div>
-      <mdi-icon name="skip_previous" hover />
+      <mdi-icon name="skip_previous" title="上一首" hover />
       <div class="play-state-box" @click="onplay_stateChange(playState)">
-        <mdi-icon name="play_arrow" hover v-if="playState === 'pause'" />
+        <mdi-icon
+          name="play_arrow"
+          title="播放"
+          hover
+          v-if="playState === 'pause'"
+        />
         <mdi-icon
           name="pause"
           hover
+          title="暂停"
           v-else-if="playState === 'playing'"
         />
         <loading-icon size="20" v-else />
       </div>
-      <mdi-icon name="skip_next" hover />
+      <mdi-icon name="skip_next" title="下一首" hover />
       <lyric-box />
     </div>
     <div class="music-progress-bar">
@@ -158,8 +160,8 @@ const timeupdateHandler = throttle((e: any) => {
   );
   current_info.value.time = current;
   current_info.value.time_ms = formatTime(current);
-  console.log('time: ', current, current_info.value.time, formatTime(current));
-}, 1000);
+  console.log("time: ", current, current_info.value.time, formatTime(current));
+}, 200);
 
 // play and pause
 const onplay_stateChange = (state: MusicPlayState) => {

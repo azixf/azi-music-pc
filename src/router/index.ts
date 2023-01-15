@@ -58,6 +58,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/pages/search/index.vue"),
         meta: {
           title: "搜索",
+          cache: true
         },
       },
       {

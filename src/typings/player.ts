@@ -1,6 +1,17 @@
 export type VolumeState = "muted" | "low" | "high";
 export type MusicOriginType = "qq" | "kuwo" | "kugou" | "netease";
 export type MusicPlayState = "loading" | "pause" | "playing";
+
+export interface LyricInfo {
+  time: number,
+  content: string
+}
+
+export interface KWLyricInfo  {
+  lineLyric: string
+  time: string
+}
+
 export interface MusicInfo {
   id?: string | number; // id
   title?: string; // 名称
@@ -20,7 +31,7 @@ export interface MusicInfo {
   mv_id?: string | number; // mv id
   mv?: string; // mv地址
   origin?: MusicOriginType; // 来源
-  lyric?: string; // 歌词
+  lyric?: string | Array<LyricInfo>; // 歌词
   play_time?: number;
   play_time_ms?: string;
 }

@@ -1,5 +1,7 @@
 import { formatDateTime } from "@/lib/utils/common";
 import {
+  KWLyricInfo,
+  LyricInfo,
   MusicInfo,
   MusicPlayState,
   PlayMode,
@@ -7,7 +9,7 @@ import {
   VolumeState,
 } from "@/typings/player";
 import { defineStore } from "pinia";
-import { apiGetKGMusicLyric } from "@/api";
+import { apiGetKGMusicLyric, apiGetKWLyric } from "@/api";
 
 export const usePlayerStore = defineStore("player", {
   state() {
@@ -47,7 +49,7 @@ export const usePlayerStore = defineStore("player", {
     };
   },
   actions: {
-    PLAY_MUSIC(info: MusicInfo) {
+    async PLAY_MUSIC(info: MusicInfo) {
       this.current_info = info;
       let isIncluded = false;
       // update currentList
@@ -73,17 +75,27 @@ export const usePlayerStore = defineStore("player", {
         }
       }
       !isRecentIncluded && this.recentList.unshift(info);
+      await this.GET_LYRIC();
     },
-    async GET_LYRIC() {
-      if (!this.current_info.id) return null;
-      let result: any = null;
+    async GET_LYRIC(): Promise<void> {
+      if (!this.current_info.id) return;
+      let result: any = "";
       if (this.current_info.origin === "kugou") {
         const [err, data] = await apiGetKGMusicLyric(this.current_info.hash!);
         if (!err) {
           result = data?.data?.items;
         }
+      } else if (this.current_info.origin === "kuwo") {
+        const id = (this.current_info.id as string).replace("MUSIC_", "");
+        const [err, data] = await apiGetKWLyric(id);
+        if (!err) {
+          console.log('data: ', data);
+          const items = transformLyric(data?.data?.lrclist);
+          console.log("items: ", items);
+          result = items;
+        }
       }
-      return result;
+      this.current_info.lyric = result;
     },
   },
   persist: {
@@ -102,3 +114,20 @@ export const usePlayerStore = defineStore("player", {
     ],
   },
 });
+
+function transformLyric(lyric: Array<KWLyricInfo>): Array<LyricInfo> {
+  const arr: Array<LyricInfo> = [];
+  for (let i = 0; i < lyric.length; i++) {
+    const { lineLyric, time } = lyric[i];
+    arr.push({
+      content: lineLyric,
+      time: transformTime(time),
+    });
+  }
+  return arr;
+}
+
+function transformTime(time: string): number {
+  const numTime = Number(time);
+  return numTime * 1000;
+}

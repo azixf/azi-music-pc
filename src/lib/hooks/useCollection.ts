@@ -12,7 +12,7 @@ export const useCollection = () => {
         title: "添加失败",
         message: "歌曲已存在到我的喜欢",
         duration: 800,
-        type: 'warning'
+        type: "warning",
       });
       return;
     }
@@ -21,11 +21,14 @@ export const useCollection = () => {
       title: "添加成功",
       message: "歌曲已添加到我的喜欢",
       duration: 800,
-      type: 'success'
+      type: "success",
     });
   };
 
-  const removeSongFormCollection = (id: string, origin: MusicOriginType) => {
+  const removeSongFormCollection = (
+    id: string | number,
+    origin: MusicOriginType
+  ) => {
     const idx = favoriteList.value.findIndex(
       item => item.id === id && item.origin === origin
     );
@@ -35,7 +38,7 @@ export const useCollection = () => {
         title: "删除成功",
         message: "歌曲已从我的喜欢移除",
         duration: 800,
-        type: 'success'
+        type: "success",
       });
     }
   };
@@ -44,6 +47,7 @@ export const useCollection = () => {
     id: string | number,
     origin: MusicOriginType
   ) => {
+    console.log("exists: ", id, origin, favoriteList.value);
     return favoriteList.value.some(
       item => item.id == id && item.origin === origin
     );

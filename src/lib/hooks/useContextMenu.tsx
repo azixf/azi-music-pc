@@ -14,22 +14,17 @@ import { MusicInfo } from "@/typings/player";
 export const useContextMenu = () => {
   const { player } = useStore();
   const { songsList } = storeToRefs(player);
-  
+
   const info = ref<MusicInfo>();
   const { play } = usePlayMusic();
   const playMusic = () => {
-    play(info.value!)
-  }
-  
+    play(info.value!);
+  };
+
   const list = ref<Array<MusicInfo>>([]);
-  const playMusicForNext = () => {
+  const playMusicForNext = () => {};
 
-  }
-
-  const deleteMusicInFromList = () => {
-
-  }
-
+  const deleteMusicInFromList = () => {};
 
   const contextmenuComponent = {
     name: "ContextmenuComp",
@@ -39,7 +34,7 @@ export const useContextMenu = () => {
           <Contextmenu name="context-menu">
             <ContextmenuItem onClick={() => playMusic()}>
               <div class="v-contextmenu-item-content">
-                <MdiIcon name="play_circle_outline"/>
+                <MdiIcon name="play_circle_outline" />
                 <span>播放</span>
               </div>
             </ContextmenuItem>
@@ -52,8 +47,10 @@ export const useContextMenu = () => {
             {info.value?.album_name ? (
               <ContextmenuItem>
                 <div class="v-contextmenu-item-content">
-                <MdiIcon name="album" />
-                  <span>专辑: { info.value?.album_name }</span>
+                  <MdiIcon name="album" />
+                  <span title={info.value?.album_name}>
+                    专辑: {info.value?.album_name}
+                  </span>
                 </div>
               </ContextmenuItem>
             ) : null}
@@ -61,7 +58,9 @@ export const useContextMenu = () => {
               <ContextmenuItem>
                 <div class="v-contextmenu-item-content">
                   <MdiIcon name="account_circle" />
-                  <span>歌手: { info.value?.singer }</span>
+                  <span title={info.value?.singer}>
+                    歌手: {info.value?.singer}
+                  </span>
                 </div>
               </ContextmenuItem>
             ) : null}
@@ -69,7 +68,7 @@ export const useContextMenu = () => {
               v-slots={{
                 label: () => (
                   <div class="v-contextmenu-item-content">
-                    <MdiIcon name="post_add"/>
+                    <MdiIcon name="post_add" />
                     <span>收藏到歌单</span>
                   </div>
                 ),
@@ -113,7 +112,11 @@ export const useContextMenu = () => {
   const instance = createApp(contextmenuComponent);
   instance.mount(document.createElement("div"));
 
-  const openContextmenu = (row: MusicInfo, ls: Array<MusicInfo>, e: MouseEvent) => {
+  const openContextmenu = (
+    row: MusicInfo,
+    ls: Array<MusicInfo>,
+    e: MouseEvent
+  ) => {
     info.value = row;
     list.value = ls;
     emitContext(e, { name: "context-menu" });

@@ -1,6 +1,6 @@
 <template>
   <div class="playing-list" @click="onVisibleToggled">
-    <mdi-icon name="queue_music" hover />
+    <mdi-icon name="queue_music" hover title="播放列表" />
   </div>
   <el-drawer
     v-model="musicListVisivle"

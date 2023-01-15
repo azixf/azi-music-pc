@@ -1,5 +1,5 @@
 <template>
-  <i :class="classes" :style="styles" @click="onClick">{{ nextName }}</i>
+  <i :class="classes" :style="styles" @click="onClick" :title="title">{{ nextName }}</i>
 </template>
 <script lang="ts">
 export default {
@@ -15,6 +15,7 @@ interface MdiIconProps {
   transition?: string | number
   hover?: boolean
   type?: 'filled' | 'outlined' | 'round' | 'sharp' | 'two-one'
+  title?: string
   onClick?: () => void
 }
 
@@ -24,6 +25,7 @@ const props = withDefaults(defineProps<MdiIconProps>(), {
   transition: '300',
   hover: false,
   type: 'filled',
+  title: '',
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onClick: () => {},
 })
@@ -90,7 +92,7 @@ watch(() => props.name, handleNameChange, {
   // display: inline-flex;
   // justify-content: center;
   // align-items: center;
-  // vertical-align: middle;
+  vertical-align: middle;
   &--shrinking {
     transform: scale(0);
   }

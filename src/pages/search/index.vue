@@ -1,5 +1,9 @@
 <template>
   <div class="search-page" v-loading="loading">
+    <h2 class="m-b-10">
+      <mdi-icon name="search" />
+      搜索结果
+    </h2>
     <el-table
       :data="result"
       stripe
@@ -14,19 +18,21 @@
             <mdi-icon
               name="favorite_border"
               hover
+              title="添加到我的喜欢"
               v-if="!isSongExistInCollecton(row.musicrid, system.musicOrigin)"
               @click="addToCollection(row)"
             ></mdi-icon>
             <mdi-icon
               name="favorite"
               hover
+              title="移出我的喜欢"
               color="var(--color-primary)"
              v-else
               @click="
                 removeSongFormCollection(row.musicrid, system.musicOrigin)
               "
             ></mdi-icon>
-            <mdi-icon name="queue" hover></mdi-icon>
+            <mdi-icon name="queue" title="收藏到歌单" hover></mdi-icon>
           </el-space>
         </template>
       </el-table-column>

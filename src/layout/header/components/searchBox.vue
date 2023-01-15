@@ -75,7 +75,7 @@
           <div class="search-popover-history" v-if="!!searchHistory.length">
             <p class="search-popover-title">
               <span>搜索历史</span>
-              <mdi-icon name="delete_forever" hover @click="clearHistory" />
+              <mdi-icon name="delete_forever" hover title="清空" @click="clearHistory" />
             </p>
             <ul class="history-wrapper">
               <li

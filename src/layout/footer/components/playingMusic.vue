@@ -1,15 +1,24 @@
 <template>
   <div :class="['playing-music', 'flex', { visible: modelValue }]">
-    <img :src="current_info.cover" alt="cover-bg" class="playing-music-bg">
+    <img :src="current_info.cover" alt="cover-bg" class="playing-music-bg" />
     <header>
-      <mdi-icon name="keyboard_double_arrow_down" hover color="#fff" @click="closeMask" />
+      <mdi-icon
+        name="keyboard_double_arrow_down"
+        hover
+        color="#fff"
+        @click="closeMask"
+      />
     </header>
     <main class="flex align-center flex-1">
       <aside>
-        <img :src="current_info.cover" alt="cover" class="playing-music-cover">
+        <img
+          :src="current_info.cover"
+          alt="cover"
+          class="playing-music-cover"
+        />
       </aside>
-      <aside class="flex-1">
-        歌词
+      <aside class="flex-1 playing-music-lyric">
+        <div style="height: 1500px">456</div>
       </aside>
     </main>
   </div>
@@ -18,36 +27,33 @@
 <script lang="ts">
 export default {
   name: "PlayingMusic",
-  components: {
-    AudioPlayer: () => defineAsyncComponent(() => import('./audioPlayer.vue')),
-    VolumeBox: () => defineAsyncComponent(() => import('./volumeBox.vue')),
-    PlayingList: () => defineAsyncComponent(() => import('./playingList.vue'))
-  }
+  components: {},
 };
 </script>
 
 <script lang="ts" setup>
-import { useStore } from '@/store';
+import { useStore } from "@/store";
 
 interface PlayingMusicProps {
   modelValue: boolean;
 }
 defineProps<PlayingMusicProps>();
 
-const emits = defineEmits<{ (event: "update:modelValue", value: boolean): void }>();
+const emits = defineEmits<{
+  (event: "update:modelValue", value: boolean): void;
+}>();
 
 const closeMask = () => {
   emits("update:modelValue", false);
 };
 
 const { player } = useStore();
-const { current_info } = storeToRefs(player)
+const { current_info } = storeToRefs(player);
 
 onBeforeMount(async () => {
-  console.log('current: ', current_info.value);
-  const res = await player.GET_LYRIC()
-  console.log('res: ',  res);
-})
+  console.log("current: ", current_info.value);
+  await player.GET_LYRIC();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -60,7 +66,7 @@ onBeforeMount(async () => {
   z-index: 10;
   opacity: 0;
   background-color: #fff;
-  transition: top .3s, opacity .3s;
+  transition: top 0.3s, opacity 0.3s;
   will-change: top, opacity;
   padding: var(--padding-default);
   display: flex;
@@ -81,12 +87,20 @@ onBeforeMount(async () => {
     opacity: 0.5;
   }
   &-cover {
-    width: 45vw;
-    height: 45vw;
+    width: 60vh;
+    height: 60vh;
     margin-right: 5vw;
   }
   &-main {
     margin-right: 5vw;
+  }
+  &-lyric {
+    overflow: auto;
+    background-color: red;
+    height: 60vh;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   &-footer {
     display: flex;

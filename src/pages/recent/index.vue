@@ -11,10 +11,16 @@
         </template>
       </el-popconfirm>
     </div>
-    <div class="recent-play-all" @click="playAll(recentList)">
+    <el-button
+      class="m-t-16 m-b-10"
+      type="primary"
+      round
+      :disabled="!recentList.length"
+      @click="playAll(recentList)"
+    >
       <mdi-icon name="play_arrow" class="m-r-8" color="#fff" />
       <span>播放全部</span>
-    </div>
+    </el-button>
     <el-table
       :data="recentList"
       highlight-current-row
