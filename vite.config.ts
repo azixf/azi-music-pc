@@ -6,15 +6,18 @@ import vueComponents from "unplugin-vue-components/vite";
 import autoImport from "unplugin-auto-import/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import { svgBuilder } from "./src/lib/plugins/svgBuilder";
-import postcssPresetEnv from 'postcss-preset-env'
+import electron, { onstart } from "vite-plugin-electron";
+import pkg from "./package.json";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   clearScreen: false,
-  server: {
-    strictPort: true,
-    port: 5237,
-  },
+  server: process.env.VSCODE_DEBUG
+    ? {
+        host: pkg.debug.env.VITE_DEV_SERVER_HOSTNAME,
+        port: pkg.debug.env.VITE_DEV_SERVER_PORT,
+      }
+    : undefined,
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
@@ -22,32 +25,11 @@ export default defineConfig({
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
   },
   css: {
-    postcss: {
-      plugins: [
-        postcssPresetEnv({
-          stage: 2,
-            autoprefixer: {
-              grid: true,
-            },
-            features: {
-              'logical-properties-and-values': false,
-              'prefers-color-scheme-query': false,
-              'gap-properties': false,
-              'custom-properties': false,
-              'place-properties': false,
-              'not-pseudo-class': false,
-              'focus-visible-pseudo-class': false,
-              'focus-within-pseudo-class': false,
-              'color-functional-notation': false,
-            },
-        })
-      ]
-    },
     preprocessorOptions: {
       scss: {
         additionalData: `@use "@/style/_mixins.scss";`,
       },
-    }
+    },
   },
   plugins: [
     vue(),
@@ -62,20 +44,40 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     svgBuilder("./src/assets/svg/"),
+    electron({
+      main: {
+        entry: "electron/main/index.ts",
+        vite: {
+          build: {
+            sourcemap: true,
+            outDir: "dist/electron/main",
+          },
+          plugins: [process.env.VSCODE_DEBUG ? onstart() : null],
+        },
+      },
+      preload: {
+        input: {
+          index: path.join(__dirname, "electron/preload/index.ts"),
+        },
+        vite: {
+          build: {
+            sourcemap: "inline",
+            outDir: "dist/electron/preload",
+          },
+        },
+      },
+      renderer: {},
+    }),
   ],
-  envPrefix: ["VITE_", "TAURI_"],
   esbuild: {
     pure: ["console.log"],
   },
-  define: {
-    "process.env.TAURI_DEBUG": process.env.TAURI_DEBUG,
-  },
   build: {
-    target: ["es2021", "chrome100", "safari13"],
+    target: "esnext",
     assetsDir: "assets",
     assetsInlineLimit: 8192,
-    minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
-    sourcemap: !!process.env.TAURI_DEBUG,
+    minify: process.env.NODE_ENV === "production" ? "esbuild" : false,
+    sourcemap: process.env.NODE_ENV !== "production",
     rollupOptions: {
       input: path.resolve(__dirname, "index.html"),
       output: {

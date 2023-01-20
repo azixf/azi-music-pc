@@ -5,13 +5,11 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
 } from "axios";
-import axiosTauriAdapter from "axios-tauri-adapter";
 
 const service: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL,
   timeout: 10 * 1000,
   timeoutErrorMessage: "请求超时，请稍后重试",
-  adapter: axiosTauriAdapter,
 });
 
 service.interceptors.request.use(
@@ -29,7 +27,7 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (res: AxiosResponse) => {
-    console.log('request response: ', res);
+    console.log("request response: ", res);
     const { code, status } = res.data;
     if (code != 200 && code != 0 && status != 1) {
       const { status, msg } = errHandler(res);
@@ -80,7 +78,10 @@ function errHandler(res: AxiosResponse): {
   };
 }
 
-type ResponseType = [AxiosError | undefined, AxiosResponse<any, any> | undefined];
+type ResponseType = [
+  AxiosError | undefined,
+  AxiosResponse<any, any> | undefined
+];
 
 export const http = {
   get(

@@ -9,7 +9,7 @@
     <div class="play-music-icon">
       <font-icon name="arrow-down" @click="visible = false" />
     </div>
-    <div class="play-music-icon-wrapper" title="我的喜欢">
+    <div class="play-music-icon-wrapper m-l-8" title="我的喜欢">
       <mdi-icon v-if="!isExists" name="favorite_border" title="添加到我的喜欢" @click="add" />
       <mdi-icon
         v-else

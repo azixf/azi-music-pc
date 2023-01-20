@@ -1,0 +1,64 @@
+/**
+ * @see https://www.electron.build/configuration/configuration
+ */
+{
+  appId: 'com.azi.music',
+  productName: '4U Music',
+  copyright: 'Copyright © 2022 ${author}',
+  asar: true,
+  directories: {
+    output: 'release',
+  },
+  compression: 'store',
+  files: ['dist'],
+  extraResources: [
+    {
+      from: './src/data',
+      to: 'data'
+    }
+  ],
+  dmg: {
+    contents: [
+      {
+        x: 410,
+        y: 150,
+        type: 'link',
+        path: '/Applications',
+      },
+      {
+        x: 130,
+        y: 150,
+        type: 'file',
+      },
+    ],
+  },
+  mac: {
+    icon: './icons/icon.ico',
+    target: ['dmg'],
+  },
+  linux: {
+    icon: './icons/icon.ico',
+  },
+  win: {
+    icon: './icons/icon.ico',
+    target: [
+      {
+        target: 'nsis',
+      },
+    ],
+  },
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowElevation: true,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: true,
+    createDesktopShortcut: true,
+    createStartMenuShortcut: true,
+    shortcutName: '${productName}',
+    artifactName: '${productName}_setup_${version}_${platform}.${ext}',
+    installerIcon: './icons/icon.ico',
+    uninstallerIcon: './icons/icon.ico',
+    installerHeaderIcon: './icons/icon.ico',
+  },
+}

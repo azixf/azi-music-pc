@@ -3,10 +3,12 @@ import App from "./App.vue";
 import router from "./router";
 import { pinia } from "./store";
 
-import 'normalize.css'
+import "normalize.css";
 import "./style/global.scss";
 import "./style/elementplus.scss";
 import "@/assets/iconfont/iconfont.css";
+
+process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = 'true';
 
 const app = createApp(App);
 app.use(router);

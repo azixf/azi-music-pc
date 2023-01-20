@@ -208,6 +208,7 @@ const clearHistory = () => {
 
 <style lang="scss" scoped>
 .search-box-wrapper {
+  -webkit-app-region: no-drag;
   .layout-header-search {
     display: flex;
     align-items: center;
