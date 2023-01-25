@@ -18,7 +18,11 @@
         />
       </aside>
       <aside class="flex-1 playing-music-lyric">
-        <div style="height: 1500px">456</div>
+        <p
+          v-for="(lyric, index) in current_info.lyric"
+          :class="[{ active: index === activeIndex }, `item-${index}`]"
+          v-html="(lyric as LyricInfo).content"
+        ></p>
       </aside>
     </main>
   </div>
@@ -33,6 +37,8 @@ export default {
 
 <script lang="ts" setup>
 import { useStore } from "@/store";
+import { LyricInfo } from "@/typings/player";
+import { getStyle } from "@/lib/utils/common";
 
 interface PlayingMusicProps {
   modelValue: boolean;
@@ -50,10 +56,39 @@ const closeMask = () => {
 const { player } = useStore();
 const { current_info } = storeToRefs(player);
 
-onBeforeMount(async () => {
-  console.log("current: ", current_info.value);
-  await player.GET_LYRIC();
-});
+const activeIndex = ref(-1);
+
+watch(
+  () => current_info.value.time,
+  (cur) => {
+    const len = current_info.value.lyric?.length;
+    if (len) {
+      for (let i = 0; i < len; i++) {
+        const item = current_info.value.lyric![i] as LyricInfo;
+        const gap = Math.abs(item.time - cur! * 1000);
+        console.log(item.time, cur! * 1000, gap);
+        if (gap <= 500) {
+          activeIndex.value = i;
+          break;
+        }
+      }
+      const wrapper = document.querySelector(
+        ".playing-music-lyric"
+      ) as HTMLElement;
+      const height = getStyle(wrapper, "height");
+      const activeItem = document.querySelector(
+        `.item-${activeIndex.value}`
+      ) as HTMLElement;
+      const offsetTop = activeItem.offsetTop;
+      if (activeItem) {
+        wrapper.scrollTo({
+          behavior: "smooth",
+          top: offsetTop - height + height / 4,
+        });
+      }
+    }
+  }
+);
 </script>
 
 <style lang="scss" scoped>
@@ -96,10 +131,19 @@ onBeforeMount(async () => {
   }
   &-lyric {
     overflow: auto;
-    background-color: red;
     height: 60vh;
+    padding: var(--padding-default) 0;
     &::-webkit-scrollbar {
       display: none;
+    }
+    p {
+      text-align: center;
+      line-height: 2;
+      &.active {
+        color: var(--color-primary);
+        font-size: var(--font-extra-large);
+        font-weight: var(--font-weight-600);
+      }
     }
   }
   &-footer {

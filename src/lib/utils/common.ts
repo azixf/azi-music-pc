@@ -108,3 +108,14 @@ export const formatDateTime = (
     .replace("mm", mm)
     .replace("ss", ss);
 };
+
+/**
+ * 获取元素样式
+ * @param el {HTMLElement} 
+ * @param property {string} 
+ * @returns 
+ */
+export function getStyle(el: HTMLElement, property: string) {
+  const value = window.getComputedStyle(el, null)[property].replace("px", "");
+  return isNaN(Number(value)) ? value : Number(value);
+}

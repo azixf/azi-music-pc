@@ -29,6 +29,8 @@ async function createWindow() {
     icon: join(ROOT_PATH.public, "./logo.png"),
     width: 1080,
     height: 720,
+    minHeight: 720,
+    minWidth: 1080,
     frame: false,
     resizable: true,
     fullscreenable: true,

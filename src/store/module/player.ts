@@ -89,7 +89,7 @@ export const usePlayerStore = defineStore("player", {
         const id = (this.current_info.id as string).replace("MUSIC_", "");
         const [err, data] = await apiGetKWLyric(id);
         if (!err) {
-          console.log('data: ', data);
+          console.log("data: ", data);
           const items = transformLyric(data?.data?.lrclist);
           console.log("items: ", items);
           result = items;
@@ -121,13 +121,8 @@ function transformLyric(lyric: Array<KWLyricInfo>): Array<LyricInfo> {
     const { lineLyric, time } = lyric[i];
     arr.push({
       content: lineLyric,
-      time: transformTime(time),
+      time: Number(time) * 1000,
     });
   }
   return arr;
-}
-
-function transformTime(time: string): number {
-  const numTime = Number(time);
-  return numTime * 1000;
 }

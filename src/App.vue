@@ -18,5 +18,12 @@ onMounted(() => {
   setTheme(primaryColor);
 
   ipcRenderer.send("set-on-top", onTop.value);
+
+  window.postMessage(
+    {
+      payload: "removeLoading",
+    },
+    "*"
+  );
 });
 </script>

@@ -56,7 +56,6 @@ function useLoading() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-primary);
   z-index: 99999;
 }
     `
@@ -66,6 +65,7 @@ function useLoading() {
   oStyle.id = 'app-loading-style'
   oStyle.innerHTML = styleContent
   oDiv.className = 'app-loading-wrap'
+  oDiv.style.backgroundColor = localStorage.primaryColor || '#ec4141'
   oDiv.innerHTML = `<div class="${className}"><div></div></div>`
 
   return {
@@ -88,5 +88,3 @@ domReady().then(appendLoading)
 window.onmessage = ev => {
   ev.data.payload === 'removeLoading' && removeLoading()
 }
-
-setTimeout(removeLoading, 4999)

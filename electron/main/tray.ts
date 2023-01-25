@@ -34,5 +34,5 @@ export const initTray = (icon: Electron.NativeImage, win: BrowserWindow) => {
   ])
 
   tray.setContextMenu(contextMenu)
-  tray.setToolTip('4U')
+  tray.setToolTip('4U Music')
 }
