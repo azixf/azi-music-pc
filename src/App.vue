@@ -8,8 +8,7 @@
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 import { setTheme } from "./lib/utils/themeUtil";
 import { useStore } from "./store";
-
-const { ipcRender } = window['electron']
+import { ipcRenderer } from "electron"
 
 const { system } = useStore();
 const { onTop } = storeToRefs(system);
@@ -18,6 +17,6 @@ onMounted(() => {
   const primaryColor = localStorage.primaryColor || "#ec4141";
   setTheme(primaryColor);
 
-  ipcRender.send("set-on-top", onTop.value);
+  ipcRenderer.send("set-on-top", onTop.value);
 });
 </script>

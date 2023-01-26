@@ -25,6 +25,9 @@ export const initTray = (icon: Electron.NativeImage, win: BrowserWindow) => {
       },
     },
     {
+      type: 'separator'
+    },
+    {
       label: '退出应用',
       type: 'normal',
       click: () => {

@@ -37,6 +37,8 @@ async function createWindow() {
     webPreferences: {
       preload,
       spellcheck: false,
+      nodeIntegration: true,
+      contextIsolation: false
     },
   });
 

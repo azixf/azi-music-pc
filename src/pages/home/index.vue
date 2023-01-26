@@ -21,7 +21,6 @@ export default {
 
 <script lang="ts" setup>
 import { TabsPaneContext } from "element-plus";
-
 const tabList = [
   {
     label: "热门推荐",

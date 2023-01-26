@@ -7,7 +7,6 @@ import autoImport from "unplugin-auto-import/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import { svgBuilder } from "./src/lib/plugins/svgBuilder";
 import electron, { onstart } from "vite-plugin-electron";
-import compression from "vite-plugin-compression";
 import pkg from "./package.json";
 
 // https://vitejs.dev/config/
@@ -45,13 +44,6 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     svgBuilder("./src/assets/svg/"),
-    compression({
-      verbose: true,
-      disable: false,
-      deleteOriginFile: false,
-      algorithm: 'gzip',
-      ext: '.gz'
-    }),
     electron({
       main: {
         entry: "electron/main/index.ts",
@@ -82,16 +74,8 @@ export default defineConfig({
   },
   build: {
     target: "esnext",
-    assetsDir: "assets",
     assetsInlineLimit: 8192,
     minify: process.env.NODE_ENV === "production" ? "esbuild" : false,
-    sourcemap: process.env.NODE_ENV !== "production",
-    rollupOptions: {
-      input: path.resolve(__dirname, "index.html"),
-      output: {
-        chunkFileNames: "js/[name]-chunk.[hash].js",
-        entryFileNames: "js/[name]-entry.[hash].js",
-      },
-    },
+    sourcemap: process.env.NODE_ENV !== "production"
   },
 });

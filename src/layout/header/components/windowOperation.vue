@@ -57,8 +57,7 @@ export default {
 <script lang="ts" setup>
 import { useStore } from "@/store";
 import { CloseMethod } from "@/store/module/system";
-
-const { ipcRender } = window['electron']
+import { ipcRenderer } from 'electron'
 
 const form = reactive({
   remembered: false,
@@ -74,15 +73,15 @@ type WindowOperitionType = "minify" | "toggleMaxize" | "close" | "fix";
 const onOperateWindow = (type: WindowOperitionType) => {
   if (type === "fix") {
     onTop.value = !onTop.value;
-    ipcRender.send("set-on-top", onTop.value);
+    ipcRenderer.send("set-on-top", onTop.value);
   } else if (type === "close") {
     if (closeType.value === "close")
-      return ipcRender.send("window-operation", "close");
+      return ipcRenderer.send("window-operation", "close");
     if (closeType.value === "hide")
-      return ipcRender.send("window-operation", "hide");
+      return ipcRenderer.send("window-operation", "hide");
     closeDialogVisible.value = true;
   } else {
-    ipcRender.send("window-operation", type);
+    ipcRenderer.send("window-operation", type);
   }
 };
 
@@ -110,9 +109,9 @@ const onModalClosed = () => {
     closeType.value = "none";
   }
   if (form.closeType === "hide") {
-    ipcRender.send("window-operation", "hide");
+    ipcRenderer.send("window-operation", "hide");
   } else {
-    ipcRender.send("window-operation", "close");
+    ipcRenderer.send("window-operation", "close");
   }
   resetForm();
 };

@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "main": "dist/electron/main/index.js",
   "author": "azixf <xie0729@yeah.net>",
+  "description": "a desktop music app built by Electron",
   "scripts": {
     "dev": "vite",
     "build:web": "rimraf ./dist && vue-tsc --noEmit && vite build",
