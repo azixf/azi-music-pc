@@ -8,8 +8,6 @@ import "./style/global.scss";
 import "./style/elementplus.scss";
 import "@/assets/iconfont/iconfont.css";
 
-process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = 'true';
-
 const app = createApp(App);
 app.use(router);
 app.use(pinia);

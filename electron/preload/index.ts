@@ -1,90 +1,34 @@
-function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
-  return new Promise(resolve => {
-    if (condition.includes(document.readyState)) {
-      resolve(true)
-    } else {
-      document.addEventListener('readystatechange', () => {
-        if (condition.includes(document.readyState)) {
-          resolve(true)
-        }
-      })
-    }
-  })
-}
+console.log("preload loaded ...");
 
-const safeDOM = {
-  append(parent: HTMLElement, child: HTMLElement) {
-    if (!Array.from(parent.children).find(e => e === child)) {
-      return parent.appendChild(child)
-    }
+import { contextBridge, ipcRenderer } from "electron";
+
+const ipc = {
+  renderer: {
+    // 渲染进程发送的消息
+    send: ["set-on-top", "window-operation", "check-update", "check-version"],
+    // 主进程发送的消息
+    receive: [
+      "main-process-message",
+      "update-message",
+      "update-downloaded-progress"
+    ],
   },
-  remove(parent: HTMLElement, child: HTMLElement) {
-    if (Array.from(parent.children).find(e => e === child)) {
-      return parent.removeChild(child)
-    }
+};
+
+contextBridge.exposeInMainWorld("electron", {
+  ipcRenderer,
+  ipcRender: {
+    send: (channel: string, ...args: any[]) => {
+      const invalidaChannels = ipc.renderer.send;
+      if (invalidaChannels.includes(channel)) {
+        ipcRenderer.send(channel, ...args);
+      }
+    },
+    on: (channel: string, func: (args: any[]) => void) => {
+      const invalidChannels = ipc.renderer.receive;
+      if (invalidChannels.includes(channel)) {
+        ipcRenderer.on(channel, (event, ...args) => func(args));
+      }
+    },
   },
-}
-
-/**
- * https://tobiasahlin.com/spinkit
- * https://connoratherton.com/loaders
- * https://projects.lukehaas.me/css-loaders
- * https://matejkustec.github.io/SpinThatShit
- */
-function useLoading() {
-  const className = `loaders-css__square-spin`
-  const styleContent = `
-@keyframes square-spin {
-  25% { transform: perspective(100px) rotateX(180deg) rotateY(0); }
-  50% { transform: perspective(100px) rotateX(180deg) rotateY(180deg); }
-  75% { transform: perspective(100px) rotateX(0) rotateY(180deg); }
-  100% { transform: perspective(100px) rotateX(0) rotateY(0); }
-}
-.${className} > div {
-  animation-fill-mode: both;
-  width: 50px;
-  height: 50px;
-  background: #fff;
-  animation: square-spin 3s 0s cubic-bezier(0.09, 0.57, 0.49, 0.9) infinite;
-}
-.app-loading-wrap {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 99999;
-}
-    `
-  const oStyle = document.createElement('style')
-  const oDiv = document.createElement('div')
-
-  oStyle.id = 'app-loading-style'
-  oStyle.innerHTML = styleContent
-  oDiv.className = 'app-loading-wrap'
-  oDiv.style.backgroundColor = localStorage.primaryColor || '#ec4141'
-  oDiv.innerHTML = `<div class="${className}"><div></div></div>`
-
-  return {
-    appendLoading() {
-      safeDOM.append(document.head, oStyle)
-      safeDOM.append(document.body, oDiv)
-    },
-    removeLoading() {
-      safeDOM.remove(document.head, oStyle)
-      safeDOM.remove(document.body, oDiv)
-    },
-  }
-}
-
-// ----------------------------------------------------------------------
-
-const { appendLoading, removeLoading } = useLoading()
-domReady().then(appendLoading)
-
-window.onmessage = ev => {
-  ev.data.payload === 'removeLoading' && removeLoading()
-}
+});

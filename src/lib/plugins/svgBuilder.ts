@@ -11,7 +11,7 @@ const hasViewBox = /(viewBox="[^>+].*?")/g
 const clearReturn = /(\r)|(\n)/g
 
 function findSvgFile(dir: PathLike): string[] {
-  const svgRes = []
+  const svgRes: string[] = []
   const dirents = readdirSync(dir, {
     withFileTypes: true,
   })

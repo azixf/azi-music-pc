@@ -33,19 +33,20 @@
     ],
   },
   mac: {
-    icon: './icons/icon.ico',
+    icon: './icons/icon.icns',
     target: ['dmg'],
   },
   linux: {
-    icon: './icons/icon.ico',
+    icon: './icons',
   },
   win: {
     icon: './icons/icon.ico',
     target: [
-      {
-        target: 'nsis',
-      },
+      'nsis',
+      'zip',
+      'msi'
     ],
+    verifyUpdateCodeSignature: false
   },
   nsis: {
     oneClick: false,
@@ -61,4 +62,12 @@
     uninstallerIcon: './icons/icon.ico',
     installerHeaderIcon: './icons/icon.ico',
   },
+  publish: [
+    {
+      provider: 'github',
+      owner: 'azixf',
+      repo: 'azi-music-pc',
+      releaseType: 'release'
+    }
+  ]
 }

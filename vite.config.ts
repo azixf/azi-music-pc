@@ -7,6 +7,7 @@ import autoImport from "unplugin-auto-import/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import { svgBuilder } from "./src/lib/plugins/svgBuilder";
 import electron, { onstart } from "vite-plugin-electron";
+import compression from "vite-plugin-compression";
 import pkg from "./package.json";
 
 // https://vitejs.dev/config/
@@ -44,6 +45,13 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     svgBuilder("./src/assets/svg/"),
+    compression({
+      verbose: true,
+      disable: false,
+      deleteOriginFile: false,
+      algorithm: 'gzip',
+      ext: '.gz'
+    }),
     electron({
       main: {
         entry: "electron/main/index.ts",

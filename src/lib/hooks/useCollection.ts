@@ -10,9 +10,10 @@ export const useCollection = () => {
     if (isSongExistInCollecton(music.id!, music.origin!)) {
       ElNotification({
         title: "添加失败",
-        message: "歌曲已存在到我的喜欢",
+        message: "歌曲已存在",
         duration: 800,
         type: "warning",
+        position: 'bottom-right'
       });
       return;
     }
@@ -22,6 +23,7 @@ export const useCollection = () => {
       message: "歌曲已添加到我的喜欢",
       duration: 800,
       type: "success",
+      position: "bottom-right"
     });
   };
 
@@ -39,6 +41,7 @@ export const useCollection = () => {
         message: "歌曲已从我的喜欢移除",
         duration: 800,
         type: "success",
+        position: "bottom-right"
       });
     }
   };

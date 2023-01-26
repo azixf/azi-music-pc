@@ -36,8 +36,6 @@ async function createWindow() {
     fullscreenable: true,
     webPreferences: {
       preload,
-      nodeIntegration: true,
-      contextIsolation: false,
       spellcheck: false,
     },
   });
