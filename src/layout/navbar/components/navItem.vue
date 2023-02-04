@@ -1,5 +1,5 @@
 <template>
-  <div :class="['nav-item', { active, 'sub-title': type === 'second' }]">
+  <div :class="['nav-item', { active, 'sub-title': type === 'second', 'msub-title': type === 'third' }]">
       <span class="flex align-center">
         <span :class="{ 'm-r-8': $slots.prefix }">
           <slot name="prefix"></slot>
@@ -24,7 +24,7 @@
 interface NavItemProps {
   active?: boolean
   label: string
-  type?: 'main' | 'second'
+  type?: 'main' | 'second' | 'third'
 }
 
 withDefaults(defineProps<NavItemProps>(), {
@@ -68,6 +68,12 @@ withDefaults(defineProps<NavItemProps>(), {
       }
       :deep(.svg-icon) {
         cursor: pointer;
+      }
+    }
+    &.msub-title {
+      padding: var(--padding-mini) var(--padding-small);
+      .nav-item-label {
+        font-size: var(--font-small);
       }
     }
   }

@@ -111,9 +111,9 @@ export const formatDateTime = (
 
 /**
  * 获取元素样式
- * @param el {HTMLElement} 
- * @param property {string} 
- * @returns 
+ * @param el {HTMLElement}
+ * @param property {string}
+ * @returns
  */
 export function getStyle(el: HTMLElement, property: string) {
   const value = window.getComputedStyle(el, null)[property].replace("px", "");

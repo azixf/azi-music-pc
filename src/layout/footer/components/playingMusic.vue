@@ -119,6 +119,7 @@ watch(
     height: calc(100vh - 63px);
     width: 100%;
     pointer-events: none;
+    object-fit: cover;
     opacity: 0.5;
   }
   &-cover {

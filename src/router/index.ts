@@ -69,6 +69,14 @@ const routes: Array<RouteRecordRaw> = [
           title: "设置",
         },
       },
+      {
+        path: "songslit",
+        name: "songslist",
+        component: () => import("@/pages/songslist/index.vue"),
+        meta: {
+          title: "歌单",
+        },
+      },
     ],
   },
 ];

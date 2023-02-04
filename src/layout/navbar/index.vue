@@ -15,17 +15,18 @@
         <component :is="item.suffix"></component>
       </template>
     </nav-item>
+    <playlist-box v-model="visible"></playlist-box>
   </nav>
 </template>
 
 <script lang="ts">
 import { VNode } from "vue";
-import MdiIcon from '@/components/mdi-icon/index.vue';
-import { usePlaylist } from '@/lib/hooks/userPlaylist';
+import MdiIcon from "@/components/mdi-icon/index.vue";
+import { useStore } from "@/store";
 export default {
   name: "LayoutNav",
   components: {
-    NavItem: defineAsyncComponent(() => import('./components/navItem.vue'))
+    NavItem: defineAsyncComponent(() => import("./components/navItem.vue")),
   },
 };
 </script>
@@ -34,17 +35,17 @@ export default {
 const activeIndex = ref(0);
 
 interface NavItemType {
-  id: number;
+  id: number | string;
   label: string;
-  type?: "main" | "second";
+  type?: "main" | "second" | "third";
   route?: string;
   prefix?: VNode;
   suffix?: VNode;
 }
 
-usePlaylist()
+const visible = ref(false);
 
-const navItemList = ref<NavItemType[]>([
+const baseItemList = ref<NavItemType[]>([
   {
     id: 0,
     label: "发现音乐",
@@ -61,9 +62,13 @@ const navItemList = ref<NavItemType[]>([
     label: "我喜欢的音乐",
     route: "/collection",
     type: "main",
-    prefix: h(MdiIcon, {
-      name: 'favorite_border'
-    }, {}),
+    prefix: h(
+      MdiIcon,
+      {
+        name: "favorite_border",
+      },
+      {}
+    ),
   },
   {
     id: 3,
@@ -71,8 +76,8 @@ const navItemList = ref<NavItemType[]>([
     route: "/download",
     type: "main",
     prefix: h(MdiIcon, {
-      name: 'download'
-    })
+      name: "download",
+    }),
   },
   {
     id: 4,
@@ -80,47 +85,91 @@ const navItemList = ref<NavItemType[]>([
     route: "/recent",
     type: "main",
     prefix: h(MdiIcon, {
-      name: 'update',
-    })
+      name: "update",
+    }),
   },
   {
     id: 5,
     label: "创建歌单",
     type: "second",
     suffix: h(MdiIcon, {
-      name: 'add',
+      name: "add",
       hover: true,
-      color: 'var(--color-subtitle)',
+      color: "var(--color-subtitle)",
       onclick: () => {
-        console.log('add')
-      }
-    })
+        visible.value = true;
+      },
+    }),
   },
 ]);
+
+const navItemList = ref<NavItemType[]>([]);
 
 const router = useRouter();
 const onNavItemClick = (item: NavItemType) => {
   if (item.type === "main" && !!item.route) {
     router.push(item.route!);
+  } else if (item.type === 'third') {
+    router.push({
+      name: 'songslist',
+      query: {
+        name: item.label
+      }
+    })
   }
 };
 
-const route = useRoute()
-watch(() => route, () => {
-  const query = route.query
-  let params = ''
+const routeChangeHandler = () => {
+  const query = route.query;
+  let params = "";
   Object.keys(query).map((item, index) => {
-    params += `${index === 0 ? '' : '&'}${item}=${query[item]}`
-  })
-  const path = params ? route.path + '?' + params : route.path
-  console.log('path: ', path);
-  const matchedPath = navItemList.value.find(item => item.route === path)
+    params += `${index === 0 ? "" : "&"}${item}=${query[item]}`;
+  });
+  const path = params ? route.path + "?" + params : route.path;
+  console.log("path: ", path);
+  const matchedPath = navItemList.value.find(item => item.route === path);
   console.log(matchedPath);
-  activeIndex.value = matchedPath?.id ?? -1
-}, {
-  immediate: true,
-  deep: true
-})
+  activeIndex.value =
+    typeof matchedPath?.id === "number" ? matchedPath.id ?? -1 : -1;
+};
+
+const route = useRoute();
+watch(
+  () => route,
+  () => {
+    routeChangeHandler();
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
+
+const { player } = useStore();
+const { songsList } = storeToRefs(player);
+watch(
+  () => songsList.value,
+  () => {
+    navItemList.value = [...baseItemList.value];
+    songsList.value.forEach(item => {
+      navItemList.value.push({
+        id: item.id,
+        label: item.name,
+        type: "third",
+        prefix: h(MdiIcon, {
+          name: 'queue_music',
+          hover: true,
+          color: 'var(--color-subtitle)'
+        })
+      });
+    });
+    routeChangeHandler();
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 </script>
 
 <style lang="scss" scoped>

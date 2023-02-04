@@ -33,11 +33,12 @@ export const usePlaylist = () => {
       return false;
     }
     const { songs_list } = playlist;
-    if (!!_ifSongInPlaylist(song, songs_list)) {
+    if (_ifSongInPlaylist(song, songs_list) > -1) {
       ElMessage.warning("歌曲已存在");
       return false;
     }
     songs_list.unshift(song);
+    console.log('songsList: ', songsList.value)
     return true;
   };
 
@@ -68,15 +69,17 @@ export const usePlaylist = () => {
     );
   };
 
-  const getSongsList = () => {
-    return songsList.value;
+  const getSongsListByName = (name: string) => {
+    return songsList.value.filter(item => item.name === name);
   };
+
+  const editSongsList = () => {};
 
   return {
     createPlaylist,
     addSongToPlaylist,
     removePlaylist,
     removeSongFromPlayList,
-    getSongsList
+    getSongsListByName,
   };
 };

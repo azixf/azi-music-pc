@@ -6,6 +6,10 @@
     &--hover > &-label {
       color: var(--color-primary);
     }
+    &-children {
+      max-height: 200px;
+      overflow: auto;
+    }
   }
   & > div {
     &:hover {

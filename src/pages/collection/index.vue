@@ -2,7 +2,8 @@
   <div class="playlist-wrapper">
     <section class="playlist-top">
       <div class="playlist-content">
-        <div class="playlist-data" v-if="favoriteList.length > 0">
+        <div class="playlist-data flex align-end">
+          <h1 style="margin: 0;margin-right: var(--padding-default);">我喜欢的音乐</h1>
           <span>歌曲：{{ favoriteList.length }}</span>
         </div>
         <div class="flex align-center">

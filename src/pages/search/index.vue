@@ -27,7 +27,7 @@
               hover
               title="移出我的喜欢"
               color="var(--color-primary)"
-             v-else
+              v-else
               @click="
                 removeSongFormCollection(row.musicrid, system.musicOrigin)
               "
@@ -69,10 +69,16 @@
       />
     </div>
   </div>
+  <Contextmenu ref="contextmenuRef"></Contextmenu>
 </template>
 <script lang="ts">
 export default {
   name: "SearchPage",
+  components: {
+    Contextmenu: defineAsyncComponent(
+      () => import("@/components/common/contextmenu.vue")
+    ),
+  },
 };
 </script>
 <script lang="ts" setup>
@@ -81,7 +87,6 @@ import { apiGetKWSongOrMV, apiKWSearch } from "@/api";
 import { useLoading } from "@/lib/hooks/useLoading";
 import { usePlayMusic } from "@/lib/hooks/usePlayMusic";
 import { MusicInfo } from "@/typings/player";
-import { useContextMenu } from "@/lib/hooks/useContextMenu";
 import { useCollection } from "@/lib/hooks/useCollection";
 const { system } = useStore();
 const { keyword } = storeToRefs(system);
@@ -188,7 +193,7 @@ const playMusic = async (row: KWResultInterface) => {
 
 const { player } = useStore();
 const { recentList } = storeToRefs(player);
-const { openContextmenu } = useContextMenu();
+const contextmenuRef = ref()
 const onContextmenuOpend = async (
   row: KWResultInterface,
   _: any,
@@ -216,7 +221,7 @@ const onContextmenuOpend = async (
     play_time: 0,
     play_time_ms: "",
   };
-  openContextmenu(musicInfo, recentList.value, event);
+  contextmenuRef.value.showContextmenu(musicInfo, recentList.value, event);
 };
 
 const {

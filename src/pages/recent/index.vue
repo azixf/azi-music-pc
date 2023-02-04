@@ -47,16 +47,19 @@
       <el-table-column prop="play_time_ms" label="播放时间"></el-table-column>
     </el-table>
   </div>
+  <Contextmenu ref="contextmenuRef"></Contextmenu>
 </template>
 
 <script lang="ts">
 export default {
   name: "RecentPage",
+  components: {
+    Contextmenu: defineAsyncComponent(() => import('@/components/common/contextmenu.vue'))
+  }
 };
 </script>
 
 <script lang="ts" setup>
-import { useContextMenu } from "@/lib/hooks/useContextMenu";
 import { usePlayMusic } from "@/lib/hooks/usePlayMusic";
 import { useStore } from "@/store";
 import { MusicInfo } from "@/typings/player";
@@ -77,11 +80,11 @@ const playMusic = (row: MusicInfo) => {
   play(row);
 };
 
-const { openContextmenu } = useContextMenu();
+const contextmenuRef = ref()
 const onContextmenuOpened = (row: MusicInfo, _: any, event: MouseEvent) => {
-  console.log("contextmenu: ", row);
-  openContextmenu(row, recentList.value, event);
+  contextmenuRef.value.showContextmenu(row, recentList.value, event);
 };
+
 </script>
 
 <style lang="scss" scoped>
