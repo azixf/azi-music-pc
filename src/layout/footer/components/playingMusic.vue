@@ -66,7 +66,6 @@ watch(
       for (let i = 0; i < len; i++) {
         const item = current_info.value.lyric![i] as LyricInfo;
         const gap = Math.abs(item.time - cur! * 1000);
-        console.log(item.time, cur! * 1000, gap);
         if (gap <= 500) {
           activeIndex.value = i;
           break;
@@ -79,8 +78,8 @@ watch(
       const activeItem = document.querySelector(
         `.item-${activeIndex.value}`
       ) as HTMLElement;
-      const offsetTop = activeItem.offsetTop;
       if (activeItem) {
+        const offsetTop = activeItem.offsetTop;
         wrapper.scrollTo({
           behavior: "smooth",
           top: offsetTop - height + height / 4,

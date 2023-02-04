@@ -46,9 +46,12 @@ export const usePlayerStore = defineStore("player", {
       favoriteList: [] as Array<MusicInfo>, // 我的收藏
       songsList: [] as Array<SongsListType>, // 歌单列表
       playState: "pause" as MusicPlayState, // 歌曲播放状态
+      pre_info: null as MusicInfo | null, // 上一首
+      next_info: null as MusicInfo | null // 下一首
     };
   },
   actions: {
+    // 播放音乐
     async PLAY_MUSIC(info: MusicInfo) {
       this.current_info = info;
       let isIncluded = false;
@@ -77,6 +80,7 @@ export const usePlayerStore = defineStore("player", {
       !isRecentIncluded && this.recentList.unshift(info);
       await this.GET_LYRIC();
     },
+    // 获取歌词
     async GET_LYRIC(): Promise<void> {
       if (!this.current_info.id) return;
       let result: any = "";
@@ -97,6 +101,62 @@ export const usePlayerStore = defineStore("player", {
       }
       this.current_info.lyric = result;
     },
+    // 修改播放模式
+    ON_MODE_CHANGE() {
+      const len = this.currentList.length;
+      if (!this.current_info.title || [0, 1].includes(len)) return;
+      const current_index = this.currentList.findIndex(item => item.title === this.current_info.title && item.origin === this.current_info.origin)
+      switch (this.mode) {
+        case 'loop':
+          if (current_index === len - 1) {
+            this.next_info = this.currentList[0]
+            this.pre_info = this.currentList[current_index - 1]
+          } else if (current_index === 0) {
+            this.pre_info = this.currentList[len - 1]
+            this.next_info = this.currentList[current_index + 1]
+          } else {
+            this.pre_info = this.currentList[current_index - 1]
+            this.next_info = this.currentList[current_index + 1]
+          }
+          break;
+        case 'order':
+          if (current_index === 0) {
+            this.pre_info = null
+            this.next_info = this.currentList[current_index + 1]
+          } else if (current_index === len - 1) {
+            this.pre_info = this.currentList[current_index - 1]
+            this.next_info = null
+          } else {
+            this.pre_info = this.currentList[current_index - 1]
+            this.next_info = this.currentList[current_index + 1]
+          }
+          break;
+        case 'random':
+          const pre_index = Math.floor(Math.random() * len)
+          const next_index = Math.floor(Math.random() * len)
+          this.pre_info = this.currentList[pre_index]
+          this.next_info = this.currentList[next_index]
+          break;
+
+        case 'single':
+          this.pre_info = this.current_info;
+          this.next_info = this.current_info;
+          break;
+      }
+    },
+    PLAY_WITH_MODE(type: string) {
+      if (type === 'next') {
+        if (this.next_info) {
+          this.PLAY_MUSIC(this.next_info)
+          this.ON_MODE_CHANGE()
+        }
+      } else {
+        if (this.pre_info) {
+          this.PLAY_MUSIC(this.pre_info)
+          this.ON_MODE_CHANGE()
+        }
+      }
+    }
   },
   persist: {
     paths: [

@@ -4,7 +4,7 @@
       <div class="play-mode-box" @click="onPlaymodeChanged">
         <mdi-icon :name="modeObj.icon" :title="modeObj.title" hover />
       </div>
-      <mdi-icon name="skip_previous" title="上一首" hover />
+      <mdi-icon name="skip_previous" title="上一首" hover @click="modePlay('pre')" />
       <div class="play-state-box" @click="onplay_stateChange(playState)">
         <mdi-icon
           name="play_arrow"
@@ -20,7 +20,7 @@
         />
         <loading-icon size="20" v-else />
       </div>
-      <mdi-icon name="skip_next" title="下一首" hover />
+      <mdi-icon name="skip_next" title="下一首" hover @click="modePlay('next')"/>
       <lyric-box />
     </div>
     <div class="music-progress-bar">
@@ -139,6 +139,7 @@ onMounted(() => {
   audioRef.value.addEventListener("canplay", canplayHandler);
   audioRef.value.addEventListener("ended", endedHandler);
   audioRef.value.addEventListener("timeupdate", timeupdateHandler);
+  player.ON_MODE_CHANGE()
 });
 
 const canplayHandler = (e: any) => {
@@ -160,7 +161,7 @@ const timeupdateHandler = throttle((e: any) => {
   );
   current_info.value.time = current;
   current_info.value.time_ms = formatTime(current);
-  console.log("time: ", current, current_info.value.time, formatTime(current));
+  // console.log("time: ", current, current_info.value.time, formatTime(current));
 }, 200);
 
 // play and pause
@@ -235,7 +236,12 @@ const onPlaymodeChanged = () => {
   } else {
     mode.value = playModeList[index].key;
   }
+  player.ON_MODE_CHANGE()
 };
+
+const modePlay = (type: string) => {
+  player.PLAY_WITH_MODE(type)
+}
 </script>
 
 <style lang="scss" scoped>
