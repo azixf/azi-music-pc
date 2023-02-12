@@ -120,14 +120,11 @@ export default {
 <script lang="ts" setup>
 import {
   apiGetKWPlaylistInfo,
-  apiGetKWSongOrMV,
-  apiGetQQMusic,
   apiGetQQPlaylistInfo,
 } from "@/api";
 import { usePlayMusic } from "@/lib/hooks/usePlayMusic";
-import { formatTime } from "@/lib/utils/common";
 import { useStore } from "@/store";
-import { KWMusicInfo, KWPlaylistInfo, MusicInfo, MusicOriginType, QQMusicInfo, QQPlaylistInfo } from "@/typings/player";
+import { KWMusicInfo, KWPlaylistInfo, MusicOriginType, QQMusicInfo, QQPlaylistInfo } from "@/typings/player";
 
 const state = reactive({
   cover: "",
@@ -193,91 +190,9 @@ const duration = computed(() => {
   };
 });
 
-const getKWMusicSrc = async (rid: number): Promise<string> => {
-  const [err, data] = await apiGetKWSongOrMV(rid + "", "mp3");
-  let src = "";
-  if (!err) {
-    src = data?.data || "";
-  }
-  return src;
-};
-
-const getQQMusicSrc = async (mid: string): Promise<string> => {
-  let src = "";
-  const [err, data] = await apiGetQQMusic(mid);
-  if (!err) {
-    src = data?.data?.url || "";
-  }
-  return src;
-};
-
-const getKWMusicInfo = async (row: KWMusicInfo) => {
-  const src = await getKWMusicSrc(row.rid);
-  const music_info: MusicInfo = {
-    id: row.musicrid,
-    title: row.name,
-    src,
-    hash: "",
-    singer: row.artist,
-    detail: "",
-    cover: row.pic,
-    time: 0,
-    time_ms: "0.00",
-    duration: row.duration,
-    progress: 0,
-    duration_ms: row.songTimeMinutes,
-    album_name: row.album,
-    album_id: row.albumid,
-    mv: "",
-    origin: "kuwo",
-    lyric: "",
-    play_time: 0,
-    play_time_ms: "",
-  };
-  return music_info;
-};
-
-const getQQMusicInfo = async (row: QQMusicInfo) => {
-  const src = await getQQMusicSrc(row.songmid);
-  let singer = "";
-  if (row.singer && row.singer.length) {
-    row.singer.forEach(item => {
-      singer += item.name + ";";
-    });
-    singer = singer.slice(0, singer.length - 1);
-  }
-  const music_info: MusicInfo = {
-    id: row.songid,
-    title: row.songname,
-    src,
-    hash: "",
-    singer,
-    detail: "",
-    cover: "",
-    time: 0,
-    time_ms: "0.00",
-    duration: row.interval,
-    progress: 0,
-    duration_ms: formatTime(row.interval),
-    album_id: row.albummid,
-    album_name: row.albumname,
-    mv: "",
-    origin: "qq",
-    lyric: "",
-    play_time: 0,
-    play_time_ms: "",
-  };
-  return music_info;
-};
-
 const { play, playAll } = usePlayMusic();
 const playMusic = async (row: KWMusicInfo | QQMusicInfo) => {
-  let music_info: MusicInfo = {};
-  if (type.value === "kuwo") {
-    music_info = await getKWMusicInfo(row as KWMusicInfo);
-  } else if (type.value === "qq") {
-    music_info = await getQQMusicInfo(row as QQMusicInfo);
-  }
+  const music_info = await player.GET_MUSIC_INFO(row as KWMusicInfo);
   play(music_info);
 };
 
@@ -286,12 +201,13 @@ const playAllMusic = () => {};
 const contextmenuRef = ref();
 const { player } = useStore();
 const { currentList } = storeToRefs(player);
-const onContextmenuOpened = (
-  row: KWPlaylistInfo | QQPlaylistInfo,
+const onContextmenuOpened = async (
+  row: KWMusicInfo | QQMusicInfo,
   _: any,
   event: MouseEvent
 ) => {
-  contextmenuRef.value.showContextmenu();
+  const music_info = await player.GET_MUSIC_INFO(row);
+  contextmenuRef.value.showContextmenu(music_info, currentList, event);
 };
 </script>
 

@@ -4,7 +4,12 @@
       <div class="play-mode-box" @click="onPlaymodeChanged">
         <mdi-icon :name="modeObj.icon" :title="modeObj.title" hover />
       </div>
-      <mdi-icon name="skip_previous" title="上一首" hover @click="modePlay('pre')" />
+      <mdi-icon
+        name="skip_previous"
+        title="上一首"
+        hover
+        @click="modePlay('pre')"
+      />
       <div class="play-state-box" @click="onplay_stateChange(playState)">
         <mdi-icon
           name="play_arrow"
@@ -20,7 +25,12 @@
         />
         <loading-icon size="20" v-else />
       </div>
-      <mdi-icon name="skip_next" title="下一首" hover @click="modePlay('next')"/>
+      <mdi-icon
+        name="skip_next"
+        title="下一首"
+        hover
+        @click="modePlay('next')"
+      />
       <lyric-box />
     </div>
     <div class="music-progress-bar">
@@ -57,8 +67,7 @@ export default {
 <script lang="ts" setup>
 import { formatTime, throttle } from "@/lib/utils/common";
 import { useStore } from "@/store";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { apiKGVerifyMusicByHash } from "@/api";
+import { ElMessageBox } from "element-plus";
 
 const audioRef = ref();
 
@@ -84,12 +93,9 @@ watch(
   ([src, time], [psrc, ptime]) => {
     console.log(src, psrc, time, ptime);
     if (src) {
-      loadSrc(() => {
-        console.log("executed");
-        playState.value = "pause";
-        audioRef.value.currentTime = current_info.value.time;
-        playState.value = "loading";
-      });
+      playState.value = "pause";
+      audioRef.value.currentTime = current_info.value.time;
+      playState.value = "loading";
     }
   }
 );
@@ -102,46 +108,13 @@ watch(
   }
 );
 
-interface KGData {
-  author: string;
-  avatar: string;
-  name: string;
-  pic: string;
-  url: string;
-}
-
-onBeforeMount(() => {
-  loadSrc();
-});
-
-// verify hash to audio src
-const loadSrc = async (cb?: () => void) => {
-  if (
-    current_info.value.origin === "kugou" &&
-    !current_info.value.src?.startsWith("http")
-  ) {
-    const [err, res] = await apiKGVerifyMusicByHash(current_info.value.src!);
-    if (!err) {
-      const data = res!.data as KGData;
-      if (data.url) {
-        current_info.value.src = data.url;
-        cb && cb();
-      } else {
-        ElMessage.warning('该歌曲不支持播放')
-      }
-    }
-  } else {
-    cb && cb();
-  }
-};
-
 onMounted(() => {
   audioRef.value.currentTime = current_info.value.time;
   audioRef.value.volume = volume.value / 100;
   audioRef.value.addEventListener("canplay", canplayHandler);
   audioRef.value.addEventListener("ended", endedHandler);
   audioRef.value.addEventListener("timeupdate", timeupdateHandler);
-  player.ON_MODE_CHANGE()
+  player.ON_MODE_CHANGE();
 });
 
 const canplayHandler = (e: any) => {
@@ -238,12 +211,12 @@ const onPlaymodeChanged = () => {
   } else {
     mode.value = playModeList[index].key;
   }
-  player.ON_MODE_CHANGE()
+  player.ON_MODE_CHANGE();
 };
 
 const modePlay = (type: string) => {
-  player.PLAY_WITH_MODE(type)
-}
+  player.PLAY_WITH_MODE(type);
+};
 </script>
 
 <style lang="scss" scoped>

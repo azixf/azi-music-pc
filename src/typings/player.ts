@@ -7,14 +7,14 @@ export type MusicPlayState = "loading" | "pause" | "playing";
 
 // 通用歌词信息
 export interface LyricInfo {
-  time: number,
-  content: string
+  time: number;
+  content: string;
 }
 
 // kuwo歌词信息
-export interface KWLyricInfo  {
-  lineLyric: string
-  time: string
+export interface KWLyricInfo {
+  lineLyric: string;
+  time: string;
 }
 
 // 正在播放歌曲
@@ -56,8 +56,8 @@ export interface SongsListType {
 
 // kuwo歌曲信息
 export interface KWMusicInfo {
-  rid: number
-  musicrid: string
+  rid: number;
+  musicrid: string;
   album: string;
   albumid: number;
   albumpic: string;
@@ -120,6 +120,15 @@ export interface QQMusicInfo {
   strMediaMid: string;
 }
 
+// qq推荐歌曲信息
+export interface QQRecommendedMusicInfo {
+  cover: string;
+  listen_num: number;
+  rcmdtemplate: string;
+  title: string;
+  content_id: number;
+}
+
 // qq歌单信息
 export interface QQPlaylistInfo {
   album_pic_mid: string;
@@ -140,4 +149,67 @@ export interface QQPlaylistInfo {
   total_song_num: number;
   tags: Array<{ id: number; name: string; pid: number }>;
   visitnum: number;
+}
+
+// kugou歌曲信息
+export interface KGMusicInfo {
+  audio_id: number;
+  album_cover: string;
+  "320hash"?: string;
+  album_id: string;
+  authors: Array<{
+    author_id: string;
+    author_name: string;
+    sizable_cover: string;
+  }>;
+  cover: string;
+  duration: number;
+  filename: string;
+  filesize: number;
+  hash: string;
+  hash_high: string;
+  mvhash: string;
+  remark: string;
+  songname: string;
+  sort: number;
+}
+
+// kugou mv信息
+export interface KGMVInfo {
+  album_audio_id: string;
+  album_cover: string;
+  authors: Array<{
+    author_id: string;
+    author_name: string;
+    sizable_cover: string;
+  }>;
+  description: string;
+  duration: number;
+  fhd_filesize: number;
+  fhd_hash: string;
+  hd_hash: string;
+  img: string;
+  ld_filesize: string;
+  ld_hash: string;
+  mvhash: string;
+  playcount: number;
+  publish: string;
+  qhd_filesize: string;
+  qhd_hash: string;
+  remark: string;
+  sd_filesize: string;
+  sd_hash: string;
+  singername: string;
+  title: string;
+  videoid: number;
+  videoname: string;
+}
+
+// kugou歌曲解析信息
+export interface KGVerifyInfo {
+  author: string;
+  avatar: string;
+  name: string;
+  pic: string;
+  url: string;
 }
