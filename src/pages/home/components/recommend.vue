@@ -100,8 +100,7 @@ import {
   apiGetQQFocusImages,
   apiGetQQRecommendedList,
   apiGetKGNewSongs,
-  apiGetKGMvList,
-  apiGetKWRecommendedList,
+  apiGetKGMvList
 } from "@/api";
 import { formatDateTime, formatTime } from "@/lib/utils/common";
 import { useStore } from "@/store";

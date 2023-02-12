@@ -118,9 +118,6 @@ const playAllMusic = () => {
       display: flex;
       align-items: center;
       gap: var(--padding-small);
-      :deep(.svg-icon) {
-        cursor: pointer;
-      }
     }
   }
 }

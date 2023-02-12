@@ -34,36 +34,49 @@ export interface PlaylistInfoData {
 }
 
 // qq
-export interface QQSongList  {
-  albumdesc: string,
-  albumid: number,
-  albummid: string,
-  albumname: string,
-  singer: Array<{ id: number, mid: string, name: string }>,
-  interval: number,
-  songid: number,
-  songmid: string,
-  songname: string,
-  strMediaMid: string
+export interface QQSongList {
+  albumdesc: string;
+  albumid: number;
+  albummid: string;
+  albumname: string;
+  singer: Array<{ id: number; mid: string; name: string }>;
+  interval: number;
+  songid: number;
+  songmid: string;
+  songname: string;
+  strMediaMid: string;
 }
 
 export interface QQPlaylistInfoData {
-  album_pic_mid: string,
-  coveradurl: string,
-  cur_song_num: number,
-  desc: string,
-  dissid: number,
-  dissname: string,
-  headurl: string,
-  ifpicurl: string,
-  logo: string,
-  nick: string,
-  nickname: string,
-  pic_dpi: string,
-  singerid: number,
-  songlist: Array<QQSongList>,
-  songnum: number,
-  total_song_num: number,
-  tags: Array<{id: number, name: string, pid: number}>,
-  visitnum: number
+  album_pic_mid: string;
+  coveradurl: string;
+  cur_song_num: number;
+  desc: string;
+  dissid: number;
+  dissname: string;
+  headurl: string;
+  ifpicurl: string;
+  logo: string;
+  nick: string;
+  nickname: string;
+  pic_dpi: string;
+  singerid: number;
+  songlist: Array<QQSongList>;
+  songnum: number;
+  total_song_num: number;
+  tags: Array<{ id: number; name: string; pid: number }>;
+  visitnum: number;
+}
+
+export interface KWMenuItem {
+  name: string;
+  list: Array<{
+    id: string;
+    intro: string;
+    name: string;
+    pic: string;
+    pub: string;
+    source: string;
+    sourceid: string;
+  }>;
 }

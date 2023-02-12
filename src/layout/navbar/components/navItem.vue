@@ -66,9 +66,6 @@ withDefaults(defineProps<NavItemProps>(), {
       span {
         font-size: var(--font-small);
       }
-      :deep(.svg-icon) {
-        cursor: pointer;
-      }
     }
     &.msub-title {
       padding: var(--padding-mini) var(--padding-small);

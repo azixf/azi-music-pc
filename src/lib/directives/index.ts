@@ -23,7 +23,7 @@ export const vLazyLoad = {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target as HTMLElement;
-          const src = bingding.value;
+          const src = bingding.value || '/default.png';
           img.setAttribute("src", src!);
           observer.unobserve(img);
         }

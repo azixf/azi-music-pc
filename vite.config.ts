@@ -5,7 +5,6 @@ import path from "path";
 import vueComponents from "unplugin-vue-components/vite";
 import autoImport from "unplugin-auto-import/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
-import { svgBuilder } from "./src/lib/plugins/svgBuilder";
 import electron, { onstart } from "vite-plugin-electron";
 import pkg from "./package.json";
 
@@ -43,7 +42,6 @@ export default defineConfig({
       imports: ["vue", "vue-router", "pinia"],
       resolvers: [ElementPlusResolver()],
     }),
-    svgBuilder("./src/assets/svg/"),
     electron({
       main: {
         entry: "electron/main/index.ts",

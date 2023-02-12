@@ -1,15 +1,15 @@
 <template>
   <header class="layout-header-wrapper flex align-center justify-between">
     <div class="layout-header-logo flex align-center">
-      <!-- <svg-icon name="netease-cloud-music-fill" color="#ffffff" size="32px" /> -->
       <img src="/logo.png" alt="logo" class="layout-header-logo-img" />
       <strong class="logo-text">4U Music</strong>
     </div>
     <search-box />
     <div class="layout-header-operations">
       <skin-comp />
-      <svg-icon
+      <mdi-icon
         name="settings"
+        hover
         color="var(--color-header-icon)"
         @click="$router.push({ name: 'setting' })"
       />
@@ -63,11 +63,5 @@ export default {
   display: flex;
   align-items: center;
   gap: 0 var(--padding-default);
-  .svg-icon {
-    cursor: pointer;
-    &:hover {
-      color: #ffffff !important;
-    }
-  }
 }
 </style>

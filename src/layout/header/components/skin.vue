@@ -1,6 +1,6 @@
 <template>
   <div class="skin-icon" @click="changeDrawerVisible">
-    <svg-icon name="skin" size="18px" color="var(--color-header-icon)" />
+    <mdi-icon name="color_lens" hover color="var(--color-header-icon)" />
   </div>
   <el-drawer v-model="drawerVisible" title="更换皮肤">
     <div class="theme-title">预设主题</div>
@@ -63,14 +63,6 @@ const onColorChange = (current: string) => {
 </script>
 
 <style lang="scss" scoped>
-.skin-icon {
-  .svg-icon {
-    cursor: pointer;
-    &:hover {
-      color: #ffffff !important;
-    }
-  }
-}
 
 .theme-title {
   margin-bottom: var(--padding-default);

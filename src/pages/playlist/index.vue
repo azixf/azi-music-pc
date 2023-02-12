@@ -294,9 +294,6 @@ const getOrigin = computed((): string => {
       display: flex;
       align-items: center;
       gap: var(--padding-small);
-      :deep(.svg-icon) {
-        cursor: pointer;
-      }
     }
 
     &__title {

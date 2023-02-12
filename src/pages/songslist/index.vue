@@ -19,7 +19,7 @@
           <el-button
             type="primary"
             round
-            :disable="!songsList?.songs_list.length"
+            :disabled="!songsList?.songs_list.length"
           >
             <mdi-icon name="play_arrow" color="#ffffff" />
             播放全部

@@ -47,3 +47,26 @@ export const apiGetKWSongOrMV = (rid: string, type: "mp3" | "mp4") => {
 export const apiGetKWLyric = (id: string) => {
   return http.get(`/kuwo/lyric/${id}`);
 };
+
+// kuwo获取歌单
+export const apiGetKWList = (data: {
+  order: 'new' | 'hot',
+  page: number,
+  size: number
+}) => {
+  return http.post('/kuwo/rcmPlayList', data)
+}
+
+// kuwo获取榜单菜单
+export const apiGetKWMenu = () => {
+  return http.get('/kuwo/musicMenu')
+}
+
+// kuwo获取排行榜歌曲
+export const apiGetKWBang = (data: {
+  bangId: string,
+  page: number,
+  size: number
+}) => {
+  return http.post('/kuwo/musicList', data)
+}

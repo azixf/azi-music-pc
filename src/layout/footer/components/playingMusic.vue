@@ -1,10 +1,11 @@
 <template>
   <div :class="['playing-music', 'flex', { visible: modelValue }]">
-    <img :src="current_info.cover" alt="cover-bg" class="playing-music-bg" />
+    <img :src="current_info.cover || '/default.png'" alt="cover-bg" class="playing-music-bg" />
     <header>
       <mdi-icon
         name="keyboard_double_arrow_down"
         hover
+        size="30"
         color="#fff"
         @click="closeMask"
       />
@@ -12,17 +13,20 @@
     <main class="flex align-center flex-1">
       <aside>
         <img
-          :src="current_info.cover"
+          :src="current_info.cover || '/default.png'"
           alt="cover"
           class="playing-music-cover"
         />
       </aside>
       <aside class="flex-1 playing-music-lyric">
-        <p
-          v-for="(lyric, index) in current_info.lyric"
-          :class="[{ active: index === activeIndex }, `item-${index}`]"
-          v-html="(lyric as LyricInfo).content"
-        ></p>
+        <template v-if="current_info.lyric">
+          <p
+            v-for="(lyric, index) in current_info.lyric"
+            :class="[{ active: index === activeIndex }, `item-${index}`]"
+            v-html="(lyric as LyricInfo).content"
+          ></p>
+        </template>
+        <div class="no-lyric" v-else>暂无歌词</div>
       </aside>
     </main>
   </div>
@@ -144,6 +148,12 @@ watch(
         font-size: var(--font-extra-large);
         font-weight: var(--font-weight-600);
       }
+    }
+    .no-lyric {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
   &-footer {

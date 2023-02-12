@@ -45,6 +45,9 @@
       </el-table-column>
       <el-table-column prop="origin" label="来源"></el-table-column>
       <el-table-column prop="play_time_ms" label="播放时间"></el-table-column>
+      <template #empty>
+        <el-empty description="暂无数据"></el-empty>
+      </template>
     </el-table>
   </div>
   <Contextmenu ref="contextmenuRef"></Contextmenu>

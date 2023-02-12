@@ -3,11 +3,11 @@
     <div class="play-music-mask">
       <mdi-icon name="keyboard_double_arrow_up" color="#eee" />
     </div>
-    <img :src="player.current_info.cover || DefaultImg" alt="music-cover" />
+    <img :src="player.current_info.cover || '/default.png'" alt="music-cover" />
   </div>
   <div class="play-music-operation" v-show="visible">
     <div class="play-music-icon">
-      <font-icon name="arrow-down" @click="visible = false" />
+      <mdi-icon name="keyboard_double_arrow_down" @click="visible = false" />
     </div>
     <div class="play-music-icon-wrapper m-l-8" title="我的喜欢">
       <mdi-icon v-if="!isExists" name="favorite_border" title="添加到我的喜欢" @click="add" />
@@ -35,7 +35,6 @@
 </template>
 
 <script lang="ts">
-import DefaultImg from "@/assets/img/default.jpg";
 import { useCollection } from "@/lib/hooks/useCollection";
 import { useStore } from "@/store";
 import PlayingMusic from "./playingMusic.vue";

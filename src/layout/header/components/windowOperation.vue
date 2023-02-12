@@ -1,28 +1,27 @@
 <template>
   <div class="window-operation">
-    <font-icon
-      :name="onTop ? 'icon_top1' : 'icon_top'"
-      size="18"
+    <mdi-icon
+      name="push_pin"
       color="var(--color-header-icon)"
-      hover-color="#ffffff"
+      hover
       @click="onOperateWindow('fix')"
-    ></font-icon>
-    <svg-icon
-      name="minus"
-      size="18px"
+    />
+    <mdi-icon
+      name="remove"
+      hover
       color="var(--color-header-icon)"
       @click="onOperateWindow('minify')"
     />
-    <svg-icon
-      name="full_screen"
-      size="18px"
+    <mdi-icon
+      name="fullscreen"
+      hover
       color="var(--color-header-icon)"
       @click="onOperateWindow('toggleMaxize')"
     />
-    <svg-icon
+    <mdi-icon
       name="close"
-      size="18px"
       color="var(--color-header-icon)"
+      hover
       @click="onOperateWindow('close')"
     />
   </div>
@@ -121,11 +120,5 @@ const onModalClosed = () => {
 .window-operation {
   display: flex;
   gap: var(--padding-default);
-  .svg-icon {
-    cursor: pointer;
-    &:hover {
-      color: #fff !important;
-    }
-  }
 }
 </style>

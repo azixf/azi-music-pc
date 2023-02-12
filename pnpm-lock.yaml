@@ -16,9 +16,9 @@ specifiers:
   element-plus: ^2.2.21
   material-icons: ^1.13.1
   node-id3: ^0.2.5
-  normalize.css: ^8.0.1
   pinia: ^2.0.23
   pinia-plugin-persistedstate: ^2.4.0
+  reset-css: ^5.0.1
   sass: ^1.56.0
   typescript: ^4.6.4
   unplugin-auto-import: ^0.11.4
@@ -40,6 +40,7 @@ dependencies:
   node-id3: 0.2.5
   pinia: 2.0.23_l7r24p6nevbtlimqmqcwa3ouhu
   pinia-plugin-persistedstate: 2.4.0_pinia@2.0.23
+  reset-css: 5.0.1
   uuid: 9.0.0
   vue: 3.2.41
   vue-router: 4.1.6_vue@3.2.41
@@ -56,7 +57,6 @@ devDependencies:
   electron-builder: 23.6.0
   electron-icon-builder: 2.0.1
   element-plus: 2.2.21_vue@3.2.41
-  normalize.css: 8.0.1
   sass: 1.56.0
   typescript: 4.8.4
   unplugin-auto-import: 0.11.4
@@ -4357,10 +4357,6 @@ packages:
     resolution: {integrity: sha512-Wj7+EJQ8mSuXr2iWfnujrimU35R2W4FAErEyTmJoJ7ucwTn2hOUSsRehMb5RSYkxXGTM7Y9QpvPmp++w5ftoJw==}
     dev: true
 
-  /normalize.css/8.0.1:
-    resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
-    dev: true
-
   /number-is-nan/1.0.1:
     resolution: {integrity: sha512-4jbtZXNAsfZbAHiiqjLPBiCl16dES1zI4Hpzzxw61Tk+loF+sBDBKx1ICKKKwIqQ7M0mFn1TmkN7euSncWgHiQ==}
     engines: {node: '>=0.10.0'}
@@ -4789,6 +4785,10 @@ packages:
   /require-main-filename/1.0.1:
     resolution: {integrity: sha512-IqSUtOVP4ksd1C/ej5zeEh/BIP2ajqpn8c5x+q99gvcIG/Qf0cud5raVnE/Dwd0ua9TXYDoDc0RE5hBSdz22Ug==}
     dev: true
+
+  /reset-css/5.0.1:
+    resolution: {integrity: sha512-VyuJdNFfp5x/W6e5wauJM59C02Vs0P22sxzZGhQMPaqu/NGTeFxlBFOOw3eq9vQd19gIDdZp7zi89ylyKOJ33Q==}
+    dev: false
 
   /resolve-alpn/1.2.1:
     resolution: {integrity: sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g==}

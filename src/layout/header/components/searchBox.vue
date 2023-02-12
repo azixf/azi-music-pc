@@ -3,7 +3,7 @@
     <div class="layout-header-search">
       <div class="layout-header-browser-btns flex align-center">
         <div class="browser-btn back active" title="刷新" @click="refeshWindow">
-          <font-icon
+          <mdi-icon
             name="refresh"
             size="18"
             color="var(--color-header-icon)"
@@ -13,6 +13,7 @@
           :class="[
             'browser-btn',
             'back',
+            'p-l-6',
             {
               active: _router.router.previous.size > 0,
             },
@@ -20,25 +21,25 @@
           title="后退"
           @click="_router.router.goToPrevious"
         >
-          <svg-icon name="arrow-left" color="var(--color-header-icon)" />
+          <mdi-icon name="arrow_back_ios" size="16" color="var(--color-header-icon)" />
         </div>
         <div
           :class="['browser-btn', { active: _router.router.next.size > 0 }]"
           title="前进"
           @click="_router.router.goToNext"
         >
-          <svg-icon name="arrow-right" color="var(--color-header-icon)" />
+          <mdi-icon name="arrow_forward_ios" size="16" color="var(--color-header-icon)" />
         </div>
       </div>
       <div
         class="layout-header-input flex align-center"
         v-click-outside="() => onPopoverVisivibleChange(false)"
       >
-        <svg-icon
+        <mdi-icon
           name="search"
           color="#fff"
-          size="14px"
-          class="search-icon cursor"
+          size="18"
+          class="search-icon cursor p-t-2"
           v-click="() => onSearch()"
         />
         <input
@@ -228,9 +229,6 @@ const clearHistory = () => {
         cursor: pointer;
         &:active {
           opacity: 0.67;
-        }
-        :deep(.svg-icon) {
-          color: #ffffff !important;
         }
       }
     }

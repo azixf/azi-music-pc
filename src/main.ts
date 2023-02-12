@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import { pinia } from "./store";
 
-import "normalize.css";
+import "reset-css";
 import "./style/global.scss";
 import "./style/elementplus.scss";
 import "@/assets/iconfont/iconfont.css";
