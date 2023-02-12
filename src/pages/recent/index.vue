@@ -24,6 +24,7 @@
     <el-table
       :data="recentList"
       highlight-current-row
+      stripe
       @row-dblclick="playMusic"
       @row-contextmenu="onContextmenuOpened"
     >

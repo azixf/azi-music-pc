@@ -86,7 +86,7 @@ import { useStore } from "@/store";
 import { apiGetKWSongOrMV, apiKWSearch } from "@/api";
 import { useLoading } from "@/lib/hooks/useLoading";
 import { usePlayMusic } from "@/lib/hooks/usePlayMusic";
-import { MusicInfo } from "@/typings/player";
+import { KWMusicInfo, MusicInfo } from "@/typings/player";
 import { useCollection } from "@/lib/hooks/useCollection";
 const { system } = useStore();
 const { keyword } = storeToRefs(system);
@@ -95,26 +95,9 @@ const page = ref(1);
 const size = ref(30);
 const total = ref(0);
 
-interface KWResultInterface {
-  musicrid: string;
-  album: string;
-  albumid: string;
-  albumpic: string;
-  artist: string;
-  artistid: number;
-  duration: number;
-  hasmv: number;
-  name: string;
-  pic: string;
-  pic120: string;
-  score100: string;
-  songTimeMinutes: string;
-  rid: number;
-}
-
 const { loading, exec } = useLoading();
 
-const result = ref<Array<KWResultInterface>>([]);
+const result = ref<Array<KWMusicInfo>>([]);
 const getSearchResult = () => {
   exec(async () => {
     result.value = [];
@@ -126,7 +109,7 @@ const getSearchResult = () => {
     if (!err) {
       console.log("data: ", data);
       total.value = Number(data?.data.total);
-      result.value = data?.data.list as Array<KWResultInterface>;
+      result.value = data?.data.list as Array<KWMusicInfo>;
     }
   });
 };
@@ -164,7 +147,7 @@ const getMusicSrc = async (rid: number) => {
 };
 
 const { play } = usePlayMusic();
-const playMusic = async (row: KWResultInterface) => {
+const playMusic = async (row: KWMusicInfo) => {
   const src = await getMusicSrc(row.rid);
   console.log(src);
   const musicInfo: MusicInfo = {
@@ -195,7 +178,7 @@ const { player } = useStore();
 const { recentList } = storeToRefs(player);
 const contextmenuRef = ref()
 const onContextmenuOpend = async (
-  row: KWResultInterface,
+  row: KWMusicInfo,
   _: any,
   event: MouseEvent
 ) => {
@@ -229,7 +212,7 @@ const {
   addSongToCollection,
   removeSongFormCollection,
 } = useCollection();
-const addToCollection = async (row: KWResultInterface) => {
+const addToCollection = async (row: KWMusicInfo) => {
   const src = await getMusicSrc(row.rid);
   console.log("src: ", src);
   const musicInfo: MusicInfo = {

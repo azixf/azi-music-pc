@@ -24,9 +24,9 @@ export default {
 
 <script lang="ts" setup>
 import { apiGetKWMenu } from "@/api";
-import { KWMenuItem } from "@/typings/playlist";
+import { KWRankMenuInfo } from "@/typings/player";
 
-const menu = ref<KWMenuItem[]>([]);
+const menu = ref<KWRankMenuInfo[]>([]);
 
 onBeforeMount(() => {
   getMenu();

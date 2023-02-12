@@ -57,7 +57,7 @@ export default {
 <script lang="ts" setup>
 import { formatTime, throttle } from "@/lib/utils/common";
 import { useStore } from "@/store";
-import { ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { apiKGVerifyMusicByHash } from "@/api";
 
 const audioRef = ref();
@@ -126,6 +126,8 @@ const loadSrc = async (cb?: () => void) => {
       if (data.url) {
         current_info.value.src = data.url;
         cb && cb();
+      } else {
+        ElMessage.warning('该歌曲不支持播放')
       }
     }
   } else {

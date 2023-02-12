@@ -144,6 +144,7 @@ export const usePlayerStore = defineStore("player", {
           break;
       }
     },
+    // 下一首、上一首播放
     PLAY_WITH_MODE(type: string) {
       if (type === 'next') {
         if (this.next_info) {
@@ -156,6 +157,9 @@ export const usePlayerStore = defineStore("player", {
           this.ON_MODE_CHANGE()
         }
       }
+    },
+    GET_MUSIC_INFO(row: unknown) {
+      
     }
   },
   persist: {

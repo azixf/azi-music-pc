@@ -46,8 +46,14 @@
       <h1 class="m-t-24 m-b-16">歌单列表</h1>
     </section>
     <section class="playlist-table">
-      <el-table :data="state.songsList" stripe>
-        <el-table-column type="index" :index="setIndex" width="64" />
+      <el-table
+        :data="state.songsList"
+        stripe
+        highlight-current-row
+        @row-dbclick="playMusic"
+        @row-contextmenu="onContextmenuOpened"
+      >
+        <el-table-column type="index" width="64" />
         <el-table-column prop="operation" label="操作">
           <div class="playlist-table__operation">
             <mdi-icon
@@ -69,13 +75,15 @@
           </template>
         </el-table-column>
         <el-table-column prop="artist" label="歌手">
-          <template #default="{ row }" v-if="type !== 'kuwo'">
-            <span>{{ row.singer?.[0]?.name || "-" }}</span>
+          <template #default="{ row }">
+            <span>{{
+              type === "qq" ? row.singer?.[0]?.name || "-" : row.artist
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="album" label="专辑">
           <template #default="{ row }">
-            <span>{{ row.albumname }}</span>
+            <span>{{ type === "qq" ? row.albumname : row.album }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -85,7 +93,7 @@
         >
         </el-table-column>
         <el-table-column prop="origin" label="来源">
-          <span>{{ getOrigin }}</span>
+          <span>{{ type }}</span>
         </el-table-column>
         <el-table-column prop="songTimeMinutes" label="时间">
           <template #default="{ row }" v-if="type !== 'kuwo'">
@@ -94,28 +102,32 @@
         </el-table-column>
       </el-table>
     </section>
-    <section class="playlist-pagination" v-if="type === 'kuwo'">
-      <el-pagination
-        background
-        v-model:current-page="pagination.page"
-        :page-size="pagination.size"
-        layout="prev, pager, next"
-        :total="pagination.total"
-        @current-change="onPaginationChange"
-      />
-    </section>
+    <Contextmenu ref="contextmenuRef"></Contextmenu>
   </div>
 </template>
 
 <script lang="ts">
 export default {
   name: "PlayList",
+  components: {
+    Contextmenu: defineAsyncComponent(
+      () => import("@/components/common/contextmenu.vue")
+    ),
+  },
 };
 </script>
 
 <script lang="ts" setup>
-import { apiGetKWPlaylistInfo, apiGetQQPlaylistInfo } from "@/api";
-import { PlaylistInfoData, QQPlaylistInfoData } from "@/typings/playlist";
+import {
+  apiGetKWPlaylistInfo,
+  apiGetKWSongOrMV,
+  apiGetQQMusic,
+  apiGetQQPlaylistInfo,
+} from "@/api";
+import { usePlayMusic } from "@/lib/hooks/usePlayMusic";
+import { formatTime } from "@/lib/utils/common";
+import { useStore } from "@/store";
+import { KWMusicInfo, KWPlaylistInfo, MusicInfo, MusicOriginType, QQMusicInfo, QQPlaylistInfo } from "@/typings/player";
 
 const state = reactive({
   cover: "",
@@ -127,33 +139,28 @@ const state = reactive({
   songsList: [] as any,
 });
 
-const pagination = reactive({
-  page: 1,
-  size: 100,
-  total: 100,
-});
-
 const route = useRoute();
-const type = ref("");
+const type = ref<MusicOriginType>();
 onBeforeMount(() => {
-  type.value = route.query.type as string;
+  type.value = route.query.type as MusicOriginType;
   getPlayListInfo();
 });
 
+// 获取歌单详情
 const getPlayListInfo = async () => {
   const { query } = route;
-  if (query.type === "kuwo") {
+  if (type.value === "kuwo") {
     if (state.songsList?.length) {
       state.songsList = [];
     }
     const [e1, r1] = await apiGetKWPlaylistInfo({
       pid: query.pid as string,
-      page: pagination.page - 1,
-      size: pagination.size,
+      page: 0,
+      size: 100,
     });
     if (!e1) {
-      pagination.total = r1!.data.total;
-      const data = r1!.data as PlaylistInfoData;
+      const data = r1!.data as KWPlaylistInfo;
+      state.playlistName = data.name;
       state.cover = data?.img700 || data?.img500 || data?.img300 || data?.img;
       state.listencnt = data.listencnt;
       state.playlistCreator = data.uname;
@@ -161,10 +168,10 @@ const getPlayListInfo = async () => {
       state.total = data.total;
       state.tags = data.tag?.split(",") || [];
     }
-  } else if (query.type === "qq") {
+  } else if (type.value === "qq") {
     const [e2, r2] = await apiGetQQPlaylistInfo(query.pid as string);
     if (!e2) {
-      const data = (r2 as any).cdlist?.[0] as QQPlaylistInfoData;
+      const data = (r2 as any).cdlist?.[0] as QQPlaylistInfo;
       if (data) {
         state.cover = data.logo;
         state.listencnt = data.visitnum;
@@ -178,16 +185,6 @@ const getPlayListInfo = async () => {
   }
 };
 
-const onPaginationChange = () => {
-  getPlayListInfo();
-};
-
-const setIndex = (idx: number) => {
-  return route.query.type === "kuwo"
-    ? (pagination.page - 1) * pagination.size + idx + 1
-    : idx + 1;
-};
-
 const duration = computed(() => {
   return function (interval: number) {
     const minutes = Math.floor(interval / 60) + "";
@@ -196,10 +193,106 @@ const duration = computed(() => {
   };
 });
 
-const getOrigin = computed((): string => {
-  const { type } = route.query;
-  return type as string;
-});
+const getKWMusicSrc = async (rid: number): Promise<string> => {
+  const [err, data] = await apiGetKWSongOrMV(rid + "", "mp3");
+  let src = "";
+  if (!err) {
+    src = data?.data || "";
+  }
+  return src;
+};
+
+const getQQMusicSrc = async (mid: string): Promise<string> => {
+  let src = "";
+  const [err, data] = await apiGetQQMusic(mid);
+  if (!err) {
+    src = data?.data?.url || "";
+  }
+  return src;
+};
+
+const getKWMusicInfo = async (row: KWMusicInfo) => {
+  const src = await getKWMusicSrc(row.rid);
+  const music_info: MusicInfo = {
+    id: row.musicrid,
+    title: row.name,
+    src,
+    hash: "",
+    singer: row.artist,
+    detail: "",
+    cover: row.pic,
+    time: 0,
+    time_ms: "0.00",
+    duration: row.duration,
+    progress: 0,
+    duration_ms: row.songTimeMinutes,
+    album_name: row.album,
+    album_id: row.albumid,
+    mv: "",
+    origin: "kuwo",
+    lyric: "",
+    play_time: 0,
+    play_time_ms: "",
+  };
+  return music_info;
+};
+
+const getQQMusicInfo = async (row: QQMusicInfo) => {
+  const src = await getQQMusicSrc(row.songmid);
+  let singer = "";
+  if (row.singer && row.singer.length) {
+    row.singer.forEach(item => {
+      singer += item.name + ";";
+    });
+    singer = singer.slice(0, singer.length - 1);
+  }
+  const music_info: MusicInfo = {
+    id: row.songid,
+    title: row.songname,
+    src,
+    hash: "",
+    singer,
+    detail: "",
+    cover: "",
+    time: 0,
+    time_ms: "0.00",
+    duration: row.interval,
+    progress: 0,
+    duration_ms: formatTime(row.interval),
+    album_id: row.albummid,
+    album_name: row.albumname,
+    mv: "",
+    origin: "qq",
+    lyric: "",
+    play_time: 0,
+    play_time_ms: "",
+  };
+  return music_info;
+};
+
+const { play, playAll } = usePlayMusic();
+const playMusic = async (row: KWMusicInfo | QQMusicInfo) => {
+  let music_info: MusicInfo = {};
+  if (type.value === "kuwo") {
+    music_info = await getKWMusicInfo(row as KWMusicInfo);
+  } else if (type.value === "qq") {
+    music_info = await getQQMusicInfo(row as QQMusicInfo);
+  }
+  play(music_info);
+};
+
+const playAllMusic = () => {};
+
+const contextmenuRef = ref();
+const { player } = useStore();
+const { currentList } = storeToRefs(player);
+const onContextmenuOpened = (
+  row: KWPlaylistInfo | QQPlaylistInfo,
+  _: any,
+  event: MouseEvent
+) => {
+  contextmenuRef.value.showContextmenu();
+};
 </script>
 
 <style lang="scss" scoped>

@@ -14,3 +14,8 @@ export const apiGetQQFocusImages = () => {
 export const apiGetQQRecommendedList = () => {
   return http.get('/qq/getMultiple/recomPlaylist') 
 }
+
+// 根据songmid解析歌曲
+export const apiGetQQMusic = (mid: string) => {
+  return http.get(`/qq/jiexi/${mid}`)
+}
