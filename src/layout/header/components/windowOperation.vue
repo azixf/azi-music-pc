@@ -3,6 +3,7 @@
     <mdi-icon
       name="push_pin"
       color="var(--color-header-icon)"
+      :type="onTop ? 'filled' : 'outlined'"
       hover
       @click="onOperateWindow('fix')"
     />

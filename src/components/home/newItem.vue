@@ -6,7 +6,9 @@
     <div class="new-item-right">
       <div class="song-name">{{ music }}</div>
       <div class="song-singer">
-        <span class="flag" v-if="mv">MV</span>
+        <span class="flag" v-if="mv">
+          <mdi-icon name="music_video"  />
+        </span>
         <span>{{ singer }}</span>
       </div>
     </div>

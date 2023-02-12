@@ -43,16 +43,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row class="m-t-24 m-b-16">
-        <el-col :span="6" class="playlist-list__title">歌曲列表</el-col>
-        <el-col :span="6" :offset="12">
-          <el-input type="text" placeholder="搜索歌单音乐">
-            <template #prefix>
-              <mdi-icon name="search" />
-            </template>
-          </el-input>
-        </el-col>
-      </el-row>
+      <h1 class="m-t-24 m-b-16">歌单列表</h1>
     </section>
     <section class="playlist-table">
       <el-table :data="state.songsList" stripe>
@@ -71,7 +62,9 @@
           <template #default="{ row }">
             <div class="playlist-table__title">
               <span>{{ type === "kuwo" ? row.name : row.songname }}</span>
-              <span class="flag" v-if="row.hasmv">MV</span>
+              <span class="flag" v-if="row.hasmv">
+                <mdi-icon name="music_video" />
+              </span>
             </div>
           </template>
         </el-table-column>
@@ -280,13 +273,6 @@ const getOrigin = computed((): string => {
     display: flex;
     align-items: center;
     gap: var(--padding-small);
-  }
-
-  &-list {
-    &__title {
-      font-size: var(--font-large);
-      font-weight: var(--font-weight-550);
-    }
   }
 
   &-table {
