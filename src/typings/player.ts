@@ -118,6 +118,7 @@ export interface QQMusicInfo {
   songmid: string;
   songname: string;
   strMediaMid: string;
+  pay: { payplay: number, payinfo: number }
 }
 
 // qq推荐歌曲信息

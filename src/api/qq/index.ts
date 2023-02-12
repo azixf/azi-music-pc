@@ -19,3 +19,8 @@ export const apiGetQQRecommendedList = () => {
 export const apiGetQQMusic = (mid: string) => {
   return http.get(`/qq/jiexi/${mid}`)
 }
+
+// 根据songmid解析歌词
+export const apiGetQQLyric = (mid: string) => {
+  return http.get(`/qq/getLyric/${mid}`)
+}

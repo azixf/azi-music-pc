@@ -6,6 +6,7 @@ import {
   KWMusicInfo,
   LyricInfo,
   MusicInfo,
+  MusicOriginType,
   MusicPlayState,
   PlayMode,
   QQMusicInfo,
@@ -17,9 +18,12 @@ import {
   apiGetKGMusicLyric,
   apiGetKWLyric,
   apiGetKWSongOrMV,
+  apiGetQQLyric,
   apiGetQQMusic,
   apiKGVerifyMusicByHash,
 } from "@/api";
+import { ElMessage } from "element-plus";
+import { parseLrc } from "@/lib/utils/lyric";
 
 export const usePlayerStore = defineStore("player", {
   state() {
@@ -63,53 +67,40 @@ export const usePlayerStore = defineStore("player", {
   actions: {
     // 播放音乐
     async PLAY_MUSIC(info: MusicInfo) {
-      this.current_info = info;
-      let isIncluded = false;
-      // update currentList
-      this.currentList.forEach(item => {
-        if (item.id === info.id && item.origin === info.origin) {
-          isIncluded = true;
-        }
-      });
-      !isIncluded && this.currentList.unshift(info);
+      let result: { src: string; pic: string } | undefined;
+      if (!info.src) {
+        result = await this.GET_MUSIC_SRC(info.hash!, info.origin!);
+      }
+      if (result) {
+        info.src = result.src;
+        result.pic && (info.cover = result.pic);
+        this.current_info = info;
+        let isIncluded = false;
+        // update currentList
+        this.currentList.forEach(item => {
+          if (item.id === info.id && item.origin === info.origin) {
+            isIncluded = true;
+          }
+        });
+        !isIncluded && this.currentList.unshift(info);
 
-      // update recentList
-      let isRecentIncluded = false;
-      for (let i = 0; i < this.recentList.length; i++) {
-        const current = this.recentList[i];
-        if (current.id === info.id && current.origin === info.origin) {
-          this.recentList.splice(i, 1);
-          const time = +new Date();
-          info.play_time = time;
-          info.play_time_ms = formatDateTime(time, "YYYY-MM-DD HH:mm");
-          this.recentList.unshift(info);
-          isRecentIncluded = true;
-          break;
+        // update recentList
+        let isRecentIncluded = false;
+        for (let i = 0; i < this.recentList.length; i++) {
+          const current = this.recentList[i];
+          if (current.id === info.id && current.origin === info.origin) {
+            this.recentList.splice(i, 1);
+            const time = +new Date();
+            info.play_time = time;
+            info.play_time_ms = formatDateTime(time, "YYYY-MM-DD HH:mm");
+            this.recentList.unshift(info);
+            isRecentIncluded = true;
+            break;
+          }
         }
+        !isRecentIncluded && this.recentList.unshift(info);
+        await this.GET_LYRIC();
       }
-      !isRecentIncluded && this.recentList.unshift(info);
-      await this.GET_LYRIC();
-    },
-    // 获取歌词
-    async GET_LYRIC(): Promise<void> {
-      if (!this.current_info.id) return;
-      let result: any = "";
-      if (this.current_info.origin === "kugou") {
-        const [err, data] = await apiGetKGMusicLyric(this.current_info.hash!);
-        if (!err) {
-          result = data?.data?.items;
-        }
-      } else if (this.current_info.origin === "kuwo") {
-        const id = (this.current_info.id as string).replace("MUSIC_", "");
-        const [err, data] = await apiGetKWLyric(id);
-        if (!err) {
-          console.log("data: ", data);
-          const items = transformLyric(data?.data?.lrclist);
-          console.log("items: ", items);
-          result = items;
-        }
-      }
-      this.current_info.lyric = result;
     },
     // 修改播放模式
     ON_MODE_CHANGE() {
@@ -164,29 +155,28 @@ export const usePlayerStore = defineStore("player", {
         if (this.next_info) {
           this.PLAY_MUSIC(this.next_info);
           this.ON_MODE_CHANGE();
+        } else {
+          ElMessage.warning("没有下一曲");
         }
       } else {
         if (this.pre_info) {
           this.PLAY_MUSIC(this.pre_info);
           this.ON_MODE_CHANGE();
+        } else {
+          ElMessage.warning("没有上一曲");
         }
       }
     },
-    // 获取歌曲信息
-    async GET_MUSIC_INFO(row: QQMusicInfo | KGMusicInfo | KWMusicInfo): Promise<MusicInfo> {
+    // 将不同类型的歌曲信息转换成通用MusicInfo类型
+    GET_MUSIC_INFO(row: QQMusicInfo | KGMusicInfo | KWMusicInfo): MusicInfo {
       let music_info: MusicInfo = {};
       if ("musicrid" in row) {
-        const [err, data] = await apiGetKWSongOrMV(row.rid + "", "mp3");
-        let src = "";
-        if (!err) {
-          src = data?.data || "";
-        }
         const time = +new Date();
         music_info = {
           id: row.musicrid,
           title: row.name,
-          src,
-          hash: "",
+          src: "",
+          hash: row.rid + "",
           singer: row.artist,
           detail: "",
           cover: row.pic,
@@ -204,11 +194,6 @@ export const usePlayerStore = defineStore("player", {
           play_time_ms: formatDateTime(time, "YYYY-MM-DD HH:mm"),
         };
       } else if ("strMediaMid" in row) {
-        let src = "";
-        const [err, data] = await apiGetQQMusic(row.songmid);
-        if (!err) {
-          src = data?.data?.url || "";
-        }
         let singer = "";
         if (row.singer && row.singer.length) {
           row.singer.forEach(item => {
@@ -220,8 +205,8 @@ export const usePlayerStore = defineStore("player", {
         music_info = {
           id: row.songid,
           title: row.songname,
-          src,
-          hash: "",
+          src: "",
+          hash: row.songmid,
           singer,
           detail: "",
           cover: "",
@@ -239,19 +224,11 @@ export const usePlayerStore = defineStore("player", {
           play_time_ms: formatDateTime(time, "YYYY-MM-DD HH:mm"),
         };
       } else if ("hash" in row) {
-        let src = "";
-        const [err, res] = await apiKGVerifyMusicByHash(row.hash);
-        if (!err) {
-          const data = res!.data as KGVerifyInfo;
-          if (data.url) {
-            src = data.url;
-          }
-        }
         const time = +new Date();
         music_info = {
           id: row.audio_id,
           title: row.songname,
-          src,
+          src: "",
           hash: row.hash_high || row.hash,
           singer: row.authors[0].author_name,
           singer_id: row.authors[0].author_id,
@@ -274,6 +251,92 @@ export const usePlayerStore = defineStore("player", {
       }
       return music_info;
     },
+    // 获取歌曲播放链接
+    async GET_MUSIC_SRC(
+      hash: string,
+      origin: MusicOriginType
+    ): Promise<{ src: string; pic: string } | undefined> {
+      let src = "";
+      let pic = "";
+      if (origin === "kuwo") {
+        const [err, data] = await apiGetKWSongOrMV(hash + "", "mp3");
+        if (!err) {
+          src = data?.data || "";
+        }
+        if (!src) {
+          ElMessage.warning("该歌曲不支持播放");
+          return;
+        }
+      } else if (origin === "qq") {
+        const [err, data] = await apiGetQQMusic(hash);
+        if (!err) {
+          if (data?.data) {
+            src = data.data.url;
+            pic = data.data.pic;
+          }
+        }
+        if (!src) {
+          ElMessage.warning("该歌曲不支持播放");
+          return;
+        }
+      } else if (origin === "kugou") {
+        const [err, data] = await apiKGVerifyMusicByHash(hash);
+        if (!err) {
+          if (data?.data) {
+            src = data.data.url;
+            pic = data.data.pic;
+          }
+        }
+        if (!src) {
+          ElMessage.warning("该歌曲不支持播放");
+          return;
+        }
+      }
+      return {
+        src,
+        pic,
+      };
+    },
+    // 获取不同平台歌曲的歌词并格式化
+    async GET_LYRIC(): Promise<void> {
+      if (!this.current_info.id) return;
+      let result: any = "";
+      if (this.current_info.origin === "kugou") {
+        const [err, data] = await apiGetKGMusicLyric(this.current_info.hash!);
+        if (!err) {
+          result = data?.data?.items;
+        }
+      } else if (this.current_info.origin === "kuwo") {
+        const id = (this.current_info.id as string).replace("MUSIC_", "");
+        const [err, data] = await apiGetKWLyric(id);
+        if (!err) {
+          const items = transformKWLyric(data?.data?.lrclist);
+          result = items;
+        }
+      } else if (this.current_info.origin === 'qq') {
+        const [err, res] = await apiGetQQLyric(this.current_info.hash!);
+        if (!err) {
+          if ((res as any).lyric) {
+            result = parseLrc((res as any).lyric).items
+          }
+        }
+      }
+
+      function transformKWLyric(lyric: Array<KWLyricInfo>): Array<LyricInfo> {
+        const arr: Array<LyricInfo> = [];
+        for (let i = 0; i < lyric.length; i++) {
+          const { lineLyric, time } = lyric[i];
+          arr.push({
+            content: lineLyric,
+            time: Number(time) * 1000,
+          });
+        }
+        return arr;
+      }
+
+      this.current_info.lyric = result;
+    },
+
   },
   persist: {
     paths: [
@@ -291,15 +354,3 @@ export const usePlayerStore = defineStore("player", {
     ],
   },
 });
-
-function transformLyric(lyric: Array<KWLyricInfo>): Array<LyricInfo> {
-  const arr: Array<LyricInfo> = [];
-  for (let i = 0; i < lyric.length; i++) {
-    const { lineLyric, time } = lyric[i];
-    arr.push({
-      content: lineLyric,
-      time: Number(time) * 1000,
-    });
-  }
-  return arr;
-}

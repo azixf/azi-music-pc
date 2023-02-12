@@ -126,6 +126,8 @@ const canplayHandler = (e: any) => {
 };
 
 const endedHandler = (e: any) => {
+  console.log('ended')
+  modePlay('next');
   playState.value = "pause";
 };
 

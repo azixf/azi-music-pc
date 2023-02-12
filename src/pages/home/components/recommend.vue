@@ -120,8 +120,8 @@ const onQEPlaylistClick = (item: QQRecommendedMusicInfo) => {
 
 const { play } = usePlayMusic();
 const { player } = useStore()
-const playMusic = async (item: KGMusicInfo) => {
-  const music_info = await player.GET_MUSIC_INFO(item);
+const playMusic = (item: KGMusicInfo) => {
+  const music_info = player.GET_MUSIC_INFO(item);
   play(music_info);
 };
 </script>

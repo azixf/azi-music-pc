@@ -7,7 +7,7 @@
   </div>
   <div class="play-music-operation" v-show="visible">
     <div class="play-music-icon">
-      <mdi-icon name="keyboard_double_arrow_down" @click="visible = false" />
+      <mdi-icon name="keyboard_double_arrow_down" hover @click="visible = false" />
     </div>
     <div class="play-music-icon-wrapper m-l-8" title="我的喜欢">
       <mdi-icon v-if="!isExists" name="favorite_border" title="添加到我的喜欢" @click="add" />

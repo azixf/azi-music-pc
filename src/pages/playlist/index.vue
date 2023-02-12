@@ -19,7 +19,7 @@
             >
           </div>
           <div class="playlist-content">
-            <el-button type="primary" round>
+            <el-button type="primary" round @click="playAllMusic">
               <mdi-icon name="play_arrow" color="#fff" />
               播放全部
             </el-button>
@@ -50,7 +50,7 @@
         :data="state.songsList"
         stripe
         highlight-current-row
-        @row-dbclick="playMusic"
+        @row-dblclick="playMusic"
         @row-contextmenu="onContextmenuOpened"
       >
         <el-table-column type="index" width="64" />
@@ -67,7 +67,25 @@
         <el-table-column prop="title" label="标题">
           <template #default="{ row }">
             <div class="playlist-table__title">
-              <span>{{ type === "kuwo" ? row.name : row.songname }}</span>
+              <span v-if="type === 'kuwo'">{{ row.name }}</span>
+              <span v-else>
+                {{ row.songname }}
+                <el-popover
+                  placement="right"
+                  title="提示"
+                  trigger="hover"
+                  content="会员内容，无法解析"
+                >
+                  <template #reference>
+                    <mdi-icon
+                      name="error_outlined"
+                      v-if="row.pay.payplay !== 0 || row.pay.payinfo !== 1"
+                      hover
+                      color="var(--color-primary)"
+                    />
+                  </template>
+                </el-popover>
+              </span>
               <span class="flag" v-if="row.hasmv">
                 <mdi-icon name="music_video" />
               </span>
@@ -118,13 +136,18 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import {
-  apiGetKWPlaylistInfo,
-  apiGetQQPlaylistInfo,
-} from "@/api";
+import { apiGetKWPlaylistInfo, apiGetQQPlaylistInfo } from "@/api";
 import { usePlayMusic } from "@/lib/hooks/usePlayMusic";
 import { useStore } from "@/store";
-import { KWMusicInfo, KWPlaylistInfo, MusicOriginType, QQMusicInfo, QQPlaylistInfo } from "@/typings/player";
+import {
+  KWMusicInfo,
+  KWPlaylistInfo,
+  MusicInfo,
+  MusicOriginType,
+  QQMusicInfo,
+  QQPlaylistInfo,
+} from "@/typings/player";
+import { ElMessage } from "element-plus";
 
 const state = reactive({
   cover: "",
@@ -191,12 +214,26 @@ const duration = computed(() => {
 });
 
 const { play, playAll } = usePlayMusic();
-const playMusic = async (row: KWMusicInfo | QQMusicInfo) => {
-  const music_info = await player.GET_MUSIC_INFO(row as KWMusicInfo);
+const playMusic = (row: KWMusicInfo | QQMusicInfo) => {
+  if ("pay" in row) {
+    if (row.pay.payplay !== 0 || row.pay.payinfo !== 1) {
+      ElMessage.warning("会员内容，暂不支持解析");
+      return;
+    }
+  }
+  const music_info = player.GET_MUSIC_INFO(row as KWMusicInfo);
+  console.log(music_info);
   play(music_info);
 };
 
-const playAllMusic = () => {};
+const playAllMusic = () => {
+  const music: Array<MusicInfo> = [];
+  state.songsList.forEach(item => {
+    const info = player.GET_MUSIC_INFO(item);
+    music.push(info);
+  });
+  playAll(music);
+};
 
 const contextmenuRef = ref();
 const { player } = useStore();
@@ -206,7 +243,7 @@ const onContextmenuOpened = async (
   _: any,
   event: MouseEvent
 ) => {
-  const music_info = await player.GET_MUSIC_INFO(row);
+  const music_info = player.GET_MUSIC_INFO(row);
   contextmenuRef.value.showContextmenu(music_info, currentList, event);
 };
 </script>
