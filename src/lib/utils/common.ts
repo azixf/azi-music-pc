@@ -46,12 +46,13 @@ export const debounce = (
     if (immidiately) {
       immidiately = false;
       fn.apply(this, args);
+    } else {
+      timer = setTimeout(() => {
+        fn.apply(this, args);
+        clearTimeout(timer!);
+        timer = null;
+      }, delay);
     }
-    timer = setTimeout(() => {
-      fn.apply(this, args);
-      clearTimeout(timer!);
-      timer = null;
-    }, delay);
   };
 };
 
@@ -85,9 +86,10 @@ export const formatDateTime = (
   dateLike: Date | string | number,
   format: string = "YYYY-MM-DD HH:mm:ss"
 ): string => {
-  if (new Date(dateLike).toString() == "Invalide Date") {
+  if (Object.is(new Date(dateLike).toString(), "Invalid Date")) {
     return dateLike as string;
   }
+
   if (typeof dateLike === "string") {
     dateLike = dateLike.replace("-", "/");
   }

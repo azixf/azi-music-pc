@@ -14,11 +14,12 @@ enum UpdateMessage {
 
 let win: BrowserWindow | null = null;
 
-export function init(window: BrowserWindow) {
+export function initUpdater(window: BrowserWindow) {
   win = window;
 }
 
 if (!app.isPackaged) {
+  autoUpdater.forceDevUpdateConfig = true
   autoUpdater.updateConfigPath = join(__dirname, "dev-app-update.yml");
 }
 
@@ -61,6 +62,7 @@ autoUpdater.on('update-downloaded', () => {
 
 // 检测更新
 ipcMain.on('check-update', () => {
+  console.log('Checking')
   autoUpdater.checkForUpdates()
 })
 

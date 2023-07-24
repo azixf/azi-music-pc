@@ -228,9 +228,18 @@ const playMusic = (row: KWMusicInfo | QQMusicInfo) => {
 
 const playAllMusic = () => {
   const music: Array<MusicInfo> = [];
-  state.songsList.forEach(item => {
-    const info = player.GET_MUSIC_INFO(item);
-    music.push(info);
+  state.songsList.forEach((item: KWMusicInfo | QQMusicInfo) => {
+    if ("pay" in item) {
+      if (item.pay.payplay !== 0 || item.pay.payinfo !== 1) {
+        return;
+      } else {
+        const info = player.GET_MUSIC_INFO(item);
+        music.push(info);
+      }
+    } else {
+      const info = player.GET_MUSIC_INFO(item);
+      music.push(info);
+    }
   });
   playAll(music);
 };

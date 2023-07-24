@@ -2,16 +2,12 @@ import { app, BrowserWindow, shell, ipcMain, nativeImage } from "electron";
 import { release } from "os";
 import { join } from "path";
 import { initTray } from "./tray";
+import { initUpdater } from "./update";
 import { initWindow } from "./window";
 
 if (release().startsWith("6.1")) app.disableHardwareAcceleration();
 
 if (process.platform === "win32") app.setAppUserModelId(app.getName());
-
-if (!app.requestSingleInstanceLock()) {
-  app.quit();
-  process.exit(0);
-}
 
 export const ROOT_PATH = {
   dist: join(__dirname, "../.."),
@@ -38,7 +34,7 @@ async function createWindow() {
       preload,
       spellcheck: false,
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
     },
   });
 
@@ -54,18 +50,35 @@ async function createWindow() {
   });
 
   win.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith("https:")) shell.openExternal(url);
+    if (url.startsWith("http:")) shell.openExternal(url);
     return {
       action: "deny",
     };
   });
 }
 
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+  process.exit(0);
+} else {
+  app.on("second-instance", (event, agv, directory) => {
+    if (win) {
+      win.restore();
+      win.show();
+      win.focus();
+      win.flashFrame(true);
+    }
+  });
+}
+
 app.whenReady().then(() => {
+  app.setAsDefaultProtocolClient("4u-music"); // 设置schema协议打开应用
+
   createWindow();
   initWindow(win);
   const icon = nativeImage.createFromPath(join(ROOT_PATH.public, "./logo.png"));
   initTray(icon, win);
+  initUpdater(win);
 });
 
 app.on("window-all-closed", () => {

@@ -11,12 +11,6 @@
   },
   compression: 'store',
   files: ['dist'],
-  extraResources: [
-    {
-      from: './src/data',
-      to: 'data'
-    }
-  ],
   dmg: {
     contents: [
       {

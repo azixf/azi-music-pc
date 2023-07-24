@@ -46,9 +46,9 @@ export default {
 
 <script lang="ts" setup>
 import { apiGetKWList } from "@/api";
-import { recommendedListItem } from "@/typings/home";
+import { KWPlaylistInfo } from "@/typings/player";
 
-const playlist = ref<recommendedListItem[]>([]);
+const playlist = ref<KWPlaylistInfo[]>([]);
 
 const order = ref<"new" | "hot">("new");
 const pagination = reactive({
@@ -84,7 +84,7 @@ const onPaginationChange = () => {
 }
 
 const router = useRouter();
-const goToDetail = (item: recommendedListItem) => {
+const goToDetail = (item: KWPlaylistInfo) => {
   router.push({
     name: "playlist",
     query: {

@@ -37,7 +37,6 @@ declare module '@vue/runtime-core' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
-    FontIcon: typeof import('./../components/common/fontIcon.vue')['default']
     ItemTitle: typeof import('./../components/home/itemTitle.vue')['default']
     ListItem: typeof import('./../components/home/listItem.vue')['default']
     LoadingIcon: typeof import('./../components/common/loadingIcon.vue')['default']
@@ -47,7 +46,6 @@ declare module '@vue/runtime-core' {
     PlaylistBox: typeof import('./../components/common/playlistBox.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SvgIcon: typeof import('./../components/common/svgIcon.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

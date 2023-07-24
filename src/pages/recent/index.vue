@@ -81,6 +81,8 @@ const clearRecentList = () => {
 
 const { play, playAll } = usePlayMusic();
 const playMusic = (row: MusicInfo) => {
+  console.log('play: ', row);
+  
   play(row);
 };
 

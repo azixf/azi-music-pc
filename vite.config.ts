@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
@@ -68,12 +69,15 @@ export default defineConfig({
     }),
   ],
   esbuild: {
-    pure: ["console.log"],
+    drop: ["console", "debugger"],
   },
   build: {
     target: "esnext",
     assetsInlineLimit: 8192,
     minify: process.env.NODE_ENV === "production" ? "esbuild" : false,
-    sourcemap: process.env.NODE_ENV !== "production"
+    sourcemap: process.env.NODE_ENV !== "production",
+  },
+  test: {
+    environment: "jsdom",
   },
 });

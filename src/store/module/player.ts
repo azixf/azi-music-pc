@@ -1,7 +1,6 @@
 import { formatDateTime, formatTime } from "@/lib/utils/common";
 import {
   KGMusicInfo,
-  KGVerifyInfo,
   KWLyricInfo,
   KWMusicInfo,
   LyricInfo,
@@ -68,39 +67,42 @@ export const usePlayerStore = defineStore("player", {
     // 播放音乐
     async PLAY_MUSIC(info: MusicInfo) {
       let result: { src: string; pic: string } | undefined;
-      if (!info.src) {
+      if (!info.src || info.origin === 'qq') {
         result = await this.GET_MUSIC_SRC(info.hash!, info.origin!);
       }
       if (result) {
         info.src = result.src;
         result.pic && (info.cover = result.pic);
-        this.current_info = info;
-        let isIncluded = false;
-        // update currentList
-        this.currentList.forEach(item => {
-          if (item.id === info.id && item.origin === info.origin) {
-            isIncluded = true;
-          }
-        });
-        !isIncluded && this.currentList.unshift(info);
-
-        // update recentList
-        let isRecentIncluded = false;
-        for (let i = 0; i < this.recentList.length; i++) {
-          const current = this.recentList[i];
-          if (current.id === info.id && current.origin === info.origin) {
-            this.recentList.splice(i, 1);
-            const time = +new Date();
-            info.play_time = time;
-            info.play_time_ms = formatDateTime(time, "YYYY-MM-DD HH:mm");
-            this.recentList.unshift(info);
-            isRecentIncluded = true;
-            break;
-          }
-        }
-        !isRecentIncluded && this.recentList.unshift(info);
-        await this.GET_LYRIC();
       }
+      info.time = 0
+      info.time_ms = "0.00"
+      info.progress = 0
+      this.current_info = info;
+      let isIncluded = false;
+      // update currentList
+      this.currentList.forEach(item => {
+        if (item.id === info.id && item.origin === info.origin) {
+          isIncluded = true;
+        }
+      });
+      !isIncluded && this.currentList.unshift(info);
+
+      // update recentList
+      let isRecentIncluded = false;
+      for (let i = 0; i < this.recentList.length; i++) {
+        const current = this.recentList[i];
+        if (current.id === info.id && current.origin === info.origin) {
+          this.recentList.splice(i, 1);
+          const time = +new Date();
+          info.play_time = time;
+          info.play_time_ms = formatDateTime(time, "YYYY-MM-DD HH:mm");
+          this.recentList.unshift(info);
+          isRecentIncluded = true;
+          break;
+        }
+      }
+      !isRecentIncluded && this.recentList.unshift(info);
+      await this.GET_LYRIC();
     },
     // 修改播放模式
     ON_MODE_CHANGE() {
@@ -313,11 +315,11 @@ export const usePlayerStore = defineStore("player", {
           const items = transformKWLyric(data?.data?.lrclist);
           result = items;
         }
-      } else if (this.current_info.origin === 'qq') {
+      } else if (this.current_info.origin === "qq") {
         const [err, res] = await apiGetQQLyric(this.current_info.hash!);
         if (!err) {
           if ((res as any).lyric) {
-            result = parseLrc((res as any).lyric).items
+            result = parseLrc((res as any).lyric).items;
           }
         }
       }
@@ -336,7 +338,6 @@ export const usePlayerStore = defineStore("player", {
 
       this.current_info.lyric = result;
     },
-
   },
   persist: {
     paths: [

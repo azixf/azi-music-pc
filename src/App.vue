@@ -18,5 +18,10 @@ onMounted(() => {
   setTheme(primaryColor);
 
   ipcRenderer.send("set-on-top", onTop.value);
+
+  ipcRenderer.send("check-update");
+  ipcRenderer.on("update-message", (evt, ...args) => {
+    console.log('args: ', args);
+  });
 });
 </script>
